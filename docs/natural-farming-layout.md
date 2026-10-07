@@ -28,3 +28,5 @@ The reference’s organic backgrounds use pointer-responsive paths. Farm Natura 
 Motion constants: `src/animation/naturalFarmingMotion.ts`. Scroll/text choreography: `src/hooks/useNaturalFarmingMotion.ts`. GPU surfaces and cleanup: `src/components/world/LivingSurface.tsx`.
 
 The sticky handover now uses linear scroll progress with a 0.65-second scrub, without a spring or front-loaded ease. Its scroll distance is the greater of 1.35 viewport heights and 1.8 times the second card's travel. This prevents the old `bottom bottom` endpoint from compressing the entire transition into a short scroll on tall screens. Geometry recalculates on resize; scrolling back reverses the same motion. Mobile and reduced-motion layouts retain ordinary stacked cards.
+
+On animated desktop layouts, the second card is positioned within a container sized to the final stack. ScrollTrigger supplies the scroll runway, so the card's former position does not leave an empty card-sized gap after the handover. Its initial position and travel remain the same. Refresh updates the stack measurements, and breakpoint cleanup restores ordinary document flow.

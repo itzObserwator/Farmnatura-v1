@@ -85,9 +85,24 @@ export function setupNaturalFarmingMotion() {
     const first = cards?.querySelector<HTMLElement>(".practice-window");
     const second = cards?.querySelector<HTMLElement>(".farming-managed-card");
     if (!stage || !cards || !first || !second) return;
+    const gap = parseFloat(getComputedStyle(second).marginTop) || 0;
+    // Reserve only the final stack's height. Pin spacing supplies the scroll runway.
+    // The moving card keeps its original starting position without a vacant flow slot.
+    gsap.set(cards, {
+      height: () =>
+        Math.max(first.offsetHeight, second.offsetHeight) +
+        motion.cards.overlap,
+    });
+    gsap.set(second, {
+      position: "absolute",
+      marginTop: 0,
+      left: 0,
+      width: "100%",
+      top: () => first.offsetTop + first.offsetHeight + gap,
+    });
     const cardTravel = () =>
       Math.max(0, second.offsetTop - first.offsetTop - motion.cards.overlap);
-    // Both cards remain in document flow. Only the second moves; the first stays opaque.
+    // Only the second moves; the first stays opaque and maintains the stack's layout.
     gsap.fromTo(
       second,
       { y: 0, rotation: -1.4 },
@@ -107,6 +122,12 @@ export function setupNaturalFarmingMotion() {
               cardTravel() * motion.cards.travelDistance,
             )}`,
           scrub: motion.cards.scrub,
+          onRefreshInit: () => {
+            // Update measurements without recapturing GSAP's original styles,
+            // so breakpoint changes can restore the ordinary stacked layout.
+            cards.style.height = `${Math.max(first.offsetHeight, second.offsetHeight) + motion.cards.overlap}px`;
+            second.style.top = `${first.offsetTop + first.offsetHeight + gap}px`;
+          },
           invalidateOnRefresh: true,
         },
       },

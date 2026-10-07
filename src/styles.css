@@ -4267,7 +4267,7 @@ svg {
   bottom: 25px;
 }
 .life-story-media {
-  padding: 0;
+  padding: 0 0 clamp(64px, 6vw, 100px);
 }
 .life-story-media .section-container {
   width: min(1130px, calc(100% - 100px));

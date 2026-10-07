@@ -29,6 +29,17 @@ test("chapter content follows the new scroll sequence and interactive sections",
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/#living");
   await expect(page.locator(".life-statistic")).toHaveCount(6);
+  const galleryCtaGap = await page
+    .locator(".life-story-media")
+    .evaluate(
+      (section) =>
+        section.getBoundingClientRect().bottom -
+        section
+          .querySelector(".gallery-page-link button")!
+          .getBoundingClientRect().bottom,
+    );
+  expect(galleryCtaGap).toBeGreaterThanOrEqual(64);
+  expect(galleryCtaGap).toBeLessThanOrEqual(100);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
@@ -301,6 +312,17 @@ test("Natural Farming keeps Centre Court sections and readable card handover", a
         .locator(".farming-managed-card")
         .evaluate((el) => el.getBoundingClientRect().top),
     ).toBeGreaterThan(after + 100);
+    await page.evaluate((y) => window.scrollTo(0, y + 2400), start);
+    await page.waitForTimeout(900);
+    const exitGap = await page.evaluate(
+      () =>
+        document.querySelector(".visit-invitation")!.getBoundingClientRect()
+          .top -
+        document.querySelector(".farming-managed-card")!.getBoundingClientRect()
+          .bottom,
+    );
+    expect(exitGap).toBeGreaterThan(120);
+    expect(exitGap).toBeLessThan(220);
   }
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();
