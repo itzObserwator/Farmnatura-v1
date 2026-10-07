@@ -15,8 +15,10 @@ export function useAnimations() {
    lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(tick);
    gsap.from('.hero-copy, .hero-art',{y:45,opacity:0,duration:1.15,stagger:.18,ease:'power3.out'});
    gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach(el=>gsap.from(el,{y:50,opacity:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%',once:true}}));
-   gsap.to('.hero-art .tree-crown',{rotation:2,transformOrigin:'50% 90%',duration:3,yoyo:true,repeat:-1,ease:'sine.inOut'});
-   gsap.to('.flower-head',{rotation:9,transformOrigin:'50% 50%',duration:2.5,yoyo:true,repeat:-1,ease:'sine.inOut'});
+   gsap.to('.family-art',{y:-6,duration:4,yoyo:true,repeat:-1,ease:'sine.inOut'});
+   gsap.to('.garden-butterfly',{x:18,y:-16,rotation:8,duration:3.4,yoyo:true,repeat:-1,ease:'sine.inOut'});
+   gsap.to('.butterfly-wings',{scaleX:.65,transformOrigin:'50% 50%',duration:.4,yoyo:true,repeat:-1});
+   gsap.to('.garden-mote',{y:-30,opacity:.15,duration:3,stagger:.8,yoyo:true,repeat:-1,ease:'sine.inOut'});
    gsap.to('.bee-wings',{scaleY:.6,transformOrigin:'center',duration:.12,yoyo:true,repeat:-1});
    gsap.to('.hero-bee',{motionPath:{path:'#bee-path',align:'#bee-path',alignOrigin:[.5,.5],autoRotate:false},duration:18,repeat:-1,ease:'sine.inOut'});
    gsap.to('.scroll-bee',{y:-200,x:120,rotation:-25,scrollTrigger:{trigger:'.intro',start:'top bottom',end:'bottom top',scrub:1.2}});

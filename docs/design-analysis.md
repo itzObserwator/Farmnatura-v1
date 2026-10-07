@@ -1,34 +1,45 @@
-# Design analysis
+# JFA Awards → Farm Natura
 
-Reference: https://www.vestrehabitats.com/ (inspected October 6, 2026, desktop Chrome at 1440 × 1000). Content source: https://www.farmnatura.in/.
+Reference: https://jfa-awards.snp.agency/. Analysed October 7, 2026 in Chrome at 1440 × 1000 and 390 × 844. Farm Natura content source: https://www.farmnatura.in/.
 
-## Visual system
+## Reference structure
 
-Vestre uses deep green (#204116), pale green (#ecedd4), cream (#fffff2), muted sage (#c1c9a0) and yellow accent dots. Its desktop hero puts animated artwork on the left and centered 50px semibold headings on the right. Intro sections alternate text and organic image masks, with 40px section headings. Curved full-width boundaries link the sections. An ecosystem icon row leads into a pinned horizontal illustrated landscape. The lower page uses product columns, paired explanatory cards, stacked location links and a dark footer.
+JFA opens with a framed illustrated poster and entry button, followed by a skippable introduction film. Its index is a full-viewport circular three-scene carousel. An organic pastel disk anchors the active composition; smaller adjacent scenes appear at the edges. Wheel, swipe and arrow controls change scenes. A small seal sits at upper left, circular menu button upper right, optional sound control lower left, navigation arrows below the central title, and a numbered pager lower right.
 
-The reference uses proprietary Graphik fonts. This implementation uses freely licensed, locally hosted DM Sans with similar geometric proportions, rather than copying the font. The layout and motion are close adaptations; an exact reproduction is not claimed because Farm Natura requires different text and original artwork.
+The three chapter pages open with full-screen pastel heroes, large uppercase serif titles and scattered botanical ornaments. Inside, large centered editorial statements lead into paired illustration/copy, photography, themed information and a next-chapter link. The menu arrives as three overlapping paper sheets, and navigation uses a pastel full-screen curtain.
 
-## Motion
+## Farm Natura mapping
 
-The reference implementation uses GSAP ScrollTrigger, motion paths and Lottie artwork. Its horizontal illustration pans with scroll, pinning at the viewport center and using a 0.9-second scrub. Content reveals move vertically with easing; pollinators follow paths across the page.
-
-Here GSAP handles staggered hero entrance, scroll reveals, continuous leaf/flower movement, bee motion paths and a pinned landscape with 0.9 scrub. Lenis provides smooth scrolling. SVG replaces Lottie so the original farmer, child, trees, flowers and landscape can be edited directly. Mobile uses a swipeable landscape, and reduced-motion users get static, accessible content.
-
-## Section mapping
-
-| Reference | Farm Natura |
+| JFA reference | Farm Natura |
 | --- | --- |
-| Biodiversity hero | Growing a life rooted in nature |
-| Biodiversity introduction | Returning to the land and living soil |
-| Urban biodiversity icons | Living soil, seeds, trees, pollinators, birdlife, flowers |
-| Horizontal habitat illustration | Original orchard, vegetable beds, farmhouse, cows and family |
-| Habitat photo strip | Interactive Farm Natura gallery |
-| Product overview | Natural farming, orchards, farmhouse living, managed care |
-| Designers | Natural farming approach and managed community |
-| Visiting areas | Kandukur location and access |
-| Experts/goals | Practical visitor FAQs |
-| Dark closing section | Site visit invitation and contact footer |
+| Poster and introduction | Original farm artwork and a short introduction using Farm Natura photos |
+| Our Story | Our Story: returning to the land, family roots and managed farming |
+| Our Installations | Natural Farming: native seeds, vegetables, soil health and managed care |
+| Centre Court | Farm Life: farmhouse living, family time, location, visits and FAQs |
+| Botanical illustrated scene disks | Original mango grove, crop garden and farmhouse/cow folk-art scenes |
+| Campaign impact statistics | Farm Natura’s published acreage, soil revitalisation period and maintenance term |
+| Festival installation gallery | Photographs from Farm Natura’s existing website |
+| Social closing sections | Site-visit invitation and Farm Natura’s contact links |
 
-## Content guardrails
+## Visual measurements
 
-Use Farm Natura’s own estate photography and published contact number. The 110+ acre statement, managed farming concept and location are sourced from its present website. Travel times are identified as approximate. No invented testimonials, pricing, available plots or booking confirmation. WhatsApp enquiry is handed to the visitor to send.
+Core navy: #003056. Paper: #fbfbf7. Sky: #d4ecf0. Mint: #c1e3d2. Sand: #ffedbf. Desktop chapter compositions are approximately 430–460px wide; neighboring scenes show at about two-thirds scale. Reference chapter index titles are about 60–70px; inner hero titles reach about 110px. Mobile hero titles are roughly 40–48px. Controls use small uppercase sans-serif text, thin outlines and slightly irregular circular/paper shapes.
+
+The reference uses proprietary Voyage, Gill Sans and Baysoir alongside other typefaces. This project uses freely licensed Italiana for the display role and Lato for body/UI text. This is a close visual and behavioral adaptation, not an identical font or artwork reproduction.
+
+## Motion implementation
+
+- GSAP animates carousel translation, scaling, rotating illustrations, looping decorative elements and pointer parallax.
+- GSAP Observer handles wheel and touch input. A transition lock prevents a single gesture from skipping several chapters. Adjacent scenes wrap outside the center path.
+- Chapter titles reveal line by line; ScrollTrigger reveals editorial content and shifts illustrations with scroll.
+- Lenis runs only on chapter pages, leaving carousel gestures under its own controls.
+- The menu uses three staggered paper layers. Navigation covers the page with a pastel curtain, switches the route, and reveals the next page.
+- Intro progress reflects loaded illustration files. The photographic intro lasts about 7.6 seconds and is always skippable.
+- Optional local synthesised ambience replaces reference-site audio. It never starts automatically.
+- Reduced motion disables continuous movement and simplifies page transitions. Native dialogs provide focus trapping for menu, photographs and enquiries.
+
+## Original artwork and content
+
+Three detailed patterned Indian folk-art compositions were created using the built-in image generation tool. PNG originals and exact prompts are preserved in the project; the deployed page uses WebP files with transparency. Decorative flowers, mangoes, foliage, bird and seal are newly authored SVG.
+
+No JFA illustrations, intro footage, proprietary fonts, testimonials or source implementation were copied. Estate facts and the contact number come from Farm Natura’s current site. Travel times are marked approximate; visitors request current pricing, availability and agreements directly from the team. The visit form creates a WhatsApp draft without sending it automatically.
