@@ -512,3 +512,63 @@ test("gallery films load on demand and gallery connects to navigation and enquir
   await page.goBack();
   await expect(page).toHaveURL(/#living$/);
 });
+
+test("Explore badge follows the pointer only over active illustration artwork", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => sessionStorage.setItem("farm-entered", "yes"));
+  await page.goto("/");
+  const art = page.locator(".chapter-scene.is-current .scene-illustration");
+  const badge = page.locator(".explore-cursor");
+  const bounds = await art.boundingBox();
+  if (!bounds) throw new Error("Active illustration is missing");
+  const x = bounds.x + bounds.width * 0.45,
+    y = bounds.y + bounds.height * 0.45;
+  await page.mouse.move(x, y);
+  await expect(badge).toHaveAttribute("data-visible", "true");
+  const first = await badge.boundingBox();
+  await page.mouse.move(x + 60, y + 30);
+  const second = await badge.boundingBox();
+  expect(second!.x - first!.x).toBeCloseTo(60, 0);
+  expect(second!.y - first!.y).toBeCloseTo(30, 0);
+  await page.mouse.move(20, 120);
+  await expect(badge).toHaveAttribute("data-visible", "false");
+  await expect(badge).toHaveCSS("opacity", "0");
+  // Hovering the chapter title or a neighbouring scene is not an Explore target.
+  await page.locator(".chapter-caption h1").hover();
+  await expect(badge).toHaveAttribute("data-visible", "false");
+  await art.hover();
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await expect(badge).toHaveAttribute("data-visible", "false");
+  await page.getByRole("button", { name: "Close menu" }).click();
+  await art.click();
+  await expect(page).toHaveURL(/#story$/);
+  await page
+    .locator(".next-scene > img:not(.next-flower)")
+    .scrollIntoViewIfNeeded();
+  await page.locator(".next-scene > img:not(.next-flower)").hover();
+  await expect(badge).toHaveAttribute("data-visible", "true");
+  await page.mouse.move(20, 120);
+  await expect(badge).toHaveAttribute("data-visible", "false");
+});
+
+test("Explore pointer badge settles smoothly and clears when illustrations change", async ({
+  page,
+}) => {
+  await page.addInitScript(() => sessionStorage.setItem("farm-entered", "yes"));
+  await page.goto("/");
+  await page.locator(".chapter-scene.is-current .scene-illustration").hover();
+  const badge = page.locator(".explore-cursor");
+  await expect(badge).toHaveAttribute("data-visible", "true");
+  await expect(badge).toHaveCSS("opacity", "1");
+  await page.mouse.move(15, 120);
+  await expect(badge).toHaveCSS("opacity", "0");
+  await page.getByRole("button", { name: "Next chapter", exact: true }).click();
+  await expect(badge).toHaveAttribute("data-visible", "false");
+  await page.waitForTimeout(1100);
+  await page.locator(".chapter-scene.is-current .scene-illustration").hover();
+  await expect(badge).toHaveAttribute("data-visible", "true");
+  await page.mouse.move(15, 120);
+  await expect(badge).toHaveAttribute("data-visible", "false");
+});

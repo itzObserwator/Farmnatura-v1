@@ -81,3 +81,5 @@ Natural Farming’s measured text timing and reversible card overlap live in `sr
 Farm Life follows the About reference. Edit its sections in `src/components/world/FarmLifeLayout.tsx`, six figures in `src/data/life.ts`, and the wide photo tour through `Gallery.tsx`’s `story` variant. The previous generic landscape and pinned-card components have been replaced. See `docs/farm-life-layout.md` for the reference mapping.
 
 The dedicated Gallery opens at `#gallery` through the menu or Farm Life. Edit its 29 photo captions, categories and six official videos in `src/data/gallery.ts`. Its camera sketch is an original editable SVG; botanical illustrations reuse our hand-drawn artwork. See [Gallery page notes](docs/gallery-page.md) for the layout, media behavior and editing guide.
+
+The landing and next-chapter illustrations share the pointer-following Explore badge in `src/hooks/useExploreCursor.tsx`. See [Explore cursor notes](docs/explore-cursor.md) for the recording analysis, motion settings and touch/keyboard behavior.

@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { chapters, type ChapterId } from "../../data/chapters";
 import HandDrawnMotif from "./HandDrawnMotif";
 import { motionTokens } from "../../animation/motionTokens";
+import { useExploreCursor } from "../../hooks/useExploreCursor";
 gsap.registerPlugin(Observer);
 const modulo = (value: number, length: number) =>
   ((value % length) + length) % length;
@@ -31,6 +32,10 @@ export default function ChapterCarousel({
     lock = useRef(false);
   const changeRef = useRef<(direction: number) => void>(() => {});
   const active = modulo(step, 3);
+  const exploreCursor = useExploreCursor(!blocked);
+  useEffect(() => {
+    exploreCursor.hide();
+  }, [step, exploreCursor.hide]);
   changeRef.current = (direction) => {
     if (lock.current || blocked) return;
     lock.current = true;
@@ -176,6 +181,7 @@ export default function ChapterCarousel({
                   src={chapter.art}
                   alt={chapter.alt}
                   draggable="false"
+                  {...(current && !blocked ? exploreCursor.handlers : {})}
                 />
                 <HandDrawnMotif
                   kind={chapter.id === "living" ? "bird" : "flower"}
@@ -269,6 +275,7 @@ export default function ChapterCarousel({
         </span>
         <span>/03</span>
       </div>
+      {exploreCursor.cursor}
     </div>
   );
 }

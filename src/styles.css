@@ -293,7 +293,7 @@ svg {
   height: 100%;
   inset: 0;
   object-fit: contain;
-  pointer-events: none;
+  pointer-events: auto;
   user-select: none;
 }
 .scene-orbit {
@@ -316,6 +316,7 @@ svg {
   transform: rotate(25deg);
 }
 .scene-explore {
+  pointer-events: none;
   position: absolute;
   left: 50%;
   top: 48%;
@@ -337,7 +338,6 @@ svg {
     opacity 0.3s,
     transform 0.3s;
 }
-.chapter-scene.is-current:hover .scene-explore,
 .chapter-scene.is-current:focus-visible .scene-explore {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
@@ -2357,11 +2357,38 @@ svg {
   pointer-events: none;
 }
 .next-scene > img:not(.next-flower) {
+  pointer-events: auto;
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+.explore-cursor {
+  position: fixed;
+  left: -25px;
+  top: -25px;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  z-index: 50;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  font-family: Lato, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: 0;
+  will-change: transform, opacity;
+}
+@media (hover: none), (pointer: coarse) {
+  .explore-cursor {
+    display: none;
+  }
 }
 .next-flower {
   height: auto;
