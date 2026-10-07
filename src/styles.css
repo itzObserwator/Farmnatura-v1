@@ -2574,3 +2574,635 @@ svg {
     top: 16px;
   }
 }
+
+/* Hand-drawn hero edges keep the headline's clear central area. */
+.handdrawn-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.handdrawn-decor .decor-piece {
+  position: absolute;
+  height: auto;
+  object-fit: contain;
+  max-width: none;
+}
+.drawn-mango {
+  width: 235px;
+  top: -145px;
+  left: 15%;
+  transform: rotate(-9deg);
+  transform-origin: top left;
+}
+.drawn-marigold-top {
+  width: 280px;
+  top: -135px;
+  right: 8%;
+  transform: rotate(20deg);
+  transform-origin: bottom center;
+}
+.drawn-foliage {
+  width: 400px;
+  left: -105px;
+  bottom: -85px;
+  transform: rotate(-8deg);
+  transform-origin: bottom left;
+}
+.drawn-marigold-bottom {
+  width: 330px;
+  right: -40px;
+  bottom: -190px;
+  transform: rotate(-20deg);
+  transform-origin: bottom center;
+}
+.drawn-bird {
+  width: 185px;
+  right: 22px;
+  top: 38%;
+  transform: rotate(-5deg);
+}
+.handdrawn-1 .drawn-mango {
+  left: 8%;
+  top: -160px;
+  transform: rotate(12deg);
+}
+.handdrawn-1 .drawn-bird {
+  top: 42%;
+  right: 15px;
+}
+.handdrawn-2 .drawn-foliage {
+  width: 420px;
+  left: -145px;
+  bottom: -60px;
+}
+.hero-scroll-art {
+  display: block;
+  width: 45px;
+  height: 60px;
+  object-fit: contain;
+}
+
+/* Our Story follows Victoria Wharf's alternating editorial composition. */
+.our-story-layout {
+  overflow-x: clip;
+  background: var(--paper);
+  padding-bottom: 120px;
+}
+.story-opening {
+  padding: 200px 25px 0;
+  text-align: center;
+}
+.story-opening h2 {
+  font-family: Georgia, serif;
+  font-size: 54px;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -1.5px;
+  max-width: 850px;
+  margin: 30px auto 0;
+}
+.story-first-split {
+  display: grid;
+  grid-template-columns: 44% 56%;
+  position: relative;
+  margin-top: 90px;
+  align-items: center;
+}
+.story-first-copy {
+  max-width: 365px;
+  margin-left: clamp(70px, 15.5vw, 240px);
+  padding-right: 22px;
+}
+.story-first-copy p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+.story-first-copy .paper-button {
+  margin-top: 10px;
+}
+.story-grove {
+  position: relative;
+  aspect-ratio: 1/1.06;
+  width: 100%;
+}
+.story-grove-surface {
+  position: absolute;
+  inset: 35px -4% 5px 0;
+  background: var(--mint);
+  border-radius: 48% 52% 36% 64% / 41% 39% 61% 59%;
+  transform: rotate(-7deg);
+}
+.story-grove-art {
+  position: relative;
+  display: block;
+  width: 95%;
+  height: 100%;
+  object-fit: contain;
+}
+.story-grove-flower {
+  position: absolute;
+  width: 165px;
+  left: -30px;
+  top: 6%;
+  transform: rotate(-20deg);
+  pointer-events: none;
+}
+.story-grove-bird {
+  position: absolute;
+  width: 170px;
+  right: 7%;
+  top: 4%;
+  transform: rotate(6deg);
+  pointer-events: none;
+}
+.story-curved-line {
+  position: relative;
+  height: 160px;
+  margin-top: 40px;
+  overflow: hidden;
+}
+.story-curved-line svg {
+  width: 100%;
+  height: 100%;
+}
+.story-curved-line text {
+  font-family: Italiana, Georgia, serif;
+  font-size: 65px;
+  fill: var(--ink);
+  letter-spacing: -1px;
+}
+.story-second-split {
+  display: grid;
+  grid-template-columns: 53% 47%;
+  align-items: center;
+  gap: 0;
+  margin-top: 90px;
+  position: relative;
+}
+.story-farm-frame {
+  position: relative;
+  width: 95%;
+  height: 660px;
+  border-radius: 45% 55% 40% 60% / 48% 43% 57% 52%;
+  overflow: hidden;
+  margin-left: -6%;
+}
+.story-farm-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.story-second-copy {
+  padding: 45px 12% 80px 8%;
+  position: relative;
+}
+.story-second-copy h2 {
+  font-family: Italiana, Georgia, serif;
+  font-size: 60px;
+  line-height: 1.04;
+  letter-spacing: -1.5px;
+  margin: 30px 0;
+}
+.story-second-copy p {
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 380px;
+}
+.story-quote-foliage {
+  position: absolute;
+  width: 260px;
+  right: 0;
+  bottom: -130px;
+  transform: rotate(-28deg);
+  pointer-events: none;
+}
+.story-index {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 335px;
+  align-items: start;
+  gap: 70px;
+  width: min(1180px, calc(100% - 150px));
+  margin: 240px auto 0;
+}
+.story-index-introduction {
+  display: none;
+}
+.story-index-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding-bottom: 80px;
+}
+.story-index-list button {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 17px;
+  text-align: left;
+  width: 100%;
+  padding: 0;
+  font-family: Italiana, Georgia, serif;
+  font-size: 64px;
+  line-height: 1.05;
+  letter-spacing: -1.8px;
+  transition: opacity 0.25s;
+}
+.story-index-list button[aria-pressed="false"] {
+  opacity: 0.65;
+}
+.story-index-list button:hover,
+.story-index-list button:focus-visible {
+  opacity: 1;
+}
+.story-index-number {
+  font-family: Lato, Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0;
+  position: relative;
+  top: -5px;
+  flex: none;
+}
+.story-index-arrow {
+  position: absolute;
+  left: -42px;
+  top: 16px;
+  font-family: Lato, Arial, sans-serif;
+  font-size: 23px;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+.story-index-list button:hover .story-index-arrow,
+.story-index-list button:focus-visible .story-index-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+.story-index-panel {
+  position: sticky;
+  top: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 640px;
+  max-height: calc(100svh - 170px);
+}
+.story-index-panel > .chapter-tag {
+  font-size: 9px;
+  letter-spacing: 0.4px;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.story-index-about {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.story-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+.story-facts strong {
+  display: block;
+  font-family: Italiana, Georgia, serif;
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.story-facts span {
+  display: block;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.story-facts-note {
+  font-size: 10px;
+  line-height: 1.4;
+  margin-top: -10px;
+}
+.story-selection {
+  margin-top: auto;
+}
+.story-selection > p {
+  font-size: 15px;
+  line-height: 1.55;
+  min-height: 100px;
+  margin-bottom: 20px;
+}
+.story-selection-photo {
+  position: relative;
+  height: 215px;
+  overflow: hidden;
+  border-radius: 44% 56% 43% 57% / 48% 42% 58% 52%;
+}
+.story-selection-photo > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.story-selection-caption {
+  display: block;
+  margin-top: 10px;
+  font-size: 10px;
+  letter-spacing: 0.1px;
+}
+@media (min-width: 1700px) {
+  .drawn-mango {
+    width: 290px;
+    top: -170px;
+  }
+  .drawn-marigold-top {
+    width: 360px;
+    top: -170px;
+  }
+  .drawn-foliage {
+    width: 470px;
+    left: -105px;
+  }
+  .drawn-marigold-bottom {
+    width: 390px;
+    bottom: -225px;
+  }
+  .drawn-bird {
+    width: 220px;
+    right: 40px;
+  }
+  .story-opening h2 {
+    font-size: 64px;
+    max-width: 1000px;
+  }
+  .story-first-copy {
+    max-width: 440px;
+  }
+  .story-first-copy p {
+    font-size: 22px;
+  }
+  .story-second-copy h2 {
+    font-size: 72px;
+  }
+  .story-farm-frame {
+    height: 790px;
+  }
+  .story-index {
+    width: min(1450px, calc(100% - 220px));
+    grid-template-columns: 1fr 400px;
+  }
+  .story-index-list button {
+    font-size: 76px;
+  }
+}
+@media (max-width: 1100px) and (min-width: 768px) {
+  .story-first-copy {
+    margin-left: 70px;
+    max-width: 310px;
+  }
+  .story-second-copy h2 {
+    font-size: 48px;
+  }
+  .story-farm-frame {
+    height: 520px;
+  }
+  .story-index {
+    width: calc(100% - 100px);
+    grid-template-columns: 1fr 300px;
+    gap: 40px;
+  }
+  .story-index-list button {
+    font-size: 49px;
+  }
+  .story-grove-flower {
+    width: 115px;
+  }
+  .drawn-bird {
+    width: 150px;
+    right: 0;
+  }
+  .drawn-mango {
+    width: 190px;
+  }
+}
+@media (max-width: 767px) {
+  .drawn-mango {
+    width: 130px;
+    top: -110px;
+    left: 42%;
+    transform: rotate(-12deg);
+  }
+  .drawn-marigold-top {
+    width: 160px;
+    right: -40px;
+    top: -95px;
+  }
+  .drawn-foliage {
+    width: 235px;
+    left: -120px;
+    bottom: -30px;
+  }
+  .drawn-marigold-bottom {
+    width: 190px;
+    right: -68px;
+    bottom: -105px;
+  }
+  .drawn-bird {
+    width: 85px;
+    right: -30px;
+    top: 58%;
+  }
+  .handdrawn-1 .drawn-mango {
+    left: 35%;
+    top: -130px;
+  }
+  .handdrawn-1 .drawn-bird {
+    top: 22%;
+    right: -20px;
+  }
+  .handdrawn-2 .drawn-foliage {
+    width: 250px;
+    left: -145px;
+    bottom: -15px;
+  }
+  .hero-scroll-art {
+    width: 38px;
+    height: 55px;
+  }
+  .our-story-layout {
+    padding-bottom: 70px;
+  }
+  .story-opening {
+    padding: 90px 22px 0;
+  }
+  .story-opening h2 {
+    font-size: 34px;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    margin-top: 25px;
+  }
+  .story-first-split {
+    grid-template-columns: 1fr;
+    margin-top: 45px;
+  }
+  .story-first-copy {
+    max-width: none;
+    margin: 0;
+    padding: 0 26px;
+  }
+  .story-first-copy p {
+    font-size: 16px;
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+  .story-grove {
+    width: 94%;
+    margin: 55px 0 0 auto;
+  }
+  .story-grove-surface {
+    inset: 18px -8% 0 0;
+  }
+  .story-grove-flower {
+    width: 80px;
+    left: -10px;
+    top: 6%;
+  }
+  .story-grove-bird {
+    width: 85px;
+    right: 7%;
+    top: 3%;
+  }
+  .story-curved-line {
+    height: 80px;
+    margin-top: 25px;
+  }
+  .story-curved-line svg {
+    width: 160%;
+    margin-left: -30%;
+    height: 100%;
+  }
+  .story-curved-line text {
+    font-size: 74px;
+  }
+  .story-second-split {
+    grid-template-columns: 1fr;
+    margin-top: 25px;
+  }
+  .story-farm-frame {
+    height: 380px;
+    width: 100%;
+    margin-left: -8%;
+  }
+  .story-second-copy {
+    padding: 45px 26px 75px;
+  }
+  .story-second-copy h2 {
+    font-size: 43px;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin: 25px 0;
+  }
+  .story-second-copy p {
+    font-size: 16px;
+  }
+  .story-quote-foliage {
+    width: 160px;
+    bottom: -60px;
+    right: -35px;
+  }
+  .story-index {
+    position: relative;
+    grid-template-columns: minmax(0, 1fr) 130px;
+    gap: 15px;
+    width: calc(100% - 44px);
+    margin: 85px auto 0;
+  }
+  .story-index-introduction {
+    display: block;
+    grid-column: 1/-1;
+    margin-bottom: 35px;
+  }
+  .story-index-introduction > .chapter-tag {
+    font-size: 9px;
+    gap: 8px;
+  }
+  .story-index-introduction p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-top: 22px;
+  }
+  .story-index-list {
+    gap: 38px;
+    padding-bottom: 20px;
+  }
+  .story-index-list button {
+    font-size: 31px;
+    line-height: 1.05;
+    letter-spacing: -0.6px;
+    gap: 9px;
+  }
+  .story-index-number {
+    font-size: 8px;
+    top: -2px;
+  }
+  .story-index-arrow {
+    display: none;
+  }
+  .story-index-panel {
+    top: auto;
+    bottom: 110px;
+    align-self: end;
+    position: sticky;
+    min-height: 0;
+    max-height: none;
+    gap: 0;
+  }
+  .story-index-panel > .chapter-tag,
+  .story-index-about,
+  .story-facts,
+  .story-facts-note {
+    display: none;
+  }
+  .story-selection > p {
+    font-size: 11px;
+    line-height: 1.4;
+    min-height: 0;
+    margin: 0 0 15px;
+  }
+  .story-selection-photo {
+    height: 110px;
+  }
+  .story-selection-caption {
+    font-size: 8px;
+    line-height: 1.3;
+    margin-top: 8px;
+  }
+}
+.story-index-mobile-facts {
+  display: none;
+}
+@media (max-width: 767px) {
+  .story-index-panel {
+    top: 130px;
+    bottom: auto;
+    align-self: start;
+  }
+  .story-index-mobile-facts {
+    display: block;
+    grid-column: 1/-1;
+    padding-top: 45px;
+  }
+  .story-index-mobile-facts .story-facts {
+    display: grid;
+  }
+  .story-index-mobile-facts .story-facts-note {
+    display: block;
+    margin: 20px 0 0;
+  }
+  .story-index-mobile-facts .story-facts strong {
+    font-size: 42px;
+  }
+  .story-index-mobile-facts .story-facts span {
+    font-size: 11px;
+  }
+}

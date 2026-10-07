@@ -16,6 +16,9 @@ Open the Local URL printed by Vite. `npm run build` produces the production webs
 | File                                        | What it controls                                                                            |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `src/data/chapters.ts`                      | Titles, colors, illustration paths, and copy for Our Story, Natural Farming, and Farm Life  |
+| `src/data/story.ts`                         | Six story-list items, descriptions, captions, and photographs                               |
+| `src/components/world/OurStoryLayout.tsx`   | Victoria Wharf-inspired editorial sections and sticky story selector                        |
+| `src/components/world/HeroBotanicals.tsx`   | Hand-drawn hero artwork placements                                                          |
 | `src/data/content.ts`                       | FAQ answers and Farm Natura’s contact details                                               |
 | `src/App.tsx`                               | Routing, page transitions, menu, and visit enquiries                                        |
 | `src/components/world/Intro.tsx`            | Illustrated entry screen and optional photographic introduction                             |
@@ -40,7 +43,7 @@ Open the Local URL printed by Vite. `npm run build` produces the production webs
 
 ## Artwork
 
-Three newly generated folk-art illustrations live in `public/illustrations/` as optimized transparent WebP files. Original PNGs are preserved in `artwork/jfa/`. Their complete prompts are in `docs/jfa-illustration-prompts.json`. Run `npm run artwork:optimize` after replacing PNG originals. Decorative botanical elements are SVG and can be edited directly.
+Three newly generated folk-art illustrations live in `public/illustrations/` as optimized transparent WebP files. Original PNGs are preserved in `artwork/jfa/`. Their complete prompts are in `docs/jfa-illustration-prompts.json`. Run `npm run artwork:optimize` after replacing PNG originals. Four hand-drawn botanical cutouts replace the hero’s flat ornaments. Their PNG originals are in `artwork/hero/`, optimized assets in `public/illustrations/hero/`, and exact generation prompts in `docs/hero-illustration-prompts.json`. Smaller SVG motifs remain in other sections.
 
 The earlier illustration draft is preserved in `artwork/illustrations/` and `artwork/previous-draft/`; it is not used by the current website. Farm Natura’s own photographs are in `public/images/`. Generated scenes are conceptual illustrations, not photographs or architectural plans of the estate.
 
@@ -65,3 +68,5 @@ The uploaded logo is preserved unchanged in `public/branding/farmnatura-logo.png
 Framer Motion handles intro and caption entrances, logo button feedback, and expanding FAQ answers. GSAP controls the three illustrated scenes, pointer parallax, paper menu, curtain transitions, editorial scroll reveals, and the WebGL chapter-color tween. Three.js renders an original full-screen shader atmosphere in the carousel; it imports only when the carousel mounts. Its canvas does not intercept gestures, caps pixel density, pauses behind dialogs and in hidden tabs, respects reduced motion, and disposes GPU resources on exit. Browsers without WebGL retain the illustrated site and all navigation. Lenis smooths editorial-page scrolling.
 
 See [the section-by-section motion map](docs/section-motion-map.md) for the latest reference audit, distinct chapter sequences, timing choices and animation responsibilities.
+
+See [Our Story layout notes](docs/our-story-layout.md) for the Victoria Wharf analysis and implementation mapping.

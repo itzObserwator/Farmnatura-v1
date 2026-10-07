@@ -41,28 +41,24 @@ export function useChapterAnimations() {
         stagger: 0.3,
         ease: "sine.inOut",
       });
-      gsap.utils
-        .toArray<HTMLElement>("[data-text-reveal]")
-        .forEach((element) =>
-          gsap.from(element.querySelectorAll(".reveal-char"), {
-            yPercent: 110,
-            duration: 1.1,
-            stagger: 0.007,
-            ease: "power3.out",
-            scrollTrigger: { trigger: element, start: "top 88%", once: true },
-          }),
-        );
-      gsap.utils
-        .toArray<HTMLElement>("[data-reveal]")
-        .forEach((element) =>
-          gsap.from(element, {
-            y: 35,
-            opacity: 0,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: { trigger: element, start: "top 88%", once: true },
-          }),
-        );
+      gsap.utils.toArray<HTMLElement>("[data-text-reveal]").forEach((element) =>
+        gsap.from(element.querySelectorAll(".reveal-char"), {
+          yPercent: 110,
+          duration: 1.1,
+          stagger: 0.007,
+          ease: "power3.out",
+          scrollTrigger: { trigger: element, start: "top 88%", once: true },
+        }),
+      );
+      gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) =>
+        gsap.from(element, {
+          y: 35,
+          opacity: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: { trigger: element, start: "top 88%", once: true },
+        }),
+      );
       gsap.utils
         .toArray<HTMLElement>("[data-image-reveal]")
         .forEach((element) => {
@@ -97,7 +93,9 @@ export function useChapterAnimations() {
           );
         });
       gsap.utils
-        .toArray<HTMLElement>(".art-panel img, .landscape-ornament")
+        .toArray<HTMLElement>(
+          ".art-panel img, .landscape-ornament, .story-grove-art, .story-drift",
+        )
         .forEach((element) =>
           gsap.fromTo(
             element,
@@ -114,6 +112,22 @@ export function useChapterAnimations() {
               },
             },
           ),
+        );
+      const curvedLine = document.querySelector(".story-curved-line textPath");
+      if (curvedLine)
+        gsap.fromTo(
+          curvedLine,
+          { attr: { startOffset: "54%" } },
+          {
+            attr: { startOffset: "46%" },
+            ease: "none",
+            scrollTrigger: {
+              trigger: ".story-curved-line",
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1,
+            },
+          },
         );
       gsap.to(".hero-decor", {
         yPercent: 18,

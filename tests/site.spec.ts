@@ -42,17 +42,15 @@ test("chapter content follows the new scroll sequence and interactive sections",
   await expect(page.locator(".transition-curtain")).not.toBeVisible();
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/#living");
-  const cards = await page
-    .locator(".moment-card")
-    .evaluateAll((els) =>
-      els.map((el) => ({
-        top: el.getBoundingClientRect().top,
-        bottom: el.getBoundingClientRect().bottom,
-      })),
-    );
+  const cards = await page.locator(".moment-card").evaluateAll((els) =>
+    els.map((el) => ({
+      top: el.getBoundingClientRect().top,
+      bottom: el.getBoundingClientRect().bottom,
+    })),
+  );
   expect(cards[1].top).toBeGreaterThanOrEqual(cards[0].bottom);
   await page.goto("/#story");
-  await page.locator(".impact-section").scrollIntoViewIfNeeded();
+  await page.locator(".story-index").scrollIntoViewIfNeeded();
   await expect(page.locator("[data-count]").first()).toHaveText("110+");
 });
 test("uploaded branding and WebGL animation work with a no-WebGL fallback", async ({
@@ -228,4 +226,41 @@ test("intro, sound preference and reduced motion remain accessible", async ({
       .locator(".hero-title")
       .evaluate((el) => getComputedStyle(el).opacity),
   ).toBe("1");
+});
+
+test("Our Story hand-drawn artwork and reference-style selector work", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/#story");
+  const artwork = page.locator(".handdrawn-decor img");
+  await expect(artwork).toHaveCount(5);
+  await expect
+    .poll(() =>
+      artwork.evaluateAll((els) =>
+        els.every(
+          (el) =>
+            (el as HTMLImageElement).complete &&
+            (el as HTMLImageElement).naturalWidth > 0,
+        ),
+      ),
+    )
+    .toBe(true);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  const weekends = page.getByRole("button", { name: /05 Farmhouse weekends/ });
+  await weekends.click();
+  await expect(weekends).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".story-selection-photo > img")).toHaveAttribute(
+    "src",
+    "/images/farmhouse.jpg",
+  );
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });
