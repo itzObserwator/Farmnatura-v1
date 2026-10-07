@@ -3,11 +3,11 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import BrandLogo from "./BrandLogo";
 import { chapters } from "../../data/chapters";
 import HeroBotanicals from "./HeroBotanicals";
+import FarmEntrance from "./FarmEntrance";
 export default function Intro({ onComplete }: { onComplete: () => void }) {
   const reduced = useReducedMotion();
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState<"poster" | "sequence">("poster");
-  const [frame, setFrame] = useState(0);
   useEffect(() => {
     let alive = true,
       loaded = 0;
@@ -24,18 +24,6 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
       alive = false;
     };
   }, []);
-  useEffect(() => {
-    if (stage !== "sequence") return;
-    const interval = window.setInterval(
-      () => setFrame((f) => (f + 1) % 3),
-      2400,
-    );
-    const timeout = window.setTimeout(onComplete, 7600);
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, [stage, onComplete]);
   return (
     <section
       className={`intro-screen is-${stage}`}
@@ -152,38 +140,7 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
         </>
       ) : (
         <>
-          <div className="intro-film">
-            <img
-              key={frame}
-              src={
-                [
-                  "/images/farm.jpg",
-                  "/images/farmhouse.jpg",
-                  "/images/goshala.jpg",
-                ][frame]
-              }
-              alt={
-                [
-                  "Farm Natura’s green estate",
-                  "A farmhouse at Farm Natura",
-                  "Farm Natura goshala",
-                ][frame]
-              }
-            />
-            <div className="intro-film-copy">
-              <span className="mini-label">FARM NATURA · KANDUKUR</span>
-              <h2>
-                {
-                  [
-                    "A little closer to nature.",
-                    "A place to put down roots.",
-                    "A life that grows with you.",
-                  ][frame]
-                }
-              </h2>
-            </div>
-            <span className="film-progress" />
-          </div>
+          <FarmEntrance onComplete={onComplete} />
           <button
             className="paper-button intro-skip"
             aria-label="Skip intro"

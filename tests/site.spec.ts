@@ -205,7 +205,8 @@ test("intro, sound preference and reduced motion remain accessible", async ({
     page.getByRole("button", { name: "ENTER THE FARM" }),
   ).toBeEnabled();
   await page.getByRole("button", { name: "ENTER THE FARM" }).click();
-  await expect(page.locator(".intro-film")).toBeVisible();
+  await expect(page.locator(".farm-entrance")).toBeVisible();
+  await expect(page.locator(".entrance-copy h2")).toContainText("Welcome");
   await page.getByRole("button", { name: "Skip intro", exact: true }).click();
   await expect(page.locator(".chapter-carousel")).toBeVisible();
   await page.getByRole("button", { name: "Turn sound on" }).click();
@@ -222,6 +223,30 @@ test("intro, sound preference and reduced motion remain accessible", async ({
       .locator(".hero-title")
       .evaluate((el) => getComputedStyle(el).opacity),
   ).toBe("1");
+});
+
+test("illustrated entrance advances through the farm story and enters automatically", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "ENTER THE FARM" }).click();
+  await expect(page.locator(".entrance-copy h2")).toContainText("It begins");
+  await expect(page.locator(".entrance-copy h2")).toContainText(
+    "Grown with care",
+    { timeout: 3500 },
+  );
+  await expect(page.locator(".entrance-copy h2")).toContainText("Welcome", {
+    timeout: 3500,
+  });
+  await expect(page.locator(".chapter-carousel")).toBeVisible({
+    timeout: 3500,
+  });
+  expect(
+    await page.evaluate(() => sessionStorage.getItem("farm-entered")),
+  ).toBe("yes");
+  await page.reload();
+  await expect(page.locator(".chapter-carousel")).toBeVisible();
+  await expect(page.locator(".farm-entrance")).toHaveCount(0);
 });
 
 test("Our Story hand-drawn artwork and reference-style selector work", async ({
