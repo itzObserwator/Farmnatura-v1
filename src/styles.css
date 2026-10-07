@@ -3279,17 +3279,21 @@ svg {
 }
 .farming-about-split {
   display: grid;
-  grid-template-columns: 49% 51%;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
+  gap: clamp(40px, 6vw, 100px);
+  width: min(1400px, calc(100% - 96px));
+  margin: 65px auto 0;
 }
 .farming-about-art {
   position: relative;
-  min-height: 650px;
-  margin-top: -65px;
+  height: clamp(460px, 42vw, 600px);
+  min-height: 0;
+  margin-top: 0;
 }
 .farming-organic-surface {
   position: absolute;
-  inset: 35px 0 0 -12%;
+  inset: 8% 3% 8% 0;
   background: #fff3b5;
   border-radius: 42% 57% 37% 62% / 54% 38% 63% 44%;
   transform: rotate(-8deg);
@@ -3302,12 +3306,12 @@ svg {
 .farming-about-art .farming-about-flower {
   position: absolute;
   width: 135px;
-  left: -25px;
+  left: 0;
   bottom: 10%;
 }
 .farming-about-copy {
-  width: min(437px, 76%);
-  margin: 70px 0 0 12%;
+  width: min(437px, 100%);
+  margin: 0 auto;
   font-size: 20px;
   line-height: 1.55;
 }
@@ -3318,10 +3322,10 @@ svg {
   margin-top: 35px;
 }
 .farming-discover {
-  padding-top: 200px;
+  padding-top: 140px;
 }
 .farming-panorama {
-  width: 78%;
+  width: min(1440px, calc(100% - 96px));
   margin: 0 auto;
   position: relative;
 }
@@ -3349,14 +3353,17 @@ svg {
 }
 .farming-discover-split {
   display: grid;
-  grid-template-columns: 55% 45%;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  min-height: 740px;
+  gap: clamp(40px, 6vw, 100px);
+  width: min(1400px, calc(100% - 96px));
+  margin: 0 auto;
+  min-height: 0;
   padding-top: 120px;
 }
 .farming-discover-copy {
-  width: min(425px, 70%);
-  margin-left: 27%;
+  width: min(425px, 100%);
+  margin: 0 auto;
   font-size: 20px;
   line-height: 1.5;
 }
@@ -3372,11 +3379,11 @@ svg {
 }
 .farming-discover-art {
   position: relative;
-  height: 640px;
+  height: clamp(460px, 42vw, 580px);
 }
 .farming-bird-surface {
   position: absolute;
-  inset: 0 -20% 12% 5%;
+  inset: 10% 3% 12% 8%;
   background: #dce8cc;
   border-radius: 53% 47% 35% 65% / 36% 59% 41% 64%;
   transform: rotate(9deg);
@@ -3520,14 +3527,13 @@ svg {
     font-size: 17px;
   }
   .farming-about-art {
-    min-height: 500px;
+    height: 460px;
   }
   .farming-photo-mask {
     height: 460px;
   }
   .farming-discover-copy {
-    margin-left: 15%;
-    width: 78%;
+    width: 100%;
     font-size: 17px;
   }
   .farming-discover-art {
@@ -3551,27 +3557,31 @@ svg {
   .farming-about-split {
     display: flex;
     flex-direction: column;
+    width: calc(100% - 40px);
+    gap: 35px;
+    margin-top: 40px;
   }
   .farming-about-art {
     width: 100%;
     min-height: 0;
+    height: auto;
     aspect-ratio: 1/1.06;
-    margin-top: 35px;
+    margin-top: 0;
   }
   .farming-about-art > .farming-crop-art {
     width: 92%;
     margin: 20px 0 0 0;
   }
   .farming-organic-surface {
-    inset: 20px 7% 0 -18%;
+    inset: 5% 0 5% 0;
   }
   .farming-about-art .farming-about-flower {
     width: 80px;
-    left: -30px;
+    left: 0;
   }
   .farming-about-copy {
-    width: calc(100% - 56px);
-    margin: 55px auto 0;
+    width: 100%;
+    margin: 0 auto;
     font-size: 17px;
   }
   .farming-discover {
@@ -3596,20 +3606,23 @@ svg {
   .farming-discover-split {
     display: flex;
     flex-direction: column;
+    width: calc(100% - 40px);
+    gap: 35px;
     padding-top: 90px;
     min-height: 0;
   }
   .farming-discover-copy {
     margin: 0 auto;
-    width: calc(100% - 56px);
+    width: 100%;
   }
   .farming-discover-copy h3 {
     font-size: 37px;
   }
   .farming-discover-art {
     width: 100%;
-    height: 400px;
-    margin-top: 45px;
+    height: auto;
+    aspect-ratio: 1 / 1.05;
+    margin-top: 0;
   }
   .farming-discover-mango {
     width: 180px;
@@ -3656,21 +3669,26 @@ svg {
   height: 75px;
   object-fit: contain;
 }
-/* Tilted estate photographs sit within the original illustrated landscape. */
+/* Bounded collages keep artwork clear of the following section at every width. */
 .farming-about-art > .farming-crop-art {
   position: absolute;
-  width: 65%;
-  left: -20%;
-  top: 22%;
+  width: 58%;
+  height: 88%;
+  object-fit: contain;
+  object-position: bottom;
+  left: 0;
+  bottom: 0;
+  top: auto;
   margin: 0;
+  z-index: 2;
 }
 .farming-about-photo {
   position: absolute;
-  width: 54%;
-  height: 435px;
+  width: 68%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
-  left: 43%;
-  top: 18%;
+  left: 29%;
+  top: 12%;
   transform: rotate(-4deg);
   border: 1px solid #244d2660;
   z-index: 1;
@@ -3682,29 +3700,31 @@ svg {
   z-index: 1;
 }
 .farming-detail-first {
-  width: 56%;
-  height: 340px;
-  top: 4%;
-  left: -4%;
+  width: 74%;
+  aspect-ratio: 1.6;
+  top: 10%;
+  left: 3%;
   transform: rotate(7deg);
 }
 .farming-detail-second {
-  width: 55%;
-  height: 250px;
-  bottom: 0;
-  right: 12%;
+  width: 67%;
+  aspect-ratio: 1.6;
+  bottom: 7%;
+  right: 4%;
   transform: rotate(-6deg);
 }
 .farming-discover-bird {
-  width: 170px;
+  width: clamp(90px, 9vw, 135px);
   left: auto;
-  right: -10px;
-  top: -5%;
+  right: 0;
+  top: 0;
+  z-index: 2;
 }
 .farming-discover-mango {
-  width: 160px;
-  right: -45px;
-  bottom: -5%;
+  width: clamp(85px, 8vw, 120px);
+  right: 20px;
+  bottom: 16px;
+  z-index: 2;
 }
 .natural-farming-layout .farming-explorer {
   position: relative;
@@ -3731,16 +3751,6 @@ svg {
   font-weight: 400;
 }
 @media (max-width: 899px) {
-  .farming-about-photo {
-    height: 350px;
-    left: 38%;
-  }
-  .farming-detail-first {
-    height: 260px;
-  }
-  .farming-detail-second {
-    height: 180px;
-  }
   .farming-feature-flower,
   .farming-feature-foliage {
     width: 160px;
@@ -3748,37 +3758,34 @@ svg {
 }
 @media (max-width: 767px) {
   .farming-about-photo {
-    width: 58%;
-    height: 300px;
-    top: 16%;
-    left: 35%;
+    width: 70%;
+    top: 12%;
+    left: 28%;
   }
   .farming-about-art > .farming-crop-art {
-    width: 65%;
-    left: -15%;
-    top: 25%;
+    width: 60%;
+    left: 0;
+    top: auto;
     margin: 0;
   }
   .farming-detail-first {
-    width: 62%;
-    height: 230px;
-    left: 4%;
+    width: 74%;
+    left: 3%;
   }
   .farming-detail-second {
-    width: 55%;
-    height: 170px;
-    right: 6%;
-    bottom: 0;
+    width: 67%;
+    right: 4%;
+    bottom: 7%;
   }
   .farming-discover-bird {
-    width: 110px;
-    right: -10px;
-    top: 5%;
+    width: 85px;
+    right: 0;
+    top: 0;
   }
   .farming-discover-mango {
-    width: 100px;
-    right: -20px;
-    bottom: -7%;
+    width: 85px;
+    right: 20px;
+    bottom: 16px;
   }
   .farming-feature-flower,
   .farming-feature-foliage {
