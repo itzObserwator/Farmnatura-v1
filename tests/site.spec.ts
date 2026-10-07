@@ -402,3 +402,113 @@ test("Farm Life follows About's editorial, media and statistics sequence", async
     "/images/farmhouse.jpg",
   );
 });
+
+test("dedicated gallery supports filtering, expanding and keyboard photo viewing", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/#gallery");
+  await expect(page).toHaveTitle("Gallery — Farm Natura");
+  await expect(page.locator(".gallery-journal-hero h1")).toContainText(
+    "LIFE, AS",
+  );
+  await page.getByRole("button", { name: "EXPLORE THE GALLERY" }).click();
+  await expect(page.locator(".gallery-journal-card")).toHaveCount(9);
+  await page.getByRole("button", { name: "MORE MOMENTS" }).click();
+  await expect(page.locator(".gallery-journal-card")).toHaveCount(18);
+  await page.getByRole("button", { name: "MORE MOMENTS" }).click();
+  await page.getByRole("button", { name: "MORE MOMENTS" }).click();
+  await expect(page.locator(".gallery-journal-card")).toHaveCount(29);
+  await expect(page.getByRole("status")).toHaveText(
+    "Showing 29 of 29 photographs",
+  );
+  await expect(page.getByRole("button", { name: "MORE MOMENTS" })).toHaveCount(
+    0,
+  );
+  await page.getByRole("button", { name: "Goshala", exact: true }).click();
+  await expect(page.locator(".gallery-journal-card")).toHaveCount(6);
+  await expect(
+    page.getByRole("button", { name: "Goshala", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await page.locator(".gallery-journal-photo").first().click();
+  const viewer = page.getByRole("dialog", {
+    name: "Farm Natura photograph viewer",
+  });
+  await expect(viewer).toBeVisible();
+  await expect(viewer.locator(".gallery-viewer-frame > img")).toHaveAttribute(
+    "src",
+    /fnsi15.webp$/,
+  );
+  await page.keyboard.press("ArrowRight");
+  await expect(viewer.locator(".gallery-viewer-frame > img")).toHaveAttribute(
+    "src",
+    /fnsi1.webp$/,
+  );
+  await page.keyboard.press("ArrowLeft");
+  await page.keyboard.press("ArrowLeft");
+  await expect(viewer.locator(".gallery-viewer-frame > img")).toHaveAttribute(
+    "src",
+    /goshalatopview.webp$/,
+  );
+  await page.keyboard.press("Escape");
+  await expect(viewer).not.toBeVisible();
+  await expect(page.locator(".gallery-journal-photo").first()).toBeFocused();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});
+
+test("gallery films load on demand and gallery connects to navigation and enquiries", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.route("https://www.youtube-nocookie.com/**", (route) =>
+    route.fulfill({
+      contentType: "text/html",
+      body: "<html><body>Verified embed placeholder</body></html>",
+    }),
+  );
+  await page.goto("/#living");
+  await page.getByRole("button", { name: "VIEW THE GALLERY" }).click();
+  await expect(page).toHaveURL(/#gallery$/);
+  await expect(page.locator("iframe")).toHaveCount(0);
+  const photoTab = page.getByRole("tab", { name: "Photographs" });
+  await photoTab.focus();
+  await photoTab.press("ArrowRight");
+  await expect(page.getByRole("tab", { name: "Films" })).toBeFocused();
+  await expect(page.getByRole("tab", { name: "Films" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await expect(page.locator(".gallery-films-grid figure")).toHaveCount(6);
+  await page
+    .getByRole("button", {
+      name: "Play film: Pragya Jaiswal on sustainable living",
+    })
+    .click();
+  const viewer = page.getByRole("dialog", { name: "Farm Natura film viewer" });
+  await expect(viewer).toBeVisible();
+  await expect(viewer.locator("iframe")).toHaveAttribute(
+    "src",
+    "https://www.youtube-nocookie.com/embed/C_XpxL-KpOs",
+  );
+  await page.getByRole("button", { name: "Close gallery viewer" }).click();
+  await expect(page.locator("iframe")).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "PLAN YOUR VISIT", exact: true })
+    .click();
+  await expect(page.locator(".contact-dialog")).toBeVisible();
+  await page.getByRole("button", { name: "Close enquiry" }).click();
+  await page.getByRole("button", { name: "EXPLORE FARM LIFE" }).click();
+  await expect(page).toHaveURL(/#living$/);
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await page
+    .getByRole("dialog", { name: "Explore Farm Natura" })
+    .getByRole("button", { name: "Gallery", exact: false })
+    .click();
+  await expect(page).toHaveURL(/#gallery$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/#living$/);
+});

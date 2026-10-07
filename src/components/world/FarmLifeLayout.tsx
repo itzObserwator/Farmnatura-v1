@@ -7,7 +7,13 @@ import Gallery from "./Gallery";
 const life = chapters[2];
 
 /** About's editorial sequence: statement, botanical split, photo split, media and facts. */
-export default function FarmLifeLayout({ onVisit }: { onVisit: () => void }) {
+export default function FarmLifeLayout({
+  onVisit,
+  onGallery,
+}: {
+  onVisit: () => void;
+  onGallery: () => void;
+}) {
   return (
     <div className="farm-life-layout">
       <section
@@ -96,7 +102,7 @@ export default function FarmLifeLayout({ onVisit }: { onVisit: () => void }) {
           />
         </div>
       </section>
-      <Gallery variant="story" />
+      <Gallery variant="story" onOpenGallery={onGallery} />
       <section className="life-impact" data-motion-section="life-impact">
         <div className="life-impact-label">
           <span className="chapter-tag" data-reveal>

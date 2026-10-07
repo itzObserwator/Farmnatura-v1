@@ -7,15 +7,18 @@ import { chapters, type ChapterId } from "./data/chapters";
 import Intro from "./components/world/Intro";
 import ChapterCarousel from "./components/world/ChapterCarousel";
 import ChapterPage from "./components/world/ChapterPage";
+import GalleryPage from "./components/world/GalleryPage";
 import MenuPanel from "./components/world/MenuPanel";
 import ContactDialog from "./components/ContactDialog";
 import { curtainPath, motionTokens } from "./animation/motionTokens";
 import { useAmbientSound } from "./hooks/useAmbientSound";
-function readRoute(): ChapterId | null {
+type RouteId = ChapterId | "gallery";
+function readRoute(): RouteId | null {
+  if (location.hash === "#gallery") return "gallery";
   return chapters.find((c) => `#${c.id}` === location.hash)?.id ?? null;
 }
 export default function App() {
-  const [route, setRoute] = useState<ChapterId | null>(readRoute),
+  const [route, setRoute] = useState<RouteId | null>(readRoute),
     [intro, setIntro] = useState(
       () => !sessionStorage.getItem("farm-entered") && !readRoute(),
     ),
@@ -35,7 +38,7 @@ export default function App() {
   }, []);
   const onActive = useCallback((index: number) => setActive(index), []);
   const navigate = useCallback(
-    (id: ChapterId | null) => {
+    (id: RouteId | null) => {
       setMenu(false);
       if (busy.current || id === route) return;
       const commit = () => {
@@ -109,9 +112,12 @@ export default function App() {
     };
   }, []);
   useEffect(() => {
-    document.title = route
-      ? `${chapters.find((c) => c.id === route)?.title} — Farm Natura`
-      : "Farm Natura — A Life Rooted in Nature";
+    document.title =
+      route === "gallery"
+        ? "Gallery — Farm Natura"
+        : route
+          ? `${chapters.find((c) => c.id === route)?.title} — Farm Natura`
+          : "Farm Natura — A Life Rooted in Nature";
     document.documentElement.style.overflow = !route || intro ? "hidden" : "";
     return () => {
       document.documentElement.style.overflow = "";
@@ -171,12 +177,18 @@ export default function App() {
       <main id="main-content" tabIndex={-1}>
         {intro ? (
           <Intro onComplete={enter} />
+        ) : route === "gallery" ? (
+          <GalleryPage
+            onVisit={() => setVisit(true)}
+            onFarmLife={() => navigate("living")}
+          />
         ) : chapter ? (
           <ChapterPage
             key={chapter.id}
             chapter={chapter}
             onVisit={() => setVisit(true)}
             onNavigate={navigate}
+            onGallery={() => navigate("gallery")}
           />
         ) : (
           <ChapterCarousel
@@ -197,7 +209,7 @@ export default function App() {
             <span key={i} />
           ))}
         </button>
-        {!intro && chapter && !footerVisible && (
+        {!intro && (chapter || route === "gallery") && !footerVisible && (
           <>
             <button
               className="paper-button index-button"
@@ -205,7 +217,9 @@ export default function App() {
             >
               INDEX <Menu size={18} strokeWidth={1} />
             </button>
-            <span className="page-number">{chapter.number}/03</span>
+            <span className="page-number">
+              {chapter ? `${chapter.number}/03` : "GALLERY"}
+            </span>
           </>
         )}
       </div>
@@ -214,6 +228,7 @@ export default function App() {
         onClose={() => setMenu(false)}
         onNavigate={navigate}
         onHome={() => navigate(null)}
+        onGallery={() => navigate("gallery")}
         onVisit={() => {
           setMenu(false);
           setVisit(true);

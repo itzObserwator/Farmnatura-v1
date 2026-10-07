@@ -10,8 +10,10 @@ const images = [
 ];
 export default function Gallery({
   variant = "default",
+  onOpenGallery,
 }: {
   variant?: "default" | "story";
+  onOpenGallery?: () => void;
 }) {
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0),
@@ -93,6 +95,13 @@ export default function Gallery({
             />
           ))}
         </div>
+        {onOpenGallery && (
+          <div className="gallery-page-link">
+            <button className="paper-button" onClick={onOpenGallery}>
+              VIEW THE GALLERY <ArrowRight size={17} strokeWidth={1} />
+            </button>
+          </div>
+        )}
       </div>
       <dialog
         ref={dialog}

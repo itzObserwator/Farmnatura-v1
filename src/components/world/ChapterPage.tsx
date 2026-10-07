@@ -16,10 +16,12 @@ export default function ChapterPage({
   chapter,
   onVisit,
   onNavigate,
+  onGallery,
 }: {
   chapter: Chapter;
   onVisit: () => void;
   onNavigate: (id: ChapterId) => void;
+  onGallery: () => void;
 }) {
   const reduced = useReducedMotion();
   const [faq, setFaq] = useState<number | null>(null);
@@ -75,7 +77,7 @@ export default function ChapterPage({
       ) : chapter.id === "farming" ? (
         <NaturalFarmingLayout onVisit={onVisit} />
       ) : (
-        <FarmLifeLayout onVisit={onVisit} />
+        <FarmLifeLayout onVisit={onVisit} onGallery={onGallery} />
       )}
       {chapter.id === "living" && (
         <section className="faq-section" id="questions">

@@ -11,12 +11,14 @@ export default function MenuPanel({
   onClose,
   onNavigate,
   onHome,
+  onGallery,
   onVisit,
 }: {
   open: boolean;
   onClose: () => void;
   onNavigate: (id: ChapterId) => void;
   onHome: () => void;
+  onGallery: () => void;
   onVisit: () => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -116,6 +118,10 @@ export default function MenuPanel({
               <span>{c.title}</span>
             </button>
           ))}
+          <button onClick={onGallery}>
+            <span>↗</span>
+            <span>Gallery</span>
+          </button>
         </nav>
         <BotanicalMotif kind="flower" className="menu-flower" />
         <div className="menu-footer">

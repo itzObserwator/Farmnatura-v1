@@ -34,6 +34,9 @@ Open the Local URL printed by Vite. `npm run build` produces the production webs
 | `src/components/world/SunlightCanvas.tsx`  | Lazy-loaded Three.js shader: moving sunlight, field contours, and pollen                    |
 | `src/components/world/MenuPanel.tsx`       | Layered paper menu                                                                          |
 | `src/components/world/Gallery.tsx`         | Gallery controls and full-size image viewer                                                 |
+| `src/components/world/GalleryPage.tsx`     | Dedicated photo journal, filters, films and accessible media viewer                         |
+| `src/data/gallery.ts`                      | Gallery photo captions, categories, order and official video links                          |
+| `src/hooks/useGalleryAnimations.ts`        | Scoped gallery reveals, botanical drift and smooth scrolling                                |
 | `src/components/ContactDialog.tsx`         | Visit enquiry form                                                                          |
 | `src/hooks/useChapterAnimations.ts`        | Chapter-page scroll reveals and parallax                                                    |
 | `src/hooks/useAmbientSound.ts`             | Optional synthesised ambience                                                               |
@@ -57,7 +60,7 @@ The introduction uses original estate photographs with motion, rather than unrel
 
 ## Reference notes
 
-See `docs/design-analysis.md` for the JFA reference analysis, section mapping, motion behavior and font substitution. The project uses freely licensed, locally hosted Italiana and Lato; proprietary reference-site fonts and artwork are not included.
+See `docs/design-analysis.md` for the JFA reference analysis, section mapping, motion behavior and font substitution. The project uses locally hosted Italiana and Lato, plus the uploaded Voyage font for statistic numbers. Reference-site artwork is not included.
 
 ## Logo and animation layers
 
@@ -74,3 +77,5 @@ Natural Farming now follows the Centre Court section sequence. Edit its editoria
 Natural Farming’s measured text timing and reversible card overlap live in `src/hooks/useNaturalFarmingMotion.ts`, with shared values in `src/animation/naturalFarmingMotion.ts`. `LivingSurface.tsx` provides its pointer-responsive Three.js backgrounds, visibility-based rendering, GPU cleanup and CSS fallback. See the motion audit in `docs/natural-farming-layout.md` before changing these timings.
 
 Farm Life follows the About reference. Edit its sections in `src/components/world/FarmLifeLayout.tsx`, six figures in `src/data/life.ts`, and the wide photo tour through `Gallery.tsx`’s `story` variant. The previous generic landscape and pinned-card components have been replaced. See `docs/farm-life-layout.md` for the reference mapping.
+
+The dedicated Gallery opens at `#gallery` through the menu or Farm Life. Edit its 29 photo captions, categories and six official videos in `src/data/gallery.ts`. Its camera sketch is an original editable SVG; botanical illustrations reuse our hand-drawn artwork. See [Gallery page notes](docs/gallery-page.md) for the layout, media behavior and editing guide.
