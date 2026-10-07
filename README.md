@@ -13,23 +13,30 @@ Open the Local URL printed by Vite. `npm run build` produces the production webs
 
 ## Where to edit
 
-| File | What it controls |
-| --- | --- |
-| `src/data/chapters.ts` | Titles, colors, illustration paths, and copy for Our Story, Natural Farming, and Farm Life |
-| `src/data/content.ts` | FAQ answers and Farm Natura’s contact details |
-| `src/App.tsx` | Routing, page transitions, menu, and visit enquiries |
-| `src/components/world/Intro.tsx` | Illustrated entry screen and optional photographic introduction |
-| `src/components/world/ChapterCarousel.tsx` | Three-scene carousel, wheel/touch gestures, arrows, keyboard controls, and pointer parallax |
-| `src/components/world/ChapterPage.tsx` | Editorial chapter page sections |
-| `src/components/world/BotanicalMotifs.tsx` | Original SVG flowers, mango, foliage, and bird |
-| `src/components/world/BrandLogo.tsx` | Supplied Farm Natura logo, shared by header, intro, menu, and footer |
-| `src/components/world/SunlightCanvas.tsx` | Lazy-loaded Three.js shader: moving sunlight, field contours, and pollen |
-| `src/components/world/MenuPanel.tsx` | Layered paper menu |
-| `src/components/world/Gallery.tsx` | Gallery controls and full-size image viewer |
-| `src/components/ContactDialog.tsx` | Visit enquiry form |
-| `src/hooks/useChapterAnimations.ts` | Chapter-page scroll reveals and parallax |
-| `src/hooks/useAmbientSound.ts` | Optional synthesised ambience |
-| `src/styles.css` | Fonts, layout, colors, breakpoints, and reduced-motion styling |
+| File                                        | What it controls                                                                            |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `src/data/chapters.ts`                      | Titles, colors, illustration paths, and copy for Our Story, Natural Farming, and Farm Life  |
+| `src/data/content.ts`                       | FAQ answers and Farm Natura’s contact details                                               |
+| `src/App.tsx`                               | Routing, page transitions, menu, and visit enquiries                                        |
+| `src/components/world/Intro.tsx`            | Illustrated entry screen and optional photographic introduction                             |
+| `src/components/world/ChapterCarousel.tsx`  | Three-scene carousel, wheel/touch gestures, arrows, keyboard controls, and pointer parallax |
+| `src/components/world/ChapterPage.tsx`      | Different section order for each chapter                                                    |
+| `src/components/world/RevealText.tsx`       | Accessible, wrapping character reveal masks                                                 |
+| `src/components/world/LandscapeChapter.tsx` | Large scroll-masked estate photos                                                           |
+| `src/components/world/FarmingExplorer.tsx`  | Keyboard-accessible natural-farming practice selector                                       |
+| `src/components/world/LifeMoments.tsx`      | Pinned desktop story cards and mobile reading layout                                        |
+| `src/components/world/NextChapter.tsx`      | Full-height illustrated chapter ending                                                      |
+| `src/components/world/PhotoTransition.tsx`  | Three.js curved photograph wipe and HTML fallback                                           |
+| `src/animation/motionTokens.ts`             | Shared animation timings and SVG transition shape                                           |
+| `src/components/world/BotanicalMotifs.tsx`  | Original SVG flowers, mango, foliage, and bird                                              |
+| `src/components/world/BrandLogo.tsx`        | Supplied Farm Natura logo, shared by header, intro, menu, and footer                        |
+| `src/components/world/SunlightCanvas.tsx`   | Lazy-loaded Three.js shader: moving sunlight, field contours, and pollen                    |
+| `src/components/world/MenuPanel.tsx`        | Layered paper menu                                                                          |
+| `src/components/world/Gallery.tsx`          | Gallery controls and full-size image viewer                                                 |
+| `src/components/ContactDialog.tsx`          | Visit enquiry form                                                                          |
+| `src/hooks/useChapterAnimations.ts`         | Chapter-page scroll reveals and parallax                                                    |
+| `src/hooks/useAmbientSound.ts`              | Optional synthesised ambience                                                               |
+| `src/styles.css`                            | Fonts, layout, colors, breakpoints, and reduced-motion styling                              |
 
 ## Artwork
 
@@ -45,7 +52,7 @@ The introduction uses original estate photographs with motion, rather than unrel
 
 ## Verification
 
-`npm test` runs desktop and mobile browser checks for the carousel, chapter routing, menu, gallery, FAQ, WhatsApp enquiry, intro, audio controls and reduced motion. The config uses the local macOS Chrome executable; change `executablePath` in `playwright.config.ts` on another machine. Set `FARM_PREVIEW_URL` to test another Vite port.
+`npm test` runs desktop and mobile browser checks for the carousel, chapter routing, menu, gallery, FAQ, WhatsApp enquiry, intro, audio controls, practice keyboard navigation, card reading order, WebGL fallbacks and reduced motion. The config uses the local macOS Chrome executable; change `executablePath` in `playwright.config.ts` on another machine. Set `FARM_PREVIEW_URL` to test another Vite port.
 
 ## Reference notes
 
@@ -56,3 +63,5 @@ See `docs/design-analysis.md` for the JFA reference analysis, section mapping, m
 The uploaded logo is preserved unchanged in `public/branding/farmnatura-logo.png`. Its green (`#3C7A3A`) and yellow (`#FDD504`) drive the palette. Dark green (`#244D26`) is the reading color; chapter backgrounds use pale green and yellow tints. Change CSS brand variables in `src/styles.css` and chapter surface colors in `src/data/chapters.ts` together.
 
 Framer Motion handles intro and caption entrances, logo button feedback, and expanding FAQ answers. GSAP controls the three illustrated scenes, pointer parallax, paper menu, curtain transitions, editorial scroll reveals, and the WebGL chapter-color tween. Three.js renders an original full-screen shader atmosphere in the carousel; it imports only when the carousel mounts. Its canvas does not intercept gestures, caps pixel density, pauses behind dialogs and in hidden tabs, respects reduced motion, and disposes GPU resources on exit. Browsers without WebGL retain the illustrated site and all navigation. Lenis smooths editorial-page scrolling.
+
+See [the section-by-section motion map](docs/section-motion-map.md) for the latest reference audit, distinct chapter sequences, timing choices and animation responsibilities.

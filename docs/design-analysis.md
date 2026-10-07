@@ -10,16 +10,16 @@ The three chapter pages open with full-screen pastel heroes, large uppercase ser
 
 ## Farm Natura mapping
 
-| JFA reference | Farm Natura |
-| --- | --- |
-| Poster and introduction | Original farm artwork and a short introduction using Farm Natura photos |
-| Our Story | Our Story: returning to the land, family roots and managed farming |
-| Our Installations | Natural Farming: native seeds, vegetables, soil health and managed care |
-| Centre Court | Farm Life: farmhouse living, family time, location, visits and FAQs |
-| Botanical illustrated scene disks | Original mango grove, crop garden and farmhouse/cow folk-art scenes |
-| Campaign impact statistics | Farm Natura’s published acreage, soil revitalisation period and maintenance term |
-| Festival installation gallery | Photographs from Farm Natura’s existing website |
-| Social closing sections | Site-visit invitation and Farm Natura’s contact links |
+| JFA reference                     | Farm Natura                                                                      |
+| --------------------------------- | -------------------------------------------------------------------------------- |
+| Poster and introduction           | Original farm artwork and a short introduction using Farm Natura photos          |
+| Our Story                         | Our Story: returning to the land, family roots and managed farming               |
+| Our Installations                 | Natural Farming: native seeds, vegetables, soil health and managed care          |
+| Centre Court                      | Farm Life: farmhouse living, family time, location, visits and FAQs              |
+| Botanical illustrated scene disks | Original mango grove, crop garden and farmhouse/cow folk-art scenes              |
+| Campaign impact statistics        | Farm Natura’s published acreage, soil revitalisation period and maintenance term |
+| Festival installation gallery     | Photographs from Farm Natura’s existing website                                  |
+| Social closing sections           | Site-visit invitation and Farm Natura’s contact links                            |
 
 ## Visual measurements
 
@@ -33,7 +33,7 @@ The reference uses proprietary Voyage, Gill Sans and Baysoir alongside other typ
 - GSAP Observer handles wheel and touch input. A transition lock prevents a single gesture from skipping several chapters. Adjacent scenes wrap outside the center path.
 - Chapter titles reveal line by line; ScrollTrigger reveals editorial content and shifts illustrations with scroll.
 - Lenis runs only on chapter pages, leaving carousel gestures under its own controls.
-- The menu uses three staggered paper layers. Navigation covers the page with a pastel curtain, switches the route, and reveals the next page.
+- The menu uses three staggered paper layers with an animated reverse close. Navigation covers the page with a curved SVG paper edge, switches the route, and reveals the next page.
 - Intro progress reflects loaded illustration files. The photographic intro lasts about 7.6 seconds and is always skippable.
 - Optional local synthesised ambience replaces reference-site audio. It never starts automatically.
 - Reduced motion disables continuous movement and simplifies page transitions. Native dialogs provide focus trapping for menu, photographs and enquiries.
@@ -47,3 +47,7 @@ No JFA illustrations, intro footage, proprietary fonts, testimonials or source i
 ## Farm Natura branding update
 
 The supplied transparent Farm Natura logo replaces the decorative reference-style seal and text-only wordmarks. Source colors sampled from the logo are green #3C7A3A and yellow #FDD504. The redesigned palette uses these colors, their pale surface tints, and dark green #244D26 for contrast. Layout and chapter choreography are retained. Framer Motion provides React entrances, button feedback and FAQ expansion; GSAP retains scene/scroll choreography; a lazy Three.js/WebGL shader adds subtle sun rays, pollen and farmland contours with graceful fallback and reduced-motion handling.
+
+## Second section-by-section audit
+
+The updated chapter sequences and motion responsibilities are documented in [section-motion-map.md](section-motion-map.md). The repeat deck replaces fading carousel wraps; character masks replace generic title fades; curved SVG wipes replace the rectangular curtain; chapters now have different content sequences, organic photo expansion, a practice selector, overlapping desktop story cards, WebGL gallery transitions and a full-height illustrated ending.
