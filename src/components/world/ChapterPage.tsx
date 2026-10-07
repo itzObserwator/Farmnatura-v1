@@ -9,7 +9,7 @@ import { useChapterAnimations } from "../../hooks/useChapterAnimations";
 import Gallery from "./Gallery";
 import RevealText from "./RevealText";
 import LandscapeChapter from "./LandscapeChapter";
-import FarmingExplorer from "./FarmingExplorer";
+import NaturalFarmingLayout from "./NaturalFarmingLayout";
 import LifeMoments from "./LifeMoments";
 import NextChapter from "./NextChapter";
 import HeroBotanicals from "./HeroBotanicals";
@@ -74,6 +74,8 @@ export default function ChapterPage({
       </section>
       {chapter.id === "story" ? (
         <OurStoryLayout onVisit={onVisit} />
+      ) : chapter.id === "farming" ? (
+        <NaturalFarmingLayout onVisit={onVisit} />
       ) : (
         <>
           <section
@@ -122,9 +124,7 @@ export default function ChapterPage({
           </section>
           <LandscapeChapter chapter={chapter} />
           {chapter.id === "living" && <LifeMoments />}
-          {chapter.id === "farming" ? (
-            <FarmingExplorer />
-          ) : (
+          {chapter.id === "living" && (
             <section className="location-section" id="location">
               <div className="section-container">
                 <span className="chapter-tag" data-reveal>

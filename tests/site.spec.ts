@@ -264,3 +264,48 @@ test("Our Story hand-drawn artwork and reference-style selector work", async ({
     ),
   ).toBe(true);
 });
+
+test("Natural Farming keeps Centre Court sections and readable card handover", async ({
+  page,
+}, info) => {
+  await page.goto("/#farming");
+  await expect(page.locator(".farming-about-photo")).toHaveAttribute(
+    "src",
+    "/images/goshala.jpg",
+  );
+  await expect(page.locator(".farming-detail-photo")).toHaveCount(2);
+  await expect(page.locator(".farming-feature-card")).toHaveCount(2);
+  await page.waitForTimeout(1500);
+  const cards = page.locator(".farming-cards");
+  if (info.project.name === "desktop") {
+    const start = await cards.evaluate(
+      (el) => el.getBoundingClientRect().top + scrollY,
+    );
+    await page.evaluate((y) => window.scrollTo(0, y + 1050), start);
+    await page.waitForTimeout(1600);
+    const rect = await page
+      .locator(".farming-managed-card")
+      .evaluate((el) => ({
+        top: el.getBoundingClientRect().top,
+        bottom: el.getBoundingClientRect().bottom,
+      }));
+    expect(rect.top).toBeGreaterThan(50);
+    expect(rect.bottom).toBeLessThan(1000);
+  }
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  const rects = await page
+    .locator(".farming-feature-card")
+    .evaluateAll((els) =>
+      els.map((el) => ({
+        top: el.getBoundingClientRect().top,
+        bottom: el.getBoundingClientRect().bottom,
+      })),
+    );
+  expect(rects[1].top).toBeGreaterThan(rects[0].bottom);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});

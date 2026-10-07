@@ -70,3 +70,5 @@ Framer Motion handles intro and caption entrances, logo button feedback, and exp
 See [the section-by-section motion map](docs/section-motion-map.md) for the latest reference audit, distinct chapter sequences, timing choices and animation responsibilities.
 
 See [Our Story layout notes](docs/our-story-layout.md) for the Victoria Wharf analysis and implementation mapping.
+
+Natural Farming now follows the Centre Court section sequence. Edit its editorial structure in `src/components/world/NaturalFarmingLayout.tsx` and its interactive cards in `FarmingExplorer.tsx`. See [Natural Farming layout notes](docs/natural-farming-layout.md) for measurements and motion mapping.

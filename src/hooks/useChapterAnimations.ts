@@ -94,7 +94,7 @@ export function useChapterAnimations() {
         });
       gsap.utils
         .toArray<HTMLElement>(
-          ".art-panel img, .landscape-ornament, .story-grove-art, .story-drift",
+          ".art-panel img, .landscape-ornament, .story-grove-art, .story-drift, .farming-drift",
         )
         .forEach((element) =>
           gsap.fromTo(
@@ -113,6 +113,74 @@ export function useChapterAnimations() {
             },
           ),
         );
+      gsap.utils
+        .toArray<HTMLElement>("[data-farming-image]")
+        .forEach((element) => {
+          gsap.fromTo(
+            element,
+            { borderRadius: "43% 57% 44% 56% / 49% 38% 62% 51%", scale: 0.92 },
+            {
+              borderRadius: "2% 3% 2% 3% / 3% 2% 3% 2%",
+              scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: element,
+                start: "top 90%",
+                end: "top 15%",
+                scrub: 0.8,
+              },
+            },
+          );
+          gsap.fromTo(
+            element.querySelector("img"),
+            { scale: 1.12, yPercent: -4 },
+            {
+              scale: 1,
+              yPercent: 4,
+              ease: "none",
+              scrollTrigger: {
+                trigger: element,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1,
+              },
+            },
+          );
+        });
+      media.add("(min-width: 900px)", () => {
+        const cards = document.querySelector<HTMLElement>(".farming-cards");
+        if (!cards) return;
+        const first = cards.querySelector(".practice-window");
+        const second = cards.querySelector(".farming-managed-card");
+        gsap.set(second, { yPercent: 135, rotation: 3, opacity: 0 });
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: cards,
+              start: "top 130px",
+              end: () => `+=${innerHeight * 1.2}`,
+              pin: true,
+              scrub: 0.8,
+              invalidateOnRefresh: true,
+            },
+          })
+          .to(
+            first,
+            { scale: 0.96, rotation: -2, opacity: 0.6, duration: 1 },
+            0,
+          )
+          .to(
+            second,
+            {
+              yPercent: 0,
+              rotation: -1,
+              opacity: 1,
+              duration: 1,
+              ease: "none",
+            },
+            0,
+          );
+      });
       const curvedLine = document.querySelector(".story-curved-line textPath");
       if (curvedLine)
         gsap.fromTo(
