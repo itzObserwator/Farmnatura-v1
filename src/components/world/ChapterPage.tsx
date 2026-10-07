@@ -12,6 +12,7 @@ import NaturalFarmingLayout from "./NaturalFarmingLayout";
 import NextChapter from "./NextChapter";
 import HeroBotanicals from "./HeroBotanicals";
 import OurStoryLayout from "./OurStoryLayout";
+import HeroBackdrop from "./HeroBackdrop";
 export default function ChapterPage({
   chapter,
   onVisit,
@@ -30,14 +31,12 @@ export default function ChapterPage({
     chapters[(chapters.findIndex((c) => c.id === chapter.id) + 1) % 3];
   return (
     <article className={`chapter-page page-${chapter.id}`}>
-      <section
-        className="page-hero"
-        data-motion-section="hero"
-        style={{ backgroundColor: chapter.color }}
-      >
-        <div className="hero-decor">
-          <HeroBotanicals variant={Number(chapter.number) - 1} />
-        </div>
+      <section className="page-hero" data-motion-section="hero">
+        <HeroBackdrop color={chapter.color}>
+          <div className="hero-decor">
+            <HeroBotanicals variant={Number(chapter.number) - 1} />
+          </div>
+        </HeroBackdrop>
         <div className="hero-title">
           <span className="chapter-tag">{chapter.tag}</span>
           <h1>

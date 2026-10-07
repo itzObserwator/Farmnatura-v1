@@ -21,6 +21,7 @@ import BrandLogo from "./BrandLogo";
 import RevealText from "./RevealText";
 import GallerySketch from "./GallerySketch";
 import PhotoTransition from "./PhotoTransition";
+import HeroBackdrop from "./HeroBackdrop";
 
 export default function GalleryPage({
   onVisit,
@@ -67,30 +68,32 @@ export default function GalleryPage({
   return (
     <article ref={root} className="gallery-journal-page">
       <section className="page-hero gallery-journal-hero">
-        <div className="gallery-hero-ornaments" aria-hidden="true">
-          <img
-            className="gallery-hero-art gallery-hero-mango"
-            src="/illustrations/hero/mango-branch.webp"
-            alt=""
-            width="600"
-            height="800"
-          />
-          <img
-            className="gallery-hero-art gallery-hero-flower"
-            src="/illustrations/hero/marigold-stem.webp"
-            alt=""
-            width="600"
-            height="800"
-          />
-          <img
-            className="gallery-hero-art gallery-hero-leaves"
-            src="/illustrations/hero/native-foliage.webp"
-            alt=""
-            width="600"
-            height="800"
-          />
-          <GallerySketch className="gallery-hero-art gallery-hero-camera" />
-        </div>
+        <HeroBackdrop color="#f4efd9">
+          <div className="gallery-hero-ornaments" aria-hidden="true">
+            <img
+              className="gallery-hero-art gallery-hero-mango"
+              src="/illustrations/hero/mango-branch.webp"
+              alt=""
+              width="600"
+              height="800"
+            />
+            <img
+              className="gallery-hero-art gallery-hero-flower"
+              src="/illustrations/hero/marigold-stem.webp"
+              alt=""
+              width="600"
+              height="800"
+            />
+            <img
+              className="gallery-hero-art gallery-hero-leaves"
+              src="/illustrations/hero/native-foliage.webp"
+              alt=""
+              width="600"
+              height="800"
+            />
+            <GallerySketch className="gallery-hero-art gallery-hero-camera" />
+          </div>
+        </HeroBackdrop>
         <div className="hero-title">
           <span className="chapter-tag">THE FARM NATURA JOURNAL</span>
           <h1>

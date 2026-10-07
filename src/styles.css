@@ -697,6 +697,18 @@ svg {
   justify-content: center;
   text-align: center;
 }
+.hero-curve-definition {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hero-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: clip-path;
+}
 .hero-decor {
   position: absolute;
   inset: 0;
@@ -4311,7 +4323,6 @@ svg {
   overflow: clip;
 }
 .gallery-journal-hero {
-  background: #f4efd9;
   height: 92svh;
   min-height: 720px;
   max-height: 1000px;
