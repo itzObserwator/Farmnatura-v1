@@ -15,9 +15,9 @@ import {
   galleryVideos,
   type GalleryCategory,
 } from "../../data/gallery";
-import { contact } from "../../data/content";
+import { type ChapterId } from "../../data/chapters";
 import { useGalleryAnimations } from "../../hooks/useGalleryAnimations";
-import BrandLogo from "./BrandLogo";
+import FarmFooter from "./FarmFooter";
 import RevealText from "./RevealText";
 import GallerySketch from "./GallerySketch";
 import PhotoTransition from "./PhotoTransition";
@@ -26,9 +26,11 @@ import HeroBackdrop from "./HeroBackdrop";
 export default function GalleryPage({
   onVisit,
   onFarmLife,
+  onNavigate,
 }: {
   onVisit: () => void;
   onFarmLife: () => void;
+  onNavigate: (id: ChapterId | "gallery") => void;
 }) {
   const root = useRef<HTMLElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -370,23 +372,7 @@ export default function GalleryPage({
           EXPLORE FARM LIFE <ArrowRight size={17} strokeWidth={1} />
         </button>
       </section>
-      <footer className="chapter-footer">
-        <div>
-          <BrandLogo className="footer-logo" />
-          <span>BY PLANET GREEN</span>
-          <a href={`tel:${contact.tel}`}>{contact.phone} ↗</a>
-        </div>
-        <div>
-          <a
-            href="https://www.instagram.com/farmnatura.in/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            INSTAGRAM ↗
-          </a>
-          <span>© {new Date().getFullYear()} FARM NATURA</span>
-        </div>
-      </footer>
+      <FarmFooter onVisit={onVisit} onNavigate={onNavigate} />
       <dialog
         ref={dialog}
         className="gallery-viewer"

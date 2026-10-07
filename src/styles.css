@@ -1095,22 +1095,308 @@ svg {
   transform: rotate(25deg);
   pointer-events: none;
 }
-.chapter-footer {
+/* Shared footer: a warm orchard vignette above a practical, readable directory. */
+.farm-footer {
+  position: relative;
+  background: #f5f2e4;
+  color: var(--navy);
+  overflow: clip;
+}
+.footer-paper-edge {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  fill: var(--paper);
+  pointer-events: none;
+}
+.farm-footer-inner {
+  width: min(1280px, calc(100% - 120px));
+  margin: auto;
+  padding: 75px 0 25px;
+}
+.footer-opening {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  align-items: center;
+  min-height: 235px;
+  gap: 55px;
+}
+.footer-opening h2 {
+  font:
+    400 clamp(42px, 4.5vw, 68px)/1.08 Italiana,
+    Georgia,
+    serif;
+  letter-spacing: -1.2px;
+  margin: 24px 0 25px;
+}
+.footer-orchard {
+  position: relative;
+  height: 235px;
+  isolation: isolate;
+}
+.footer-orchard::before {
+  content: "";
+  position: absolute;
+  width: 230px;
+  height: 180px;
+  border-radius: 48% 52% 41% 59%;
+  background: #e4ebd5;
+  left: 25%;
+  top: 20px;
+  transform: rotate(-12deg);
+  z-index: -1;
+}
+.footer-mango {
+  position: absolute;
+  height: 245px;
+  width: 185px;
+  object-fit: contain;
+  left: 36%;
+  top: -17px;
+  transform: rotate(20deg);
+}
+.footer-bird {
+  position: absolute;
+  width: 140px;
+  object-fit: contain;
+  left: 7%;
+  top: 20px;
+  transform: rotate(-7deg);
+}
+.footer-field-note {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  transform: rotate(-4deg);
+}
+.footer-hand-rule {
+  display: block;
+  width: 100%;
+  height: 12px;
+  margin: 25px 0 38px;
+  fill: none;
+  stroke: #244d2655;
+  stroke-width: 0.8;
+}
+.footer-columns {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1.15fr;
+  gap: clamp(35px, 6vw, 100px);
+  padding-bottom: 40px;
+}
+.farm-footer .footer-logo {
+  width: 175px;
+  margin: -3px 0 18px;
+}
+.footer-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.footer-brand .footer-label {
+  margin-bottom: 14px;
+  font-weight: 400;
+}
+.footer-columns p {
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0;
+}
+.footer-chapters a {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  min-height: 39px;
+  font-size: 17px;
+  width: fit-content;
+}
+.footer-link-number {
+  font-size: 10px;
+  color: #244d2690;
+}
+.footer-chapters a > svg {
+  margin-left: 12px;
+}
+.footer-contact a,
+.footer-visit-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+}
+.footer-phone {
+  font-size: 22px;
+  margin: 0 0 17px;
+  white-space: nowrap;
+}
+.footer-visit-link {
+  padding: 0 0 6px;
+  border: 0;
+  border-bottom: 1px solid #244d2670;
+  margin-top: 20px;
+  font-size: 15px;
+  text-align: left;
+}
+.footer-instagram {
+  margin-top: 17px;
+  font-size: 12px;
+}
+.footer-chapters a > svg,
+.footer-contact svg {
+  transition: transform 0.25s ease;
+}
+.footer-chapters a:hover > svg,
+.footer-contact a:hover > svg,
+.footer-visit-link:hover > svg {
+  transform: translate(2px, -2px);
+}
+.footer-bottom {
   display: flex;
   justify-content: space-between;
-  padding: 45px 80px;
-  background: white;
-  gap: 30px;
-  font-size: 10px;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid #244d2628;
+  padding: 22px 0 0;
+  font-size: 9px;
   letter-spacing: 1px;
 }
-.chapter-footer > div {
+.footer-bottom-note {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  gap: 10px;
+  align-items: center;
 }
-.chapter-footer > div:last-child {
-  text-align: right;
+.footer-bottom-note > span {
+  color: #3c7d37;
+  font-size: 21px;
+  line-height: 1;
+}
+@media (max-width: 1000px) {
+  .farm-footer-inner {
+    width: calc(100% - 64px);
+  }
+  .footer-columns {
+    gap: 30px;
+  }
+  .footer-phone {
+    font-size: 18px;
+  }
+  .footer-bird {
+    left: 0;
+  }
+  .footer-mango {
+    left: 32%;
+  }
+}
+@media (max-width: 650px) {
+  .farm-footer-inner {
+    width: calc(100% - 44px);
+    padding-top: 55px;
+  }
+  .footer-opening {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .footer-opening h2 {
+    font-size: clamp(37px, 10.5vw, 56px);
+    margin-bottom: 0;
+    letter-spacing: -0.7px;
+  }
+  .footer-opening .chapter-tag {
+    font-size: 9px;
+  }
+  .footer-orchard {
+    width: min(300px, 100%);
+    height: 185px;
+    margin-left: auto;
+    margin-top: 18px;
+  }
+  .footer-orchard::before {
+    width: 175px;
+    height: 145px;
+    top: 10px;
+  }
+  .footer-mango {
+    width: 140px;
+    height: 190px;
+    top: -12px;
+  }
+  .footer-bird {
+    width: 108px;
+    top: 10px;
+  }
+  .footer-field-note {
+    font-size: 10px;
+    bottom: 6px;
+  }
+  .footer-hand-rule {
+    margin: 18px 0 32px;
+  }
+  .footer-columns {
+    grid-template-columns: 1fr 1fr;
+    gap: 35px 22px;
+    padding-bottom: 32px;
+  }
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+  .farm-footer .footer-logo {
+    width: 155px;
+  }
+  .footer-contact {
+    grid-column: 1 / -1;
+  }
+  .footer-chapters {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 16px;
+  }
+  .footer-chapters .footer-label {
+    grid-column: 1 / -1;
+  }
+  .footer-chapters a {
+    min-height: 44px;
+    display: grid;
+    grid-template-columns: 14px minmax(0, 1fr) 12px;
+    gap: 6px;
+    width: 100%;
+    font-size: 15px;
+  }
+  .footer-chapters a > svg {
+    width: 12px;
+    margin-left: 0;
+  }
+  .footer-visit-link,
+  .footer-instagram {
+    min-height: 44px;
+  }
+  .footer-label {
+    margin-bottom: 14px;
+  }
+  .footer-phone {
+    font-size: 22px;
+  }
+  .footer-bottom {
+    font-size: 8px;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .footer-bottom-note {
+    max-width: 125px;
+    line-height: 1.5;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-chapters a > svg,
+  .footer-contact svg {
+    transition: none;
+  }
 }
 .next-chapter {
   width: 100%;
@@ -1783,13 +2069,6 @@ svg {
     width: 130px;
     left: -60px;
     bottom: -45px;
-  }
-  .chapter-footer {
-    padding: 32px 22px;
-    gap: 20px;
-    font-size: 8px;
-    letter-spacing: 0.5px;
-    line-height: 1.5;
   }
   .next-chapter {
     padding: 75px 20px 110px;

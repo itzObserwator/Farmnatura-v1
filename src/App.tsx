@@ -181,6 +181,7 @@ export default function App() {
           <GalleryPage
             onVisit={() => setVisit(true)}
             onFarmLife={() => navigate("living")}
+            onNavigate={navigate}
           />
         ) : chapter ? (
           <ChapterPage

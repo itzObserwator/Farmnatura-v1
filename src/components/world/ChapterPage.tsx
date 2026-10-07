@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import BrandLogo from "./BrandLogo";
+import FarmFooter from "./FarmFooter";
 import { ArrowDown, ArrowUpRight, Plus, Minus } from "lucide-react";
 import { chapters, type Chapter, type ChapterId } from "../../data/chapters";
-import { faqs, contact } from "../../data/content";
+import { faqs } from "../../data/content";
 import { BotanicalMotif } from "./BotanicalMotifs";
 import { useChapterAnimations } from "../../hooks/useChapterAnimations";
 import FarmLifeLayout from "./FarmLifeLayout";
@@ -137,23 +137,10 @@ export default function ChapterPage({
           PLAN YOUR VISIT <ArrowUpRight size={16} />
         </button>
       </section>
-      <footer className="chapter-footer">
-        <div>
-          <BrandLogo className="footer-logo" />
-          <span>BY PLANET GREEN</span>
-          <a href={`tel:${contact.tel}`}>{contact.phone} ↗</a>
-        </div>
-        <div>
-          <a
-            href="https://www.instagram.com/farmnatura.in/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            INSTAGRAM ↗
-          </a>
-          <span>© {new Date().getFullYear()} FARM NATURA</span>
-        </div>
-      </footer>
+      <FarmFooter
+        onVisit={onVisit}
+        onNavigate={(id) => (id === "gallery" ? onGallery() : onNavigate(id))}
+      />
       <NextChapter chapter={next} onNavigate={onNavigate} />
     </article>
   );
