@@ -17,7 +17,6 @@ export function useChapterAnimations() {
     const tick = (time: number) => lenis.raf(time * 1000);
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add(tick);
-    const media = gsap.matchMedia();
     let mounted = true;
     let cleanupFarming = () => {};
     const ctx = gsap.context(() => {
@@ -173,33 +172,22 @@ export function useChapterAnimations() {
           },
         });
       });
-      media.add("(min-width: 900px)", () => {
-        const stack = document.querySelector<HTMLElement>(".moments-stack");
-        if (!stack) return;
-        const cards = stack.querySelectorAll<HTMLElement>(".moment-card");
-        gsap.set(cards[1], { yPercent: 115, rotation: 3 });
-        gsap
-          .timeline({
+      const lifeScribble = document.querySelector(".life-scribble path");
+      if (lifeScribble)
+        gsap.fromTo(
+          lifeScribble,
+          { strokeDasharray: 1, strokeDashoffset: 1 },
+          {
+            strokeDashoffset: 0,
+            duration: 1.6,
+            ease: "power2.out",
             scrollTrigger: {
-              trigger: stack,
-              start: "top 110px",
-              end: () => `+=${innerHeight * 1.1}`,
-              pin: true,
-              scrub: 0.8,
-              invalidateOnRefresh: true,
+              trigger: ".life-opening",
+              start: "top 50%",
+              once: true,
             },
-          })
-          .to(
-            cards[0],
-            { scale: 0.96, rotation: -2, opacity: 0.6, duration: 1 },
-            0,
-          )
-          .to(
-            cards[1],
-            { yPercent: 0, rotation: -1, duration: 1, ease: "none" },
-            0,
-          );
-      });
+          },
+        );
       gsap.fromTo(
         ".next-scene",
         { scale: 0.78, y: 70 },
@@ -241,7 +229,6 @@ export function useChapterAnimations() {
       clearTimeout(timeout);
       window.removeEventListener("load", refresh);
       cleanupFarming();
-      media.revert();
       ctx.revert();
       gsap.ticker.remove(tick);
       lenis.destroy();

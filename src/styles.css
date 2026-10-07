@@ -3796,3 +3796,473 @@ svg {
 .living-surface {
   pointer-events: none;
 }
+
+/* Farm Life follows About's editorial, media, impact, and six-statistic sequence. */
+.farm-life-layout {
+  background: var(--paper);
+  overflow-x: clip;
+}
+.life-opening {
+  position: relative;
+  text-align: center;
+  padding: 135px 25px 0;
+}
+.life-opening h2 {
+  width: min(900px, 78%);
+  margin: 25px auto 0;
+  font:
+    60px/1.12 Italiana,
+    Georgia,
+    serif;
+}
+.life-opening .reveal-word,
+.life-impact .reveal-word {
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+.life-scribble {
+  position: absolute;
+  width: 240px;
+  right: -15px;
+  bottom: -110px;
+}
+.life-first-split {
+  display: grid;
+  grid-template-columns: 49% 51%;
+  align-items: center;
+  max-width: 1280px;
+  margin: 95px auto 0;
+}
+.life-flower-scene {
+  position: relative;
+  height: 640px;
+}
+.life-flower-surface {
+  position: absolute;
+  inset: 0 18% 0 0;
+  background: #fff3b5;
+  border-radius: 44% 56% 54% 46% / 45% 39% 61% 55%;
+}
+.life-marigold {
+  position: absolute;
+  width: 78%;
+  height: 100%;
+  object-fit: contain;
+  left: -1%;
+  top: 0;
+}
+.life-flower-bird {
+  position: absolute;
+  width: 170px;
+  right: 12%;
+  top: 0;
+}
+.life-first-copy {
+  width: min(450px, 76%);
+  font-size: 20px;
+  line-height: 1.5;
+  margin-left: 6%;
+}
+.life-first-copy p + p {
+  margin-top: 45px;
+}
+.life-first-copy .paper-button {
+  margin-top: 35px;
+}
+.life-second-split {
+  display: grid;
+  grid-template-columns: 49% 51%;
+  align-items: center;
+  max-width: 1130px;
+  margin: -30px auto 180px;
+}
+.life-weekend-copy {
+  width: 425px;
+  max-width: 83%;
+  padding-top: 100px;
+  font-size: 20px;
+  line-height: 1.5;
+}
+.life-weekend-copy h3 {
+  font:
+    44px/1.1 Italiana,
+    Georgia,
+    serif;
+  margin: 30px 0;
+}
+.life-weekend-copy p + p {
+  margin-top: 25px;
+}
+.life-photo-scene {
+  position: relative;
+  height: 640px;
+}
+.life-photo-surface {
+  position: absolute;
+  inset: -40px -30% -15px 5%;
+  background: #dce8cc;
+  border-radius: 47% 53% 61% 39% / 39% 52% 48% 61%;
+}
+.life-weekend-photo {
+  position: absolute;
+  width: 67%;
+  height: 285px;
+  object-fit: cover;
+  left: 7%;
+  top: 25px;
+  transform: rotate(8deg);
+  border: 1px solid #244d2640;
+  z-index: 1;
+}
+.life-table-photo {
+  position: absolute;
+  width: 62%;
+  height: 245px;
+  object-fit: cover;
+  right: -10%;
+  bottom: 35px;
+  transform: rotate(-7deg);
+  border: 1px solid #244d2640;
+  z-index: 1;
+}
+.life-photo-foliage {
+  position: absolute;
+  width: 230px;
+  left: -5%;
+  bottom: 25px;
+}
+.life-story-media {
+  padding: 0;
+}
+.life-story-media .section-container {
+  width: min(1130px, calc(100% - 100px));
+}
+.life-story-media .chapter-tag {
+  display: flex;
+  justify-content: center;
+}
+.life-story-media .gallery-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px 0 40px;
+  gap: 25px;
+}
+.life-story-media .gallery-heading h2 {
+  text-align: center;
+  font:
+    100px/1.06 Italiana,
+    Georgia,
+    serif;
+}
+.life-story-media .gallery-arrows {
+  align-self: flex-end;
+}
+.life-story-media .gallery-photo {
+  height: 635px;
+  border-radius: 0;
+}
+.life-story-media .photo-plus {
+  opacity: 1;
+  left: 50%;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border: 1px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  border-radius: 50%;
+}
+.life-story-media .gallery-meta {
+  margin-top: 20px;
+}
+.life-impact {
+  position: relative;
+  max-width: 1130px;
+  margin: 190px auto 0;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  gap: 0;
+}
+.life-impact-label {
+  position: relative;
+  padding-top: 18px;
+}
+.life-impact-label > img {
+  position: absolute;
+  width: 250px;
+  left: -160px;
+  top: 135px;
+  transform: rotate(-20deg);
+}
+.life-impact-copy {
+  max-width: 690px;
+}
+.life-impact h2 {
+  font:
+    53px/1.06 Italiana,
+    Georgia,
+    serif;
+  margin: 0 0 70px;
+}
+.life-impact p {
+  font-size: 20px;
+  line-height: 1.5;
+}
+.life-impact p + p {
+  margin-top: 35px;
+}
+.life-statistics {
+  width: min(1130px, calc(100% - 100px));
+  margin: 110px auto 100px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 65px 95px;
+  text-align: center;
+}
+.life-statistic-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  font-family: Italiana, Georgia, serif;
+}
+.life-statistic strong {
+  font-size: 120px;
+  line-height: 1;
+  font-weight: 400;
+}
+.life-statistic-value > span {
+  font-size: 38px;
+}
+.life-statistic svg {
+  display: block;
+  width: 100%;
+  margin: 12px 0 22px;
+}
+.life-statistic p {
+  font-size: 14px;
+  line-height: 1.45;
+  max-width: 250px;
+  margin: auto;
+}
+.life-statistics-note {
+  grid-column: 1 / -1;
+  max-width: 750px;
+  margin: 0 auto;
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.75;
+}
+.life-statistics > .paper-button {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: -35px;
+}
+@media (max-width: 1100px) {
+  .life-opening h2 {
+    font-size: 51px;
+  }
+  .life-first-copy {
+    font-size: 18px;
+  }
+  .life-first-split {
+    margin-right: 20px;
+  }
+  .life-second-split,
+  .life-impact {
+    width: calc(100% - 100px);
+  }
+  .life-weekend-copy {
+    font-size: 18px;
+  }
+  .life-statistics {
+    gap: 60px 35px;
+  }
+  .life-statistic strong {
+    font-size: 95px;
+  }
+}
+@media (max-width: 767px) {
+  .life-opening {
+    padding: 100px 22px 0;
+  }
+  .life-opening h2 {
+    font-size: 38px;
+    width: 100%;
+  }
+  .life-scribble {
+    width: 100px;
+    bottom: -90px;
+    right: -25px;
+  }
+  .life-first-split {
+    display: flex;
+    flex-direction: column;
+    margin: 95px auto 0;
+  }
+  .life-flower-scene {
+    width: 100%;
+    height: 430px;
+  }
+  .life-flower-surface {
+    inset: 0 8% 0 -8%;
+  }
+  .life-marigold {
+    width: 92%;
+    left: -2%;
+  }
+  .life-flower-bird {
+    width: 120px;
+    right: 2%;
+  }
+  .life-first-copy {
+    width: calc(100% - 56px);
+    margin: 55px auto 0;
+    font-size: 17px;
+  }
+  .life-first-copy p + p {
+    margin-top: 28px;
+  }
+  .life-second-split {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 90px auto 110px;
+  }
+  .life-weekend-copy {
+    width: calc(100% - 56px);
+    max-width: none;
+    padding: 0;
+    font-size: 17px;
+  }
+  .life-weekend-copy h3 {
+    font-size: 37px;
+  }
+  .life-photo-scene {
+    width: 100%;
+    height: 460px;
+    margin-top: 55px;
+  }
+  .life-weekend-photo {
+    width: 68%;
+    height: 210px;
+    left: 5%;
+  }
+  .life-table-photo {
+    width: 60%;
+    height: 180px;
+    right: -4%;
+    bottom: 15px;
+  }
+  .life-photo-foliage {
+    width: 155px;
+    left: -15px;
+    bottom: 45px;
+  }
+  .life-story-media .section-container {
+    width: calc(100% - 36px);
+  }
+  .life-story-media .gallery-heading h2 {
+    font-size: 48px;
+  }
+  .life-story-media .gallery-heading {
+    margin-bottom: 25px;
+    gap: 18px;
+  }
+  .life-story-media .gallery-photo {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+  .life-story-media .photo-plus {
+    width: 55px;
+    height: 55px;
+  }
+  .life-impact {
+    display: block;
+    width: calc(100% - 56px);
+    margin-top: 110px;
+  }
+  .life-impact-label {
+    padding: 0;
+    margin-bottom: 35px;
+  }
+  .life-impact-label > img {
+    width: 100px;
+    left: auto;
+    right: -60px;
+    top: 60px;
+  }
+  .life-impact h2 {
+    font-size: 40px;
+    margin-bottom: 40px;
+  }
+  .life-impact p {
+    font-size: 17px;
+  }
+  .life-statistics {
+    width: calc(100% - 44px);
+    grid-template-columns: 1fr 1fr;
+    margin: 80px auto;
+    gap: 45px 28px;
+  }
+  .life-statistic strong {
+    font-size: 68px;
+  }
+  .life-statistic-value > span {
+    font-size: 22px;
+  }
+  .life-statistic p {
+    font-size: 12px;
+  }
+  .life-statistic svg {
+    margin: 8px 0 15px;
+  }
+  .life-statistics-note {
+    font-size: 11px;
+  }
+  .life-statistics > .paper-button {
+    margin-top: 0;
+  }
+}
+@media (max-width: 767px) {
+  .life-flower-scene {
+    display: none;
+  }
+  .life-first-split {
+    margin-top: 80px;
+  }
+  .life-first-copy {
+    margin-top: 0;
+  }
+  .life-second-split {
+    margin-top: 95px;
+  }
+  .life-photo-scene {
+    order: -1;
+    margin-top: 0;
+    margin-bottom: 95px;
+  }
+  .life-statistics {
+    grid-template-columns: 1fr;
+    gap: 50px;
+    width: calc(100% - 50px);
+  }
+  .life-statistic strong {
+    font-size: 90px;
+  }
+  .life-statistic-value > span {
+    font-size: 28px;
+  }
+  .life-statistic svg {
+    width: 85%;
+    margin: 10px auto 20px;
+  }
+  .life-statistic p {
+    font-size: 14px;
+    max-width: 300px;
+  }
+}

@@ -26,11 +26,13 @@ This is an independently implemented Farm Natura adaptation. It retains the supp
 | Additional Farm Natura details        | Farm Life location, practical FAQ and visit invitation                           | Placed after the experience story; FAQ uses Framer Motion height/opacity expansion; visit enquiry retains its explicit WhatsApp draft flow                                   |
 | Returning illustrated index           | Full-height scene for the next Farm Natura chapter                               | The next illustration grows into view with scroll; chapter label and title reveal separately; overlapping page controls hide when this scene becomes visible                 |
 
-## Different chapter sequences
+## Current chapter sequences
 
-- **Our Story:** hero → editorial introduction and illustrated split → estate landscape → impact statement and figures → visit invitation → footer → illustrated Natural Farming chapter.
-- **Natural Farming:** hero → editorial introduction and illustrated split → farming landscape → interactive practice index → visit invitation → footer → illustrated Farm Life chapter.
-- **Farm Life:** hero → editorial introduction and illustrated split → farmhouse landscape → overlapping family-experience stories → location → photographic gallery → FAQ → visit invitation → footer → illustrated Our Story chapter.
+- **Our Story (Victoria Wharf):** hero → centered lead → copy left and grove right → curved text ribbon → estate photograph left and statement right → sticky six-item story selector → visit invitation → footer → Natural Farming.
+- **Natural Farming (Centre Court):** hero → centered lead → tilted photo and botanical scene left, copy right → panoramic photograph → discovery copy and staggered photos → interactive practices and reversible pinned paper cards → visit invitation → footer → Farm Life.
+- **Farm Life (About):** hero → centered editorial statement → botanical scene left, copy right → weekend copy left and tilted photograph pair right → wide interactive photo tour → impact statement and copy → six statistics → FAQ → visit invitation → footer → Our Story.
+
+Detailed current layouts: `our-story-layout.md`, `natural-farming-layout.md`, and `farm-life-layout.md`. The earlier table above documents the initial adaptation; these dedicated chapter layouts supersede its generic image-mask and Farm Life card sequences.
 
 ## Editing the choreography
 

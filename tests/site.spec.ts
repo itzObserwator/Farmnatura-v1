@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 test("chapter content follows the new scroll sequence and interactive sections", async ({
   page,
-}, info) => {
+}) => {
   await page.addInitScript(() => sessionStorage.setItem("farm-entered", "yes"));
   await page.goto("/#farming");
   const seeds = page.getByRole("tab", { name: "01 Indigenous seeds" });
@@ -16,22 +16,8 @@ test("chapter content follows the new scroll sequence and interactive sections",
     .click();
   await expect(page).toHaveURL(/#living$/);
   await page.waitForTimeout(1200);
-  const stack = page.locator(".moments-stack");
-  await stack.scrollIntoViewIfNeeded();
-  await page.waitForTimeout(500);
-  if (info.project.name === "desktop") {
-    const top = await stack.evaluate(
-      (el) => el.getBoundingClientRect().top + scrollY,
-    );
-    await page.evaluate((y) => window.scrollTo(0, y + 750), top);
-    await page.waitForTimeout(1400);
-    expect(
-      await page
-        .locator(".moment-card")
-        .nth(1)
-        .evaluate((el) => el.getBoundingClientRect().top),
-    ).toBeLessThan(1000);
-  }
+  await page.locator(".life-second-split").scrollIntoViewIfNeeded();
+  await expect(page.locator(".life-photo-scene > img")).toHaveCount(3);
   await page.locator(".photo-gallery").scrollIntoViewIfNeeded();
   await expect(page.locator(".photo-transition")).toHaveAttribute(
     "data-webgl",
@@ -42,13 +28,12 @@ test("chapter content follows the new scroll sequence and interactive sections",
   await expect(page.locator(".transition-curtain")).not.toBeVisible();
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/#living");
-  const cards = await page.locator(".moment-card").evaluateAll((els) =>
-    els.map((el) => ({
-      top: el.getBoundingClientRect().top,
-      bottom: el.getBoundingClientRect().bottom,
-    })),
-  );
-  expect(cards[1].top).toBeGreaterThanOrEqual(cards[0].bottom);
+  await expect(page.locator(".life-statistic")).toHaveCount(6);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
   await page.goto("/#story");
   await page.locator(".story-index").scrollIntoViewIfNeeded();
   await expect(page.locator("[data-count]").first()).toHaveText("110+");
@@ -366,4 +351,54 @@ test("Natural Farming fluid surfaces animate and survive WebGL failure", async (
   await page.getByRole("tab", { name: "01 Indigenous seeds" }).click();
   await expect(page.getByRole("tabpanel")).toContainText("Locally adapted");
   expect(errors).toEqual([]);
+});
+
+test("Farm Life follows About's editorial, media and statistics sequence", async ({
+  page,
+}, info) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/#living");
+  const sequence = await page
+    .locator(".farm-life-layout > section")
+    .evaluateAll((els) =>
+      els.map((el) => el.getAttribute("data-motion-section")),
+    );
+  expect(sequence).toEqual([
+    "life-introduction",
+    "life-botanical",
+    "life-weekends",
+    "gallery",
+    "life-impact",
+    "life-statistics",
+  ]);
+  await expect(page.locator(".life-statistic")).toHaveCount(6);
+  await expect(
+    page.locator(".life-statistic").first().locator("strong"),
+  ).toHaveText("110");
+  if (info.project.name === "mobile") {
+    await expect(page.locator(".life-flower-scene")).toBeHidden();
+    const photoBottom = await page
+      .locator(".life-photo-scene")
+      .evaluate((el) => el.getBoundingClientRect().bottom);
+    const copyTop = await page
+      .locator(".life-weekend-copy")
+      .evaluate((el) => el.getBoundingClientRect().top);
+    expect(copyTop).toBeGreaterThan(photoBottom);
+    const lefts = await page
+      .locator(".life-statistic")
+      .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().left));
+    expect(new Set(lefts).size).toBe(1);
+  }
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page
+    .getByRole("button", { name: "Next photograph", exact: true })
+    .click();
+  await expect(page.locator(".gallery-photo > img")).toHaveAttribute(
+    "src",
+    "/images/farmhouse.jpg",
+  );
 });

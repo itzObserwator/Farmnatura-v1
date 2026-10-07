@@ -8,7 +8,11 @@ const images = [
   { src: "/images/goshala.jpg", label: "Life on the farm" },
   { src: "/images/dining.jpg", label: "Together around the table" },
 ];
-export default function Gallery() {
+export default function Gallery({
+  variant = "default",
+}: {
+  variant?: "default" | "story";
+}) {
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0),
     [open, setOpen] = useState(false);
@@ -19,18 +23,24 @@ export default function Gallery() {
   }, [open]);
   return (
     <section
-      className="photo-gallery"
+      className={`photo-gallery ${variant === "story" ? "life-story-media" : ""}`}
       id="gallery"
       data-motion-section="gallery"
     >
       <div className="section-container">
         <span className="chapter-tag" data-reveal>
-          FROM THE FARM
+          {variant === "story" ? "A LITTLE LOOK AROUND" : "FROM THE FARM"}
         </span>
         <div className="gallery-heading" data-reveal>
           <h2>
-            Little moments.
-            <br />A fuller life.
+            {variant === "story" ? (
+              "Farm life, in pictures."
+            ) : (
+              <>
+                Little moments.
+                <br />A fuller life.
+              </>
+            )}
           </h2>
           <div className="gallery-arrows">
             <button

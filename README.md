@@ -13,33 +13,31 @@ Open the Local URL printed by Vite. `npm run build` produces the production webs
 
 ## Where to edit
 
-| File                                        | What it controls                                                                            |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `src/data/chapters.ts`                      | Titles, colors, illustration paths, and copy for Our Story, Natural Farming, and Farm Life  |
-| `src/data/story.ts`                         | Six story-list items, descriptions, captions, and photographs                               |
-| `src/components/world/OurStoryLayout.tsx`   | Victoria Wharf-inspired editorial sections and sticky story selector                        |
-| `src/components/world/HeroBotanicals.tsx`   | Hand-drawn hero artwork placements                                                          |
-| `src/data/content.ts`                       | FAQ answers and Farm Natura’s contact details                                               |
-| `src/App.tsx`                               | Routing, page transitions, menu, and visit enquiries                                        |
-| `src/components/world/Intro.tsx`            | Illustrated entry screen and optional photographic introduction                             |
-| `src/components/world/ChapterCarousel.tsx`  | Three-scene carousel, wheel/touch gestures, arrows, keyboard controls, and pointer parallax |
-| `src/components/world/ChapterPage.tsx`      | Different section order for each chapter                                                    |
-| `src/components/world/RevealText.tsx`       | Accessible, wrapping character reveal masks                                                 |
-| `src/components/world/LandscapeChapter.tsx` | Large scroll-masked estate photos                                                           |
-| `src/components/world/FarmingExplorer.tsx`  | Keyboard-accessible natural-farming practice selector                                       |
-| `src/components/world/LifeMoments.tsx`      | Pinned desktop story cards and mobile reading layout                                        |
-| `src/components/world/NextChapter.tsx`      | Full-height illustrated chapter ending                                                      |
-| `src/components/world/PhotoTransition.tsx`  | Three.js curved photograph wipe and HTML fallback                                           |
-| `src/animation/motionTokens.ts`             | Shared animation timings and SVG transition shape                                           |
-| `src/components/world/BotanicalMotifs.tsx`  | Original SVG flowers, mango, foliage, and bird                                              |
-| `src/components/world/BrandLogo.tsx`        | Supplied Farm Natura logo, shared by header, intro, menu, and footer                        |
-| `src/components/world/SunlightCanvas.tsx`   | Lazy-loaded Three.js shader: moving sunlight, field contours, and pollen                    |
-| `src/components/world/MenuPanel.tsx`        | Layered paper menu                                                                          |
-| `src/components/world/Gallery.tsx`          | Gallery controls and full-size image viewer                                                 |
-| `src/components/ContactDialog.tsx`          | Visit enquiry form                                                                          |
-| `src/hooks/useChapterAnimations.ts`         | Chapter-page scroll reveals and parallax                                                    |
-| `src/hooks/useAmbientSound.ts`              | Optional synthesised ambience                                                               |
-| `src/styles.css`                            | Fonts, layout, colors, breakpoints, and reduced-motion styling                              |
+| File                                       | What it controls                                                                            |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `src/data/chapters.ts`                     | Titles, colors, illustration paths, and copy for Our Story, Natural Farming, and Farm Life  |
+| `src/data/story.ts`                        | Six story-list items, descriptions, captions, and photographs                               |
+| `src/components/world/OurStoryLayout.tsx`  | Victoria Wharf-inspired editorial sections and sticky story selector                        |
+| `src/components/world/HeroBotanicals.tsx`  | Hand-drawn hero artwork placements                                                          |
+| `src/data/content.ts`                      | FAQ answers and Farm Natura’s contact details                                               |
+| `src/App.tsx`                              | Routing, page transitions, menu, and visit enquiries                                        |
+| `src/components/world/Intro.tsx`           | Illustrated entry screen and optional photographic introduction                             |
+| `src/components/world/ChapterCarousel.tsx` | Three-scene carousel, wheel/touch gestures, arrows, keyboard controls, and pointer parallax |
+| `src/components/world/ChapterPage.tsx`     | Different section order for each chapter                                                    |
+| `src/components/world/RevealText.tsx`      | Accessible, wrapping character reveal masks                                                 |
+| `src/components/world/FarmingExplorer.tsx` | Keyboard-accessible natural-farming practice selector                                       |
+| `src/components/world/NextChapter.tsx`     | Full-height illustrated chapter ending                                                      |
+| `src/components/world/PhotoTransition.tsx` | Three.js curved photograph wipe and HTML fallback                                           |
+| `src/animation/motionTokens.ts`            | Shared animation timings and SVG transition shape                                           |
+| `src/components/world/BotanicalMotifs.tsx` | Original SVG flowers, mango, foliage, and bird                                              |
+| `src/components/world/BrandLogo.tsx`       | Supplied Farm Natura logo, shared by header, intro, menu, and footer                        |
+| `src/components/world/SunlightCanvas.tsx`  | Lazy-loaded Three.js shader: moving sunlight, field contours, and pollen                    |
+| `src/components/world/MenuPanel.tsx`       | Layered paper menu                                                                          |
+| `src/components/world/Gallery.tsx`         | Gallery controls and full-size image viewer                                                 |
+| `src/components/ContactDialog.tsx`         | Visit enquiry form                                                                          |
+| `src/hooks/useChapterAnimations.ts`        | Chapter-page scroll reveals and parallax                                                    |
+| `src/hooks/useAmbientSound.ts`             | Optional synthesised ambience                                                               |
+| `src/styles.css`                           | Fonts, layout, colors, breakpoints, and reduced-motion styling                              |
 
 ## Artwork
 
@@ -74,3 +72,5 @@ See [Our Story layout notes](docs/our-story-layout.md) for the Victoria Wharf an
 Natural Farming now follows the Centre Court section sequence. Edit its editorial structure in `src/components/world/NaturalFarmingLayout.tsx` and its interactive cards in `FarmingExplorer.tsx`. See [Natural Farming layout notes](docs/natural-farming-layout.md) for measurements and motion mapping.
 
 Natural Farming’s measured text timing and reversible card overlap live in `src/hooks/useNaturalFarmingMotion.ts`, with shared values in `src/animation/naturalFarmingMotion.ts`. `LivingSurface.tsx` provides its pointer-responsive Three.js backgrounds, visibility-based rendering, GPU cleanup and CSS fallback. See the motion audit in `docs/natural-farming-layout.md` before changing these timings.
+
+Farm Life follows the About reference. Edit its sections in `src/components/world/FarmLifeLayout.tsx`, six figures in `src/data/life.ts`, and the wide photo tour through `Gallery.tsx`’s `story` variant. The previous generic landscape and pinned-card components have been replaced. See `docs/farm-life-layout.md` for the reference mapping.
