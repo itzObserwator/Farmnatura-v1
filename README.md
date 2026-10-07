@@ -1,6 +1,6 @@
 # Farm Natura — a life rooted in nature
 
-An illustrated, three-chapter website inspired by JFA Awards. Built with React, TypeScript and Vite, using GSAP for animation and Lenis for smooth editorial-page scrolling. All illustrations are original Farm Natura artwork.
+An illustrated, three-chapter website inspired by JFA Awards. Built with React, TypeScript and Vite, using Framer Motion for React interactions, GSAP for scene and scroll choreography, Three.js/WebGL for the animated sunlight atmosphere, and Lenis for smooth editorial-page scrolling. All illustrations are original Farm Natura artwork.
 
 ## Start the website
 
@@ -21,7 +21,9 @@ Open the Local URL printed by Vite. `npm run build` produces the production webs
 | `src/components/world/Intro.tsx` | Illustrated entry screen and optional photographic introduction |
 | `src/components/world/ChapterCarousel.tsx` | Three-scene carousel, wheel/touch gestures, arrows, keyboard controls, and pointer parallax |
 | `src/components/world/ChapterPage.tsx` | Editorial chapter page sections |
-| `src/components/world/BotanicalMotifs.tsx` | Original SVG flowers, mango, foliage, bird, and brand seal |
+| `src/components/world/BotanicalMotifs.tsx` | Original SVG flowers, mango, foliage, and bird |
+| `src/components/world/BrandLogo.tsx` | Supplied Farm Natura logo, shared by header, intro, menu, and footer |
+| `src/components/world/SunlightCanvas.tsx` | Lazy-loaded Three.js shader: moving sunlight, field contours, and pollen |
 | `src/components/world/MenuPanel.tsx` | Layered paper menu |
 | `src/components/world/Gallery.tsx` | Gallery controls and full-size image viewer |
 | `src/components/ContactDialog.tsx` | Visit enquiry form |
@@ -48,3 +50,9 @@ The introduction uses original estate photographs with motion, rather than unrel
 ## Reference notes
 
 See `docs/design-analysis.md` for the JFA reference analysis, section mapping, motion behavior and font substitution. The project uses freely licensed, locally hosted Italiana and Lato; proprietary reference-site fonts and artwork are not included.
+
+## Logo and animation layers
+
+The uploaded logo is preserved unchanged in `public/branding/farmnatura-logo.png`. Its green (`#3C7A3A`) and yellow (`#FDD504`) drive the palette. Dark green (`#244D26`) is the reading color; chapter backgrounds use pale green and yellow tints. Change CSS brand variables in `src/styles.css` and chapter surface colors in `src/data/chapters.ts` together.
+
+Framer Motion handles intro and caption entrances, logo button feedback, and expanding FAQ answers. GSAP controls the three illustrated scenes, pointer parallax, paper menu, curtain transitions, editorial scroll reveals, and the WebGL chapter-color tween. Three.js renders an original full-screen shader atmosphere in the carousel; it imports only when the carousel mounts. Its canvas does not intercept gestures, caps pixel density, pauses behind dialogs and in hidden tabs, respects reduced motion, and disposes GPU resources on exit. Browsers without WebGL retain the illustrated site and all navigation. Lenis smooths editorial-page scrolling.

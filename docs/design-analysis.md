@@ -43,3 +43,7 @@ The reference uses proprietary Voyage, Gill Sans and Baysoir alongside other typ
 Three detailed patterned Indian folk-art compositions were created using the built-in image generation tool. PNG originals and exact prompts are preserved in the project; the deployed page uses WebP files with transparency. Decorative flowers, mangoes, foliage, bird and seal are newly authored SVG.
 
 No JFA illustrations, intro footage, proprietary fonts, testimonials or source implementation were copied. Estate facts and the contact number come from Farm Natura’s current site. Travel times are marked approximate; visitors request current pricing, availability and agreements directly from the team. The visit form creates a WhatsApp draft without sending it automatically.
+
+## Farm Natura branding update
+
+The supplied transparent Farm Natura logo replaces the decorative reference-style seal and text-only wordmarks. Source colors sampled from the logo are green #3C7A3A and yellow #FDD504. The redesigned palette uses these colors, their pale surface tints, and dark green #244D26 for contrast. Layout and chapter choreography are retained. Framer Motion provides React entrances, button feedback and FAQ expansion; GSAP retains scene/scroll choreography; a lazy Three.js/WebGL shader adds subtle sun rays, pollen and farmland contours with graceful fallback and reduced-motion handling.

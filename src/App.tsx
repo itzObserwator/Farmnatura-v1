@@ -1,5 +1,7 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
 import gsap from 'gsap';
+import {MotionConfig,motion} from 'framer-motion';
+import BrandLogo from './components/world/BrandLogo';
 import {Menu} from 'lucide-react';
 import {chapters,type ChapterId} from './data/chapters';
 import Intro from './components/world/Intro';
@@ -7,7 +9,7 @@ import ChapterCarousel from './components/world/ChapterCarousel';
 import ChapterPage from './components/world/ChapterPage';
 import MenuPanel from './components/world/MenuPanel';
 import ContactDialog from './components/ContactDialog';
-import {FarmSeal,BotanicalMotif} from './components/world/BotanicalMotifs';
+import {BotanicalMotif} from './components/world/BotanicalMotifs';
 import {useAmbientSound} from './hooks/useAmbientSound';
 function readRoute():ChapterId|null{return chapters.find(c=>`#${c.id}`===location.hash)?.id??null;}
 export default function App(){
@@ -24,8 +26,8 @@ export default function App(){
  useEffect(()=>{const pop=()=>{setRoute(readRoute());setMenu(false);window.scrollTo(0,0);};window.addEventListener('popstate',pop);window.addEventListener('hashchange',pop);return()=>{window.removeEventListener('popstate',pop);window.removeEventListener('hashchange',pop);transition.current?.kill();};},[]);
  useEffect(()=>{document.title=route?`${chapters.find(c=>c.id===route)?.title} — Farm Natura`:'Farm Natura — A Life Rooted in Nature';document.documentElement.style.overflow=(!route||intro)?'hidden':'';return()=>{document.documentElement.style.overflow='';};},[route,intro]);
  const chapter=chapters.find(c=>c.id===route);
- return <><a className="skip-link" href="#main-content" onClick={e=>{e.preventDefault();document.getElementById("main-content")?.focus();}}>Skip to content</a>{!intro&&<header className="world-header"><button className="brand-seal" aria-label="Farm Natura home" onClick={()=>navigate(null)}><FarmSeal/></button><button className="round-button header-menu" aria-label="Open menu" aria-expanded={menu} onClick={()=>setMenu(true)}><Menu size={21} strokeWidth={1}/></button></header>}
+ return <MotionConfig reducedMotion="user"><a className="skip-link" href="#main-content" onClick={e=>{e.preventDefault();document.getElementById("main-content")?.focus();}}>Skip to content</a>{!intro&&<header className="world-header"><motion.button whileHover={{scale:1.025}} whileTap={{scale:.97}} className="brand-seal" aria-label="Farm Natura home" onClick={()=>navigate(null)}><BrandLogo/></motion.button><button className="round-button header-menu" aria-label="Open menu" aria-expanded={menu} onClick={()=>setMenu(true)}><Menu size={21} strokeWidth={1}/></button></header>}
  <main id="main-content" tabIndex={-1}>{intro?<Intro onComplete={enter}/>:chapter?<ChapterPage key={chapter.id} chapter={chapter} onVisit={()=>setVisit(true)} onNavigate={navigate}/>:<ChapterCarousel onExplore={navigate} onActive={onActive} blocked={menu||visit}/>}</main>
  <div className="world-utilities"><button className={`round-button sound-toggle ${enabled?'is-on':''}`} aria-label={enabled?'Turn sound off':'Turn sound on'} aria-pressed={enabled} onClick={toggle}>{[0,1,2,3,4].map(i=><span key={i}/>)}</button>{!intro&&chapter&&<><button className="paper-button index-button" onClick={()=>setMenu(true)}>INDEX <Menu size={18} strokeWidth={1}/></button><span className="page-number">{chapter.number}/03</span></>}</div>
- <MenuPanel open={menu} onClose={()=>setMenu(false)} onNavigate={navigate} onHome={()=>navigate(null)} onVisit={()=>{setMenu(false);setVisit(true);}}/><ContactDialog open={visit} onClose={()=>setVisit(false)}/><div ref={curtain} className="transition-curtain" aria-hidden="true"><BotanicalMotif kind={active===2?'bird':'flower'}/><span>FARM NATURA</span></div></>;
+ <MenuPanel open={menu} onClose={()=>setMenu(false)} onNavigate={navigate} onHome={()=>navigate(null)} onVisit={()=>{setMenu(false);setVisit(true);}}/><ContactDialog open={visit} onClose={()=>setVisit(false)}/><div ref={curtain} className="transition-curtain" aria-hidden="true"><BotanicalMotif kind={active===2?'bird':'flower'}/><span>FARM NATURA</span></div></MotionConfig>;
 }

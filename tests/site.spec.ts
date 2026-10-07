@@ -1,4 +1,18 @@
 import {test,expect} from '@playwright/test';
+test('uploaded branding and WebGL animation work with a no-WebGL fallback',async({page})=>{
+ await page.addInitScript(()=>sessionStorage.setItem('farm-entered','yes'));
+ await page.goto('/');
+ const logo=page.getByRole('button',{name:'Farm Natura home'}).getByRole('img',{name:'Farm Natura',exact:true});
+ await expect(logo).toBeVisible();expect(await logo.evaluate(el=>(el as HTMLImageElement).naturalWidth)).toBe(609);
+ expect(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--brand-green').trim())).toBe('#3c7a3a');
+ await expect(page.locator('.sunlight-canvas')).toHaveAttribute('data-webgl','ready');
+ const canvas=page.locator('.sunlight-canvas canvas');
+ const first=await canvas.screenshot();await page.waitForTimeout(250);const second=await canvas.screenshot();expect(first.equals(second)).toBe(false);
+ // Exercise the actual unavailable-context path rather than hiding the canvas with CSS.
+ await page.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type:string,...args:unknown[]){if(type==='webgl2')return null;return Reflect.apply(original,this,[type,...args]);} as typeof original;});
+ await page.reload();await expect(page.locator('.sunlight-canvas')).toHaveAttribute('data-webgl','unavailable');
+ await page.waitForTimeout(1300);await page.getByRole('button',{name:'Next chapter',exact:true}).click();await expect(page.locator('.chapter-caption h1')).toHaveText('Natural Farming');
+});
 const enter=async(page:import('@playwright/test').Page)=>{await page.goto('/');await page.getByRole('button',{name:'Skip intro',exact:true}).click();await expect(page.getByRole('button',{name:'Explore Our Story',exact:true})).toBeVisible();await page.waitForTimeout(1300);};
 test('chapter carousel supports arrows, wheel, menu, and page transitions',async({page},info)=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await enter(page);
