@@ -28,3 +28,14 @@ export const contact = {
   address:
     "Planet Green’s Farm Natura, Above Hyundai Showroom, Q-City Road, Financial District, Gowlidoddi, Hyderabad",
 };
+
+export const visitInterests = [
+  "Farm Plots",
+  "Farm House",
+  "Weekend Destination",
+] as const;
+export const visitPlotSizes = [
+  "1/4 Acre (1210 sq.yards)",
+  "1/2 Acre (2420 sq.yards)",
+  "1 Acre (4840 sq.yards)",
+] as const;

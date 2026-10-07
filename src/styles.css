@@ -1844,18 +1844,25 @@ svg {
   flex-direction: column;
   gap: 7px;
 }
+.enquiry-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
 .contact-dialog label span {
   font-size: 11px;
   opacity: 0.7;
 }
-.contact-dialog input {
+.contact-dialog input,
+.contact-dialog select {
   border: 1px solid #b6c9a5;
   background: #fff;
   border-radius: 0;
   padding: 12px;
   color: var(--navy);
   width: 100%;
-  font-size: 15px;
+  font-size: 16px;
+  min-height: 46px;
 }
 .button {
   display: inline-flex;

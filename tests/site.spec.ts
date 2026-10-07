@@ -185,8 +185,15 @@ test("gallery, FAQ, enquiry and original artwork work", async ({ page }) => {
     .getByRole("button", { name: "PLAN YOUR VISIT", exact: true })
     .click();
   await expect(page.locator(".contact-dialog")).toBeVisible();
-  await page.getByLabel("Your name").fill("Test visitor");
+  await page.getByLabel("Full name").fill("Test visitor");
+  await page.getByLabel("Email address").fill("visitor@example.com");
   await page.getByLabel("Phone number").fill("9876543210");
+  await page
+    .getByLabel("Interested in", { exact: true })
+    .selectOption("Farm Plots");
+  await page
+    .getByLabel("Looking for plot size")
+    .selectOption("1/2 Acre (2420 sq.yards)");
   const [popup] = await Promise.all([
     page.waitForEvent("popup"),
     page.getByRole("button", { name: "Continue on WhatsApp" }).click(),
