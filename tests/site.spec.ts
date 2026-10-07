@@ -280,6 +280,8 @@ test("Natural Farming keeps Centre Court sections and readable card handover", a
       .locator(".farming-managed-card")
       .evaluate((el) => el.getBoundingClientRect().top);
     expect(after).toBeLessThan(before - 100);
+    // A small scroll must advance the handover gradually, rather than jump cards.
+    expect(before - after).toBeLessThan(160);
     expect(
       Math.abs(
         (await page

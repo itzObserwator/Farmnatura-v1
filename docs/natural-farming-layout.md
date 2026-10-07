@@ -25,4 +25,6 @@ Text uses the reference’s 1.1-second cubic Bézier `(0.165, 0.84, 0.44, 1)`, a
 
 The reference’s organic backgrounds use pointer-responsive paths. Farm Natura implements that behavior with original branded Three.js shader surfaces and spring-smoothed pointer deformation; the shape contours are adapted to its artwork. The extra photo zoom and growing rounded mask have been removed. WebGL absence retains the CSS shapes. Reduced motion disables the shader and pinning while keeping both cards readable.
 
-Motion constants: `src/animation/naturalFarmingMotion.ts`. Scroll/text choreography: `src/hooks/useNaturalFarmingMotion.ts`. GPU surfaces and cleanup: `src/components/world/LivingSurface.tsx`. Pin distance follows the actual content height so Farm Natura copy can be edited without fixed screenshot offsets.
+Motion constants: `src/animation/naturalFarmingMotion.ts`. Scroll/text choreography: `src/hooks/useNaturalFarmingMotion.ts`. GPU surfaces and cleanup: `src/components/world/LivingSurface.tsx`.
+
+The sticky handover now uses linear scroll progress with a 0.65-second scrub, without a spring or front-loaded ease. Its scroll distance is the greater of 1.35 viewport heights and 1.8 times the second card's travel. This prevents the old `bottom bottom` endpoint from compressing the entire transition into a short scroll on tall screens. Geometry recalculates on resize; scrolling back reverses the same motion. Mobile and reduced-motion layouts retain ordinary stacked cards.

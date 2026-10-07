@@ -85,22 +85,28 @@ export function setupNaturalFarmingMotion() {
     const first = cards?.querySelector<HTMLElement>(".practice-window");
     const second = cards?.querySelector<HTMLElement>(".farming-managed-card");
     if (!stage || !cards || !first || !second) return;
+    const cardTravel = () =>
+      Math.max(0, second.offsetTop - first.offsetTop - motion.cards.overlap);
     // Both cards remain in document flow. Only the second moves; the first stays opaque.
     gsap.fromTo(
       second,
       { y: 0, rotation: -1.4 },
       {
-        y: () => -(second.offsetTop - first.offsetTop) + motion.cards.overlap,
+        y: () => -cardTravel(),
         rotation: motion.cards.rotation,
-        ease: "power1.out",
+        ease: "none",
         scrollTrigger: {
           id: "farming-card-handover",
           trigger: stage,
           pin: true,
           start: () =>
             `top ${motion.cards.top - (first.getBoundingClientRect().top - stage.getBoundingClientRect().top)}px`,
-          end: "bottom bottom",
-          scrub: true,
+          end: () =>
+            `+=${Math.max(
+              window.innerHeight * motion.cards.viewportDistance,
+              cardTravel() * motion.cards.travelDistance,
+            )}`,
+          scrub: motion.cards.scrub,
           invalidateOnRefresh: true,
         },
       },
