@@ -297,6 +297,7 @@ svg {
   user-select: none;
 }
 .scene-orbit {
+  object-fit: contain;
   position: absolute;
   width: 80px;
   height: 100px;
@@ -555,22 +556,22 @@ svg {
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
-.intro-poster .floating-decor {
+.intro-poster .handdrawn-decor {
   z-index: 1;
   overflow: hidden;
 }
-.intro-poster .decor-bottom-left,
-.intro-poster .decor-bottom-right,
-.intro-poster .decor-bird {
+.intro-poster .drawn-foliage,
+.intro-poster .drawn-marigold-bottom,
+.intro-poster .drawn-bird {
   display: none;
 }
-.intro-poster .decor-top-left {
+.intro-poster .drawn-mango {
   width: 180px;
   top: -65px;
   left: 25px;
   transform: rotate(-35deg);
 }
-.intro-poster .decor-top-right {
+.intro-poster .drawn-marigold-top {
   width: 220px;
   top: -65px;
   right: 10px;
@@ -1830,12 +1831,12 @@ svg {
     right: -12%;
     transform: rotate(3deg);
   }
-  .intro-poster .decor-top-left {
+  .intro-poster .drawn-mango {
     width: 100px;
     left: -12px;
     top: -40px;
   }
-  .intro-poster .decor-top-right {
+  .intro-poster .drawn-marigold-top {
     width: 125px;
     right: -20px;
     top: -45px;
@@ -2355,7 +2356,7 @@ svg {
   top: calc(40% - 215px);
   pointer-events: none;
 }
-.next-scene > img {
+.next-scene > img:not(.next-flower) {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -2363,6 +2364,8 @@ svg {
   object-fit: contain;
 }
 .next-flower {
+  height: auto;
+  object-fit: contain;
   position: absolute;
   width: 80px;
   left: 10px;

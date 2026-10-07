@@ -44,10 +44,10 @@ export const chapters = [
     id: "living",
     number: "03",
     title: "Farm Life",
-    tag: "A PLACE TO RETURN TO",
+    tag: "GROW A LITTLE CLOSER",
     color: "#fff3b5",
-    art: "/illustrations/living-retreat.webp",
-    alt: "Original Indian folk-art farmhouse with banana leaves, parrots and a white indigenous cow",
+    art: "/illustrations/living-harvest.webp",
+    alt: "Original hand-drawn Indian family tending living soil, planting seedlings and harvesting vegetables among orchard trees",
     hero: ["LESS HURRY.", "MORE NATURE.", "MORE LIFE."],
     subtitle:
       "Weekends under open skies. Family around the table. A little space to simply breathe.",

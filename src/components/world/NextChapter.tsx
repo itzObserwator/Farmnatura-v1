@@ -1,6 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import type { Chapter, ChapterId } from "../../data/chapters";
-import { BotanicalMotif } from "./BotanicalMotifs";
+import HandDrawnMotif from "./HandDrawnMotif";
 export default function NextChapter({
   chapter,
   onNavigate,
@@ -21,7 +21,11 @@ export default function NextChapter({
             style={{ backgroundColor: chapter.color }}
           />
           <img src={chapter.art} alt={chapter.alt} loading="lazy" />
-          <BotanicalMotif kind="flower" className="next-flower" />
+          <HandDrawnMotif
+            kind="flower"
+            className="next-flower"
+            loading="lazy"
+          />
         </div>
         <span className="chapter-tag">THE NEXT CHAPTER</span>
         <span className="next-title">{chapter.title}</span>

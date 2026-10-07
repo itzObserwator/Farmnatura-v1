@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import BrandLogo from "./BrandLogo";
 import { chapters } from "../../data/chapters";
-import { FloatingDecor } from "./BotanicalMotifs";
+import HeroBotanicals from "./HeroBotanicals";
 export default function Intro({ onComplete }: { onComplete: () => void }) {
   const reduced = useReducedMotion();
   const [progress, setProgress] = useState(0);
@@ -85,7 +85,7 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <FloatingDecor />
+            <HeroBotanicals />
             <img
               className="intro-art intro-art-left"
               src={chapters[0].art}
@@ -94,7 +94,7 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
             <img
               className="intro-art intro-art-right"
               src={chapters[2].art}
-              alt="Original illustrated farmhouse and garden"
+              alt={chapters[2].alt}
             />
             <div className="intro-brand">
               <span className="mini-label">PLANET GREEN PRESENTS</span>

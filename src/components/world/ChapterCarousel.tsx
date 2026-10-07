@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import SunlightCanvas from "./SunlightCanvas";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { chapters, type ChapterId } from "../../data/chapters";
-import { BotanicalMotif } from "./BotanicalMotifs";
+import HandDrawnMotif from "./HandDrawnMotif";
 import { motionTokens } from "../../animation/motionTokens";
 gsap.registerPlugin(Observer);
 const modulo = (value: number, length: number) =>
@@ -177,11 +177,11 @@ export default function ChapterCarousel({
                   alt={chapter.alt}
                   draggable="false"
                 />
-                <BotanicalMotif
+                <HandDrawnMotif
                   kind={chapter.id === "living" ? "bird" : "flower"}
                   className="scene-orbit orbit-one"
                 />
-                <BotanicalMotif
+                <HandDrawnMotif
                   kind="mango"
                   className="scene-orbit orbit-two"
                 />
