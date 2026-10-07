@@ -1,29 +1,25 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { chapters } from "../../data/chapters";
 import BrandLogo from "./BrandLogo";
 
 const scenes = [
   {
-    label: "THE LIVING LAND",
+    label: "ROOTED IN NATURAL FARMING",
     title: "It begins\nwith the earth.",
-    copy: "Living soil. Native seeds. Good things taking root.",
-    chapter: chapters[1],
+    copy: "Working with the earth. Restoring life to the land.",
   },
   {
-    label: "THE SHARED HARVEST",
-    title: "Grown with care.\nShared with joy.",
-    copy: "From the shade of a mango grove to the people you love.",
-    chapter: chapters[0],
+    label: "FROM SOIL TO LIFE",
+    title: "Soil comes\nalive.",
+    copy: "Organic matter, native seeds and care, season after season.",
   },
   {
     label: "A LIFE IN NATURE",
     title: "Welcome\nto the farm.",
-    copy: "A slower rhythm. A shared harvest. A little closer to nature.",
-    chapter: chapters[2],
+    copy: "Healthy soil. Thriving crops. A future grown naturally.",
   },
 ];
-const sceneDuration = 1800;
+const sceneDuration = 2200;
 const entranceDuration = sceneDuration * scenes.length;
 
 /** A short illustrated welcome, separate from actual image-loading progress. */
@@ -68,54 +64,172 @@ export default function FarmEntrance({
         <span>PLANET GREEN PRESENTS</span>
       </div>
       <div className="entrance-world">
-        <div className="entrance-orchard" aria-hidden="true">
+        <div className="entrance-field-scene" aria-hidden="true">
           <motion.div
             className="entrance-sun"
             initial={reduced ? false : { scale: 0.85 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 2, ease: "easeOut" }}
           />
-          <svg className="entrance-orbit" viewBox="0 0 560 560">
-            <motion.path
-              d="M80 430C-15 210 90 35 283 28S593 233 491 424C444 510 236 571 117 472"
+          <svg className="entrance-landscape" viewBox="0 0 600 560">
+            <defs>
+              <pattern
+                id="entrance-soil-grain"
+                width="37"
+                height="29"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M4 7l5 2m13 11l7-3M13 25l4-2"
+                  stroke="#ead7ac"
+                  strokeWidth="1"
+                  opacity=".55"
+                />
+                <path
+                  d="M17 4l3 1m12 9l2 2"
+                  stroke="#614927"
+                  strokeWidth="1"
+                  opacity=".35"
+                />
+                <circle cx="5" cy="21" r="1.2" fill="#604b2f" opacity=".4" />
+                <circle cx="26" cy="5" r=".8" fill="#efe0bb" opacity=".6" />
+              </pattern>
+            </defs>
+            <path
+              d="M20 326Q105 247 214 296T420 269Q516 261 583 318L575 365H24Z"
+              fill="#dce6cd"
+            />
+            <path
+              d="M27 335Q153 299 298 333T578 328"
               fill="none"
-              stroke="currentColor"
-              strokeWidth="0.8"
-              initial={reduced ? false : { pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 2, ease: "easeInOut" }}
+              stroke="#8caa70"
+              strokeWidth="2"
+            />
+            <path
+              d="M32 355Q297 296 568 355L590 477Q315 558 10 477Z"
+              fill="#b99564"
+              stroke="#725a3b"
+              strokeWidth="1.5"
+            />
+            <motion.path
+              d="M32 355Q297 296 568 355L590 477Q315 558 10 477Z"
+              fill="#637d43"
+              initial={{ opacity: reduced ? 0.6 : 0 }}
+              animate={{ opacity: 0.6 }}
+              transition={{
+                delay: reduced ? 0 : 2.4,
+                duration: reduced ? 0 : 2.8,
+              }}
+            />
+            <path
+              d="M32 355Q297 296 568 355L590 477Q315 558 10 477Z"
+              fill="url(#entrance-soil-grain)"
+            />
+            {Array.from({ length: 6 }, (_, row) => (
+              <g key={row}>
+                <path
+                  d={`M${26 - row * 2} ${366 + row * 22}Q300 ${308 + row * 29} ${575 + row * 2} ${366 + row * 22}`}
+                  fill="none"
+                  stroke="#7a5a37"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                />
+                <motion.path
+                  d={`M${26 - row * 2} ${361 + row * 22}Q300 ${304 + row * 29} ${575 + row * 2} ${361 + row * 22}`}
+                  fill="none"
+                  stroke="#e0c697"
+                  strokeWidth="2"
+                  initial={reduced ? false : { pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{
+                    delay: reduced ? 0 : row * 0.16,
+                    duration: reduced ? 0 : 2.8,
+                    ease: "linear",
+                  }}
+                />
+              </g>
+            ))}
+            {Array.from({ length: 32 }, (_, i) => {
+              const row = Math.floor(i / 8),
+                col = i % 8;
+              const x = 55 + col * 69,
+                y = 396 + row * 28 - Math.sin((col / 7) * Math.PI) * 28;
+              return (
+                <g key={i} transform={`translate(${x} ${y})`}>
+                  <motion.g
+                    className="entrance-seedling"
+                    initial={reduced ? false : { scaleY: 0, opacity: 0 }}
+                    animate={{ scaleY: 1, opacity: 1 }}
+                    style={{ originX: "0px", originY: "0px" }}
+                    transition={{
+                      delay: reduced ? 0 : 2.8 + col * 0.12 + row * 0.14,
+                      duration: reduced ? 0 : 0.85,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <path
+                      d="M0 0Q3-13 0-25"
+                      fill="none"
+                      stroke="#244d26"
+                      strokeWidth="2"
+                    />
+                    <path
+                      d="M1-12Q-18-11-16-26Q-1-28 1-12Z"
+                      fill={i % 3 ? "#3c7a3a" : "#72954e"}
+                      stroke="#244d26"
+                      strokeWidth="1"
+                    />
+                    <path
+                      d="M1-18Q3-35 17-33Q18-18 1-18Z"
+                      fill="#85a75f"
+                      stroke="#244d26"
+                      strokeWidth="1"
+                    />
+                    <path
+                      d="M0-13L-12-23M2-20L12-29"
+                      stroke="#c9d89a"
+                      strokeWidth=".8"
+                    />
+                    {i % 5 === 0 && (
+                      <>
+                        <path d="M1-24L1-38" stroke="#244d26" />
+                        <circle
+                          cx="1"
+                          cy="-38"
+                          r="5"
+                          fill="#ffd500"
+                          stroke="#94751f"
+                          strokeWidth="1"
+                        />
+                      </>
+                    )}
+                  </motion.g>
+                </g>
+              );
+            })}
+            <path
+              d="M33 492Q292 553 567 493"
+              fill="none"
+              stroke="#725a3b"
+              strokeWidth="1"
             />
           </svg>
-          <AnimatePresence mode="sync">
-            <motion.img
-              key={current.chapter.id}
-              className="entrance-scene-art"
-              src={current.chapter.art}
-              alt=""
-              initial={reduced ? false : { opacity: 0, y: 14, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{
-                opacity: 0,
-                y: reduced ? 0 : -8,
-                scale: reduced ? 1 : 1.025,
-              }}
-              transition={{
-                duration: reduced ? 0 : 0.55,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            />
-          </AnimatePresence>
+          <motion.div
+            className="entrance-plough-team"
+            initial={reduced ? false : { x: "-12%" }}
+            animate={{ x: reduced ? "10%" : "12%" }}
+            transition={{ duration: reduced ? 0 : 4.6, ease: "linear" }}
+          >
+            <img src="/illustrations/entrance/oxen-plough.webp" alt="" />
+          </motion.div>
           <img
             className="entrance-bird"
             src="/illustrations/hero/orchard-bird.webp"
             alt=""
           />
-          <img
-            className="entrance-marigold"
-            src="/illustrations/hero/marigold-stem.webp"
-            alt=""
-          />
-          <span className="entrance-art-note">Soil. Seed. Season.</span>
+          <span className="entrance-art-note">
+            Restoring the land, season by season.
+          </span>
         </div>
         <div className="entrance-copy">
           <AnimatePresence mode="wait">
@@ -142,7 +256,7 @@ export default function FarmEntrance({
                 key={step.label}
               >
                 <i />
-                {["SOIL", "HARVEST", "LIFE"][index]}
+                {["SOIL", "SEED", "LIFE"][index]}
               </span>
             ))}
           </div>

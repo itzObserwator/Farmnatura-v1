@@ -238,10 +238,9 @@ test("illustrated entrance advances through the farm story and enters automatica
   await page.goto("/");
   await page.getByRole("button", { name: "ENTER THE FARM" }).click();
   await expect(page.locator(".entrance-copy h2")).toContainText("It begins");
-  await expect(page.locator(".entrance-copy h2")).toContainText(
-    "Grown with care",
-    { timeout: 3500 },
-  );
+  await expect(page.locator(".entrance-copy h2")).toContainText("Soil comes", {
+    timeout: 3500,
+  });
   await expect(page.locator(".entrance-copy h2")).toContainText("Welcome", {
     timeout: 3500,
   });

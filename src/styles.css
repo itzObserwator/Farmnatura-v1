@@ -614,7 +614,7 @@ svg {
   gap: clamp(30px, 5vw, 75px);
   width: min(1180px, 100%);
 }
-.entrance-orchard {
+.entrance-field-scene {
   position: relative;
   width: min(560px, 44vw, calc(100svh - 210px));
   aspect-ratio: 1;
@@ -628,20 +628,24 @@ svg {
   background: #fff1a8;
   z-index: -1;
 }
-.entrance-orbit {
+.entrance-landscape {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  color: #3d783c70;
-  transform: rotate(-12deg);
 }
-.entrance-scene-art {
+.entrance-plough-team {
   position: absolute;
-  inset: 8% 7%;
-  width: 86%;
-  height: 86%;
-  object-fit: contain;
+  width: 84%;
+  left: 2%;
+  bottom: 37%;
+}
+.entrance-plough-team img {
+  display: block;
+  width: 100%;
+}
+.entrance-seedling {
+  transform-box: fill-box;
 }
 .entrance-bird {
   position: absolute;
@@ -660,7 +664,9 @@ svg {
 .entrance-art-note {
   position: absolute;
   bottom: -5px;
-  left: 28%;
+  left: 0;
+  width: 100%;
+  text-align: center;
   font-size: 11px;
   letter-spacing: 0.6px;
   transform: rotate(-4deg);
@@ -760,7 +766,7 @@ svg {
     grid-template-columns: 1fr;
     gap: 22px;
   }
-  .entrance-orchard {
+  .entrance-field-scene {
     width: min(320px, 34svh, 100%);
   }
   .entrance-bird {
@@ -813,7 +819,7 @@ svg {
   }
 }
 @media (max-width: 650px) and (max-height: 650px) {
-  .entrance-orchard {
+  .entrance-field-scene {
     width: min(240px, 27svh, 100%);
   }
   .entrance-copy > div:first-child {
@@ -835,7 +841,7 @@ svg {
     grid-template-columns: 0.9fr 1.1fr;
     gap: 18px;
   }
-  .entrance-orchard {
+  .entrance-field-scene {
     width: min(220px, 40svh, 100%);
   }
   .entrance-copy > div:first-child {

@@ -11,14 +11,18 @@ export default function Intro({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
     let alive = true,
       loaded = 0;
-    chapters.forEach((c) => {
+    const assets = [
+      ...chapters.map((c) => c.art),
+      "/illustrations/entrance/oxen-plough.webp",
+    ];
+    assets.forEach((src) => {
       const img = new Image();
       const done = () => {
-        if (alive) setProgress(Math.round((++loaded / chapters.length) * 100));
+        if (alive) setProgress(Math.round((++loaded / assets.length) * 100));
       };
       img.onload = done;
       img.onerror = done;
-      img.src = c.art;
+      img.src = src;
     });
     return () => {
       alive = false;
