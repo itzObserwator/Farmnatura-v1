@@ -1,26 +1,10 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import BrandLogo from "./BrandLogo";
 
-const scenes = [
-  {
-    label: "ROOTED IN NATURAL FARMING",
-    title: "It begins\nwith the earth.",
-    copy: "Working with the earth. Restoring life to the land.",
-  },
-  {
-    label: "FROM SOIL TO LIFE",
-    title: "Soil comes\nalive.",
-    copy: "Organic matter, native seeds and care, season after season.",
-  },
-  {
-    label: "A LIFE IN NATURE",
-    title: "Welcome\nto the farm.",
-    copy: "Healthy soil. Thriving crops. A future grown naturally.",
-  },
-];
+const sceneCount = 3;
 const sceneDuration = 2200;
-const entranceDuration = sceneDuration * scenes.length;
+const entranceDuration = sceneDuration * sceneCount;
 
 /** A short illustrated welcome, separate from actual image-loading progress. */
 export default function FarmEntrance({
@@ -36,7 +20,7 @@ export default function FarmEntrance({
     const interval = reduced
       ? undefined
       : window.setInterval(
-          () => setScene((value) => Math.min(value + 1, scenes.length - 1)),
+          () => setScene((value) => Math.min(value + 1, sceneCount - 1)),
           sceneDuration,
         );
     const fade = window.setTimeout(
@@ -50,7 +34,6 @@ export default function FarmEntrance({
       clearTimeout(complete);
     };
   }, [onComplete, reduced]);
-  const current = scenes[scene];
   return (
     <motion.div
       className="farm-entrance"
@@ -230,36 +213,6 @@ export default function FarmEntrance({
           <span className="entrance-art-note">
             Restoring the land, season by season.
           </span>
-        </div>
-        <div className="entrance-copy">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={scene}
-              initial={reduced ? false : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: reduced ? 0 : -8 }}
-              transition={{ duration: reduced ? 0 : 0.3 }}
-            >
-              <span className="chapter-tag">{current.label}</span>
-              <h2>
-                {current.title.split("\n").map((line, index) => (
-                  <span key={index}>{line}</span>
-                ))}
-              </h2>
-              <p>{current.copy}</p>
-            </motion.div>
-          </AnimatePresence>
-          <div className="entrance-journey" aria-hidden="true">
-            {scenes.map((step, index) => (
-              <span
-                className={index <= scene ? "is-grown" : ""}
-                key={step.label}
-              >
-                <i />
-                {["SOIL", "SEED", "LIFE"][index]}
-              </span>
-            ))}
-          </div>
         </div>
       </div>
       <div className="entrance-status">

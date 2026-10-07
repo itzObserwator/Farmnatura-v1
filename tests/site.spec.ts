@@ -213,7 +213,7 @@ test("intro, sound preference and reduced motion remain accessible", async ({
   ).toBeEnabled();
   await page.getByRole("button", { name: "ENTER THE FARM" }).click();
   await expect(page.locator(".farm-entrance")).toBeVisible();
-  await expect(page.locator(".entrance-copy h2")).toContainText("Welcome");
+  await expect(page.locator(".entrance-copy")).toHaveCount(0);
   await page.getByRole("button", { name: "Skip intro", exact: true }).click();
   await expect(page.locator(".chapter-carousel")).toBeVisible();
   await page.getByRole("button", { name: "Turn sound on" }).click();
@@ -237,11 +237,13 @@ test("illustrated entrance advances through the farm story and enters automatica
 }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "ENTER THE FARM" }).click();
-  await expect(page.locator(".entrance-copy h2")).toContainText("It begins");
-  await expect(page.locator(".entrance-copy h2")).toContainText("Soil comes", {
+  await expect(page.locator(".entrance-copy")).toHaveCount(0);
+  await expect(page.locator(".entrance-plough-team img")).toBeVisible();
+  await expect(page.locator(".entrance-status")).toContainText("01 / 03");
+  await expect(page.locator(".entrance-status")).toContainText("02 / 03", {
     timeout: 3500,
   });
-  await expect(page.locator(".entrance-copy h2")).toContainText("Welcome", {
+  await expect(page.locator(".entrance-status")).toContainText("03 / 03", {
     timeout: 3500,
   });
   await expect(page.locator(".chapter-carousel")).toBeVisible({
