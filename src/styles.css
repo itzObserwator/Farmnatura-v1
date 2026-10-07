@@ -1,4 +1,11 @@
 @font-face {
+  font-family: Voyage;
+  src: url("/fonts/voyage-regular.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
   font-family: Italiana;
   src: url("/fonts/italiana.ttf") format("truetype");
   font-weight: 400;
@@ -4031,6 +4038,7 @@ svg {
   font-family: Italiana, Georgia, serif;
 }
 .life-statistic strong {
+  font-family: Voyage, Georgia, serif;
   font-size: 120px;
   line-height: 1;
   font-weight: 400;
