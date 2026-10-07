@@ -3744,3 +3744,55 @@ svg {
     top: 64%;
   }
 }
+/* Motion fidelity: photos retain their tilt, live surfaces deform separately. */
+.page-farming .farming-photo-mask {
+  border-radius: 0;
+}
+.living-surface canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.living-surface[data-webgl="ready"] {
+  background: transparent;
+  border-radius: 0;
+}
+.farming-feature-stage {
+  position: relative;
+}
+.page-farming .farming-managed-card {
+  position: relative;
+  inset: auto;
+  margin-top: 200px;
+}
+.page-farming .farming-cards {
+  isolation: isolate;
+}
+.page-farming .farming-feature-card {
+  opacity: 1;
+}
+.page-farming .farming-managed-card {
+  z-index: 2;
+}
+/* Two nested masks allow the word and its characters to reveal together. */
+.page-farming [data-farming-reveal] .reveal-word {
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+@media (max-width: 899px) {
+  .page-farming .farming-managed-card {
+    margin-top: 60px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-farming [data-farming-reveal] {
+    opacity: 1;
+  }
+  .page-farming .farming-managed-card {
+    transform: none;
+  }
+}
+.living-surface {
+  pointer-events: none;
+}

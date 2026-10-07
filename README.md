@@ -72,3 +72,5 @@ See [the section-by-section motion map](docs/section-motion-map.md) for the late
 See [Our Story layout notes](docs/our-story-layout.md) for the Victoria Wharf analysis and implementation mapping.
 
 Natural Farming now follows the Centre Court section sequence. Edit its editorial structure in `src/components/world/NaturalFarmingLayout.tsx` and its interactive cards in `FarmingExplorer.tsx`. See [Natural Farming layout notes](docs/natural-farming-layout.md) for measurements and motion mapping.
+
+Natural Farming’s measured text timing and reversible card overlap live in `src/hooks/useNaturalFarmingMotion.ts`, with shared values in `src/animation/naturalFarmingMotion.ts`. `LivingSurface.tsx` provides its pointer-responsive Three.js backgrounds, visibility-based rendering, GPU cleanup and CSS fallback. See the motion audit in `docs/natural-farming-layout.md` before changing these timings.

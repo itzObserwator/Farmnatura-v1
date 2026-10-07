@@ -279,33 +279,91 @@ test("Natural Farming keeps Centre Court sections and readable card handover", a
   const cards = page.locator(".farming-cards");
   if (info.project.name === "desktop") {
     const start = await cards.evaluate(
-      (el) => el.getBoundingClientRect().top + scrollY,
+      (el) => el.getBoundingClientRect().top + scrollY - 95,
     );
-    await page.evaluate((y) => window.scrollTo(0, y + 1050), start);
-    await page.waitForTimeout(1600);
-    const rect = await page
+    await page.evaluate((y) => window.scrollTo(0, y + 40), start);
+    await page.waitForTimeout(700);
+    const before = await page
       .locator(".farming-managed-card")
-      .evaluate((el) => ({
-        top: el.getBoundingClientRect().top,
-        bottom: el.getBoundingClientRect().bottom,
-      }));
-    expect(rect.top).toBeGreaterThan(50);
-    expect(rect.bottom).toBeLessThan(1000);
+      .evaluate((el) => el.getBoundingClientRect().top);
+    const firstTop = await page
+      .locator(".practice-window")
+      .evaluate((el) => el.getBoundingClientRect().top);
+    await page.evaluate((y) => window.scrollTo(0, y + 250), start);
+    await page.waitForTimeout(700);
+    const after = await page
+      .locator(".farming-managed-card")
+      .evaluate((el) => el.getBoundingClientRect().top);
+    expect(after).toBeLessThan(before - 100);
+    expect(
+      Math.abs(
+        (await page
+          .locator(".practice-window")
+          .evaluate((el) => el.getBoundingClientRect().top)) - firstTop,
+      ),
+    ).toBeLessThan(3);
+    expect(
+      await page
+        .locator(".practice-window")
+        .evaluate((el) => getComputedStyle(el).opacity),
+    ).toBe("1");
+    await page.evaluate((y) => window.scrollTo(0, y + 40), start);
+    await page.waitForTimeout(700);
+    expect(
+      await page
+        .locator(".farming-managed-card")
+        .evaluate((el) => el.getBoundingClientRect().top),
+    ).toBeGreaterThan(after + 100);
   }
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();
-  const rects = await page
-    .locator(".farming-feature-card")
-    .evaluateAll((els) =>
-      els.map((el) => ({
-        top: el.getBoundingClientRect().top,
-        bottom: el.getBoundingClientRect().bottom,
-      })),
-    );
+  const rects = await page.locator(".farming-feature-card").evaluateAll((els) =>
+    els.map((el) => ({
+      top: el.getBoundingClientRect().top,
+      bottom: el.getBoundingClientRect().bottom,
+    })),
+  );
   expect(rects[1].top).toBeGreaterThan(rects[0].bottom);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+});
+
+test("Natural Farming fluid surfaces animate and survive WebGL failure", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/#farming");
+  const surface = page.locator(".farming-organic-surface");
+  await surface.scrollIntoViewIfNeeded();
+  await expect(surface).toHaveAttribute("data-webgl", "ready");
+  const canvas = surface.locator("canvas");
+  const before = await canvas.screenshot();
+  const rect = await surface.boundingBox();
+  await page.mouse.move(
+    rect!.x + rect!.width * 0.82,
+    rect!.y + rect!.height * 0.5,
+  );
+  await page.waitForTimeout(700);
+  expect(before.equals(await canvas.screenshot())).toBe(false);
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (
+      type: string,
+      ...args: unknown[]
+    ) {
+      return type === "webgl2"
+        ? null
+        : Reflect.apply(original, this, [type, ...args]);
+    } as typeof original;
+  });
+  await page.reload();
+  await expect(surface).toHaveAttribute("data-webgl", "unavailable");
+  await expect(page.locator(".farming-about-photo")).toBeAttached();
+  await page.getByRole("tab", { name: "01 Indigenous seeds" }).click();
+  await expect(page.getByRole("tabpanel")).toContainText("Locally adapted");
+  expect(errors).toEqual([]);
 });

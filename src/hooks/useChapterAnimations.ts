@@ -2,6 +2,7 @@ import { useLayoutEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import { setupNaturalFarmingMotion } from "./useNaturalFarmingMotion";
 import { motionTokens } from "../animation/motionTokens";
 gsap.registerPlugin(ScrollTrigger);
 /** Scene-specific scroll choreography, scoped to the currently mounted chapter. */
@@ -18,47 +19,54 @@ export function useChapterAnimations() {
     gsap.ticker.add(tick);
     const media = gsap.matchMedia();
     let mounted = true;
+    let cleanupFarming = () => {};
     const ctx = gsap.context(() => {
-      gsap.from(".page-hero .reveal-char", {
-        yPercent: 115,
-        duration: motionTokens.text.duration,
-        stagger: motionTokens.text.stagger,
-        ease: motionTokens.text.ease,
-        delay: 0.35,
-      });
-      gsap.from(".page-hero .chapter-tag, .hero-subtitle", {
-        opacity: 0,
-        y: 15,
-        duration: 1,
-        delay: 0.7,
-      });
-      gsap.to(".page-hero .decor-piece", {
-        y: -14,
-        rotation: "+=3",
-        duration: 4,
-        yoyo: true,
-        repeat: -1,
-        stagger: 0.3,
-        ease: "sine.inOut",
-      });
-      gsap.utils.toArray<HTMLElement>("[data-text-reveal]").forEach((element) =>
-        gsap.from(element.querySelectorAll(".reveal-char"), {
-          yPercent: 110,
-          duration: 1.1,
-          stagger: 0.007,
-          ease: "power3.out",
-          scrollTrigger: { trigger: element, start: "top 88%", once: true },
-        }),
-      );
-      gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) =>
-        gsap.from(element, {
-          y: 35,
+      if (!document.querySelector(".page-farming")) {
+        gsap.from(".page-hero .reveal-char", {
+          yPercent: 115,
+          duration: motionTokens.text.duration,
+          stagger: motionTokens.text.stagger,
+          ease: motionTokens.text.ease,
+          delay: 0.35,
+        });
+        gsap.from(".page-hero .chapter-tag, .hero-subtitle", {
           opacity: 0,
+          y: 15,
           duration: 1,
-          ease: "power3.out",
-          scrollTrigger: { trigger: element, start: "top 88%", once: true },
-        }),
-      );
+          delay: 0.7,
+        });
+        gsap.to(".page-hero .decor-piece", {
+          y: -14,
+          rotation: "+=3",
+          duration: 4,
+          yoyo: true,
+          repeat: -1,
+          stagger: 0.3,
+          ease: "sine.inOut",
+        });
+      }
+      gsap.utils
+        .toArray<HTMLElement>("[data-text-reveal]:not([data-farming-reveal])")
+        .forEach((element) =>
+          gsap.from(element.querySelectorAll(".reveal-char"), {
+            yPercent: 110,
+            duration: 1.1,
+            stagger: 0.007,
+            ease: "power3.out",
+            scrollTrigger: { trigger: element, start: "top 88%", once: true },
+          }),
+        );
+      gsap.utils
+        .toArray<HTMLElement>("[data-reveal]:not([data-farming-reveal])")
+        .forEach((element) =>
+          gsap.from(element, {
+            y: 35,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: { trigger: element, start: "top 88%", once: true },
+          }),
+        );
       gsap.utils
         .toArray<HTMLElement>("[data-image-reveal]")
         .forEach((element) => {
@@ -94,7 +102,7 @@ export function useChapterAnimations() {
         });
       gsap.utils
         .toArray<HTMLElement>(
-          ".art-panel img, .landscape-ornament, .story-grove-art, .story-drift, .farming-drift",
+          ".art-panel img, .landscape-ornament, .story-grove-art, .story-drift",
         )
         .forEach((element) =>
           gsap.fromTo(
@@ -113,74 +121,7 @@ export function useChapterAnimations() {
             },
           ),
         );
-      gsap.utils
-        .toArray<HTMLElement>("[data-farming-image]")
-        .forEach((element) => {
-          gsap.fromTo(
-            element,
-            { borderRadius: "43% 57% 44% 56% / 49% 38% 62% 51%", scale: 0.92 },
-            {
-              borderRadius: "2% 3% 2% 3% / 3% 2% 3% 2%",
-              scale: 1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: element,
-                start: "top 90%",
-                end: "top 15%",
-                scrub: 0.8,
-              },
-            },
-          );
-          gsap.fromTo(
-            element.querySelector("img"),
-            { scale: 1.12, yPercent: -4 },
-            {
-              scale: 1,
-              yPercent: 4,
-              ease: "none",
-              scrollTrigger: {
-                trigger: element,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1,
-              },
-            },
-          );
-        });
-      media.add("(min-width: 900px)", () => {
-        const cards = document.querySelector<HTMLElement>(".farming-cards");
-        if (!cards) return;
-        const first = cards.querySelector(".practice-window");
-        const second = cards.querySelector(".farming-managed-card");
-        gsap.set(second, { yPercent: 135, rotation: 3, opacity: 0 });
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: cards,
-              start: "top 130px",
-              end: () => `+=${innerHeight * 1.2}`,
-              pin: true,
-              scrub: 0.8,
-              invalidateOnRefresh: true,
-            },
-          })
-          .to(
-            first,
-            { scale: 0.96, rotation: -2, opacity: 0.6, duration: 1 },
-            0,
-          )
-          .to(
-            second,
-            {
-              yPercent: 0,
-              rotation: -1,
-              opacity: 1,
-              duration: 1,
-              ease: "none",
-            },
-            0,
-          );
-      });
+      cleanupFarming = setupNaturalFarmingMotion();
       const curvedLine = document.querySelector(".story-curved-line textPath");
       if (curvedLine)
         gsap.fromTo(
@@ -299,6 +240,7 @@ export function useChapterAnimations() {
       mounted = false;
       clearTimeout(timeout);
       window.removeEventListener("load", refresh);
+      cleanupFarming();
       media.revert();
       ctx.revert();
       gsap.ticker.remove(tick);

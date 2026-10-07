@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { chapters } from "../../data/chapters";
 import RevealText from "./RevealText";
+import LivingSurface from "./LivingSurface";
 import FarmingExplorer from "./FarmingExplorer";
 const farming = chapters[1];
 /** Centre Court's introduction, panoramic image, discovery split, and feature cards. */
@@ -16,10 +17,10 @@ export default function NaturalFarmingLayout({
         id="chapter-intro"
         data-motion-section="farming-about"
       >
-        <span className="chapter-tag" data-reveal>
+        <span className="chapter-tag" data-farming-reveal>
           ABOUT NATURAL FARMING
         </span>
-        <h2 data-text-reveal>
+        <h2 data-farming-reveal>
           <RevealText text="Care for the soil, and the soil cares for us." />
         </h2>
         <div className="farming-about-split">
@@ -30,7 +31,10 @@ export default function NaturalFarmingLayout({
               alt="Farm Natura’s goshala and farm grounds"
               loading="lazy"
             />
-            <div className="farming-organic-surface" />
+            <LivingSurface
+              className="farming-organic-surface"
+              color="#fff3b5"
+            />
             <img
               className="farming-crop-art farming-drift"
               src={farming.art}
@@ -44,9 +48,13 @@ export default function NaturalFarmingLayout({
               loading="lazy"
             />
           </div>
-          <div className="farming-about-copy" data-reveal>
-            <p>{farming.body}</p>
-            <p>{farming.secondary}</p>
+          <div className="farming-about-copy">
+            <p data-farming-reveal>
+              <RevealText text={farming.body} />
+            </p>
+            <p data-farming-reveal>
+              <RevealText text={farming.secondary} />
+            </p>
             <button className="paper-button" onClick={onVisit}>
               MEET THE FARMING TEAM <ArrowUpRight size={16} />
             </button>
@@ -76,16 +84,18 @@ export default function NaturalFarmingLayout({
           </figcaption>
         </figure>
         <div className="farming-discover-split">
-          <div className="farming-discover-copy" data-reveal>
-            <span className="chapter-tag">LIFE BETWEEN THE ROWS</span>
-            <h3>Good things grow together.</h3>
-            <p>
-              Fruit-bearing trees, seasonal vegetables, birds and pollinators.
-              Every part of the farm has a place in the story of the land.
+          <div className="farming-discover-copy">
+            <span className="chapter-tag" data-farming-reveal>
+              LIFE BETWEEN THE ROWS
+            </span>
+            <h3 data-farming-reveal>
+              <RevealText text="Good things grow together." />
+            </h3>
+            <p data-farming-reveal>
+              <RevealText text="Fruit-bearing trees, seasonal vegetables, birds and pollinators. Every part of the farm has a place in the story of the land." />
             </p>
-            <p>
-              Walk through the estate, discover what is growing this season, and
-              see how a living ecosystem supports natural farming.
+            <p data-farming-reveal>
+              <RevealText text="Walk through the estate, discover what is growing this season, and see how a living ecosystem supports natural farming." />
             </p>
           </div>
           <div className="farming-discover-art">
@@ -101,7 +111,7 @@ export default function NaturalFarmingLayout({
               alt="Farm Natura’s goshala in the managed farming estate"
               loading="lazy"
             />
-            <div className="farming-bird-surface" />
+            <LivingSurface className="farming-bird-surface" color="#dce8cc" />
             <img
               className="farming-discover-bird farming-drift"
               src="/illustrations/hero/orchard-bird.webp"

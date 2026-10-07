@@ -13,6 +13,16 @@ The live page’s section structure, dimensions, decorative placements and pinni
 | Centered feature title and paper cards       | Natural-farming practices and managed agronomy care                                          |
 | Social invitation and next chapter           | Shared visit invitation, contact footer and illustrated Farm Life link                       |
 
-GSAP controls masked text entrances, decorative parallax, the photograph’s organic-to-rounded mask, and the desktop card handover. Framer Motion changes practice descriptions and botanical accents. The four keyboard-accessible practice tabs remain available above the cards. Small screens and reduced-motion settings show both cards in normal reading order. Original Farm Natura artwork and photographs are reused; reference images and copy are not imported.
+GSAP controls the nested word/text masks and desktop card handover. Photographs retain their fixed tilt and rectangular edges, as measured on the reference. Three.js renders pointer-responsive organic background surfaces independently of the photographs. Framer Motion changes practice descriptions and botanical accents. The four keyboard-accessible practice tabs remain available above the cards. Small screens and reduced-motion settings show both cards in normal reading order. Original Farm Natura artwork and photographs are reused; reference images and copy are not imported.
 
 Edit sections in `src/components/world/NaturalFarmingLayout.tsx`, practice/card copy in `FarmingExplorer.tsx`, responsive sizing in `src/styles.css`, and scroll timing in `src/hooks/useChapterAnimations.ts`.
+
+## Centre Court motion audit
+
+The animation was re-audited at sixteen positions through the custom scrolling container and against the publicly served behavior. At 1440 × 1000, the first card stayed near 94px from the top while the second moved upward approximately 736px and finished at a 1° tilt. The first card kept opacity 1 and its original size. Its former shrink/fade effect has been removed.
+
+Text uses the reference’s 1.1-second cubic Bézier `(0.165, 0.84, 0.44, 1)`, a 0.007-second word stagger, and a 20% intersection threshold. Words and their inner glyphs lift together from 105%. Natural Farming uses its own motion setup so these measurements do not alter the other chapters.
+
+The reference’s organic backgrounds use pointer-responsive paths. Farm Natura implements that behavior with original branded Three.js shader surfaces and spring-smoothed pointer deformation; the shape contours are adapted to its artwork. The extra photo zoom and growing rounded mask have been removed. WebGL absence retains the CSS shapes. Reduced motion disables the shader and pinning while keeping both cards readable.
+
+Motion constants: `src/animation/naturalFarmingMotion.ts`. Scroll/text choreography: `src/hooks/useNaturalFarmingMotion.ts`. GPU surfaces and cleanup: `src/components/world/LivingSurface.tsx`. Pin distance follows the actual content height so Farm Natura copy can be edited without fixed screenshot offsets.
