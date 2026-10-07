@@ -46,8 +46,8 @@ export const chapters = [
     title: "Farm Life",
     tag: "GROW A LITTLE CLOSER",
     color: "#fff3b5",
-    art: "/illustrations/living-harvest.webp",
-    alt: "Original hand-drawn Indian family tending living soil, planting seedlings and harvesting vegetables among orchard trees",
+    art: "/illustrations/living-harvest-folk.webp",
+    alt: "Original Indian folk-art family planting a seedling and harvesting tomatoes beneath a patterned mango tree",
     hero: ["LESS HURRY.", "MORE NATURE.", "MORE LIFE."],
     subtitle:
       "Weekends under open skies. Family around the table. A little space to simply breathe.",
