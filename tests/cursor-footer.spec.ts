@@ -33,14 +33,13 @@ test("chapter carousel precedes the footer and allows scrolling onward", async (
   await expect(page.locator(".farm-footer")).toBeInViewport();
 });
 
-test("pointer circle follows the cursor and sound control stays beside the menu", async ({
+test("pointer circle follows the cursor and sound control stays in the bottom-left", async ({
   page,
 }, info) => {
   await page.goto("/about-us");
   const sound = await page.locator(".sound-toggle").boundingBox();
-  const menu = await page.locator(".header-menu").boundingBox();
-  expect(sound!.y).toBe(menu!.y);
-  expect(sound!.x + sound!.width).toBeLessThan(menu!.x);
+  expect(sound!.x).toBeLessThan(50);
+  expect(sound!.y).toBeGreaterThan(page.viewportSize()!.height - 100);
   if (info.project.name === "desktop") {
     await page.mouse.move(350, 350);
     const ring = page.locator(".cursor-ring");

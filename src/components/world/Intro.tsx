@@ -16,17 +16,30 @@ export default function Intro({
   const reduced = useReducedMotion();
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState<"poster" | "sequence">("poster");
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    const update = () => setPaused(document.hidden);
+    update();
+    document.addEventListener("visibilitychange", update);
+    return () => document.removeEventListener("visibilitychange", update);
+  }, []);
   useEffect(() => {
     let alive = true,
       loaded = 0;
-    const images = Array.from(document.querySelectorAll<HTMLImageElement>(".intro-poster img"));
+    const images = Array.from(
+      document.querySelectorAll<HTMLImageElement>(".intro-poster img"),
+    );
     const done = () => {
-      if (alive) setProgress(Math.round((++loaded / Math.max(images.length, 1)) * 100));
+      if (alive)
+        setProgress(Math.round((++loaded / Math.max(images.length, 1)) * 100));
     };
     if (!images.length) setProgress(100);
-    images.forEach(image => {
+    images.forEach((image) => {
       if (image.complete) done();
-      else { image.addEventListener('load',done,{once:true}); image.addEventListener('error',done,{once:true}); }
+      else {
+        image.addEventListener("load", done, { once: true });
+        image.addEventListener("error", done, { once: true });
+      }
     });
     return () => {
       alive = false;
@@ -37,11 +50,15 @@ export default function Intro({
       className={`intro-screen is-${stage}`}
       aria-label="Welcome to Farm Natura"
     >
-      {progress < 100 && <span className="intro-loading-status" role="status">Loading {progress}%</span>}
+      {progress < 100 && (
+        <span className="intro-loading-status" role="status">
+          Loading {progress}%
+        </span>
+      )}
       {stage === "poster" ? (
         <>
           <motion.div
-            className="intro-poster"
+            className={`intro-poster ${paused ? "is-paused" : ""}`}
             initial={false}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
@@ -50,16 +67,48 @@ export default function Intro({
             }}
           >
             <HeroBotanicals />
-            <ResponsiveImage
-              className="intro-art intro-art-left"
-              src={chapters[0].art}
-              alt="Original illustrated mango grove"
-            />
-            <ResponsiveImage
-              className="intro-art intro-art-right"
-              src={chapters[2].art}
-              alt={chapters[2].alt}
-            />
+            {[chapters[0], chapters[2]].map((chapter, index) => (
+              <div
+                key={chapter.id}
+                className={`intro-art intro-art-${index === 0 ? "left" : "right"}`}
+              >
+                <ResponsiveImage
+                  className="intro-tree-canopy"
+                  src={chapter.art}
+                  alt=""
+                  aria-hidden="true"
+                  sizes="(max-width: 767px) 52vw, 32vw"
+                />
+                <ResponsiveImage
+                  className="intro-tree-ground"
+                  src={chapter.art}
+                  alt={chapter.alt}
+                  sizes="(max-width: 767px) 52vw, 32vw"
+                />
+              </div>
+            ))}
+            <div className="intro-sky" aria-hidden="true">
+              <div className="intro-flying-bird">
+                <svg viewBox="0 0 100 70" fill="none">
+                  <path d="M16 40 2 49 29 46" fill="#315a36" />
+                  <path
+                    d="M20 37Q41 22 59 32L70 23Q79 18 86 29L96 34 85 38Q80 49 63 45L38 48Z"
+                    fill="#e9be3b"
+                    stroke="#315a36"
+                    strokeWidth="1.2"
+                  />
+                  <path
+                    className="intro-bird-wing"
+                    d="M57 36Q32 9 18 3Q17 25 32 38Q44 45 57 36Z"
+                    fill="#315a36"
+                    stroke="#9aa552"
+                    strokeWidth="1.2"
+                  />
+                  <path d="m86 29 12 5-12 3" fill="#bb7036" />
+                  <circle cx="80" cy="28" r="2" fill="#244b2a" />
+                </svg>
+              </div>
+            </div>
             <div className="intro-brand">
               <span className="mini-label">PLANET GREEN PRESENTS</span>
               <motion.h1

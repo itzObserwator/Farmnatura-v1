@@ -50,6 +50,11 @@ export default function App({
     [footerVisible, setFooterVisible] = useState(false),
     [reading, setReading] = useState(false);
   const { audioRef, enabled, start, toggle } = useAmbientSound();
+  const [soundControlVisible, setSoundControlVisible] = useState(!intro);
+  const enterWithSound = useCallback(() => {
+    setSoundControlVisible(true);
+    start();
+  }, [start]);
   const curtain = useRef<HTMLDivElement>(null);
   const curtainShape = useRef<SVGPathElement>(null);
   const transition = useRef<gsap.core.Timeline | null>(null);
@@ -266,7 +271,7 @@ export default function App({
           }
         >
           {intro ? (
-            <Intro onComplete={enter} onEnter={start} />
+            <Intro onComplete={enter} onEnter={enterWithSound} />
           ) : route === "gallery" ? (
             <GalleryPage
               onVisit={() => setVisit(true)}
@@ -293,17 +298,19 @@ export default function App({
       </main>
       <CursorRing />
       <div className="world-utilities">
-        <button
-          className={`round-button sound-toggle ${enabled ? "is-on" : ""}`}
-          title={enabled ? "Pause the farm tune" : "Play the farm tune"}
-          aria-label={enabled ? "Turn sound off" : "Turn sound on"}
-          aria-pressed={enabled}
-          onClick={toggle}
-        >
-          {[0, 1, 2, 3, 4].map((i) => (
-            <span key={i} />
-          ))}
-        </button>
+        {soundControlVisible && (
+          <button
+            className={`round-button sound-toggle ${enabled ? "is-on" : ""}`}
+            title={enabled ? "Pause the farm tune" : "Play the farm tune"}
+            aria-label={enabled ? "Turn sound off" : "Turn sound on"}
+            aria-pressed={enabled}
+            onClick={toggle}
+          >
+            {[0, 1, 2, 3, 4].map((i) => (
+              <span key={i} />
+            ))}
+          </button>
+        )}
         {!intro && (chapter || route === "gallery") && !footerVisible && (
           <span className="page-number">
             {chapter ? `${chapter.number}/03` : "GALLERY"}

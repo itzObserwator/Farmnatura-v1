@@ -259,6 +259,7 @@ test("intro, sound preference and reduced motion remain accessible", async ({
     page.getByRole("button", { name: "ENTER THE FARM" }),
   ).toBeEnabled();
   const audio = page.locator("audio");
+  await expect(page.locator(".sound-toggle")).toHaveCount(0);
   expect(await audio.evaluate((el: HTMLAudioElement) => el.paused)).toBe(true);
   await expect(
     page.getByRole("button", { name: "Skip intro", exact: true }),
