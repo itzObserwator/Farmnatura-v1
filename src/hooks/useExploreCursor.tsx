@@ -73,7 +73,7 @@ export function useExploreCursor(enabled = true) {
       window.removeEventListener("resize", hide);
     };
   }, [hide]);
-  const cursor = createPortal(
+  const cursor = typeof document === 'undefined' ? null : createPortal(
     <motion.span
       className="explore-cursor"
       aria-hidden="true"

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
 import gsap from "gsap";
+import { useNearViewport } from "../../hooks/useNearViewport";
 
 /** A lazy-loaded Three.js/WebGL atmosphere. It never captures clicks or touch gestures. */
 export default function SunlightCanvas({
@@ -11,6 +12,7 @@ export default function SunlightCanvas({
   paused: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null);
+  const near = useNearViewport(host);
   const uniforms = useRef<{ uChapter: { value: number } } | null>(null);
   const reduced = useReducedMotion();
   const pause = useRef(paused);
@@ -27,7 +29,7 @@ export default function SunlightCanvas({
     let cancelled = false;
     let dispose = () => {};
     const node = host.current;
-    if (!node) return;
+    if (!node || !near) return;
     // Dynamic import keeps Three.js out of the intro and editorial page bundles.
     void import("three")
       .then((THREE) => {
@@ -155,6 +157,6 @@ export default function SunlightCanvas({
       cancelled = true;
       dispose();
     };
-  }, [reduced]);
+  }, [reduced, near]);
   return <div ref={host} className="sunlight-canvas" aria-hidden="true" />;
 }

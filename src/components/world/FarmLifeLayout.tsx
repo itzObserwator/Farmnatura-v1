@@ -1,9 +1,11 @@
+import ResponsiveImage from "./ResponsiveImage";
 import { ArrowUpRight } from "lucide-react";
 import { chapters } from "../../data/chapters";
 import { lifeFacts } from "../../data/life";
 import RevealText from "./RevealText";
 import LivingSurface from "./LivingSurface";
 import Gallery from "./Gallery";
+import HandDrawnMotif from "./HandDrawnMotif";
 const life = chapters[2];
 
 /** About's editorial sequence: statement, botanical split, photo split, media and facts. */
@@ -27,15 +29,11 @@ export default function FarmLifeLayout({
         <h2 data-text-reveal>
           <RevealText text="A little more space for the things that matter. For family, for nature, and for a life that grows with you." />
         </h2>
-        <svg className="life-scribble" viewBox="0 0 220 210" aria-hidden="true">
-          <path
-            d="M15 30C130-30 220 130 95 120S5 10 180 65C250 120 150 185 35 193m0 0 14-11m-14 11 18 6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth=".8"
-            pathLength="1"
-          />
-        </svg>
+        <HandDrawnMotif
+          kind="sprig"
+          className="life-opening-sprig"
+          loading="lazy"
+        />
       </section>
       <section
         className="life-first-split"
@@ -43,13 +41,13 @@ export default function FarmLifeLayout({
       >
         <div className="life-flower-scene">
           <LivingSurface className="life-flower-surface" color="#fff3b5" />
-          <img
+          <ResponsiveImage
             className="life-marigold"
             src="/illustrations/hero/marigold-stem.webp"
             alt="Hand-drawn marigolds, leaves and buds"
             loading="lazy"
           />
-          <img
+          <ResponsiveImage
             className="life-flower-bird"
             src="/illustrations/hero/orchard-bird.webp"
             alt=""
@@ -82,19 +80,19 @@ export default function FarmLifeLayout({
         </div>
         <div className="life-photo-scene">
           <LivingSurface className="life-photo-surface" color="#dce8cc" />
-          <img
+          <ResponsiveImage
             className="life-weekend-photo"
-            src="/images/farmhouse.jpg"
+            src="/images/farmhouse.webp"
             alt="A farmhouse at Farm Natura"
             loading="lazy"
           />
-          <img
+          <ResponsiveImage
             className="life-table-photo"
-            src="/images/dining.jpg"
-            alt="The dining space at Farm Natura"
+            src="/images/garden-planter.webp"
+            alt="A wooden garden planter among greenery at Farm Natura"
             loading="lazy"
           />
-          <img
+          <ResponsiveImage
             className="life-photo-foliage"
             src="/illustrations/hero/native-foliage.webp"
             alt=""
@@ -108,7 +106,7 @@ export default function FarmLifeLayout({
           <span className="chapter-tag" data-reveal>
             GROWING A FULLER LIFE
           </span>
-          <img
+          <ResponsiveImage
             src="/illustrations/hero/mango-branch.webp"
             alt=""
             loading="lazy"

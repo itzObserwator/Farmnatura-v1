@@ -7,19 +7,19 @@
 }
 @font-face {
   font-family: Italiana;
-  src: url("/fonts/italiana.ttf") format("truetype");
+  src: url("/fonts/italiana.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: Lato;
-  src: url("/fonts/lato.ttf") format("truetype");
+  src: url("/fonts/lato.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: Lato;
-  src: url("/fonts/lato-bold.ttf") format("truetype");
+  src: url("/fonts/lato-bold.woff2") format("woff2");
   font-weight: 700;
   font-display: swap;
 }
@@ -84,7 +84,7 @@ p {
 }
 h1,
 h2 {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-weight: 400;
 }
 h3 {
@@ -195,11 +195,29 @@ svg {
   pointer-events: none;
 }
 .sound-toggle {
-  position: absolute;
-  left: 40px;
-  bottom: 28px;
+  position: fixed;
+  right: 94px;
+  top: 26px;
   gap: 3px;
   pointer-events: auto;
+}
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--navy);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.cursor-ring[data-visible="true"] { opacity: 0.65; }
+body:has(.explore-cursor[data-visible="true"]) .cursor-ring { opacity: 0; }
+@media (hover: none), (pointer: coarse) {
+  .cursor-ring { display: none; }
 }
 .sound-toggle span {
   width: 1px;
@@ -244,6 +262,9 @@ svg {
   font-weight: 700;
 }
 .chapter-carousel {
+  --scene-width: 460px;
+  --scene-height: 460px;
+  --scene-center: 44%;
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -259,10 +280,10 @@ svg {
 }
 .chapter-scene {
   position: absolute;
-  width: 460px;
-  height: 460px;
-  left: calc(50% - 230px);
-  top: calc(44% - 230px);
+  width: var(--scene-width);
+  height: var(--scene-height);
+  left: calc(50% - var(--scene-width) / 2);
+  top: calc(var(--scene-center) - var(--scene-height) / 2);
   padding: 0;
   transform-origin: center;
   will-change: transform;
@@ -345,8 +366,11 @@ svg {
 .chapter-caption {
   position: absolute;
   left: 0;
-  bottom: 12%;
+  top: calc(
+    var(--scene-center) + var(--scene-height) / 2 + clamp(24px, 3svh, 40px)
+  );
   width: 100%;
+  padding: 0 20px;
   text-align: center;
   pointer-events: none;
 }
@@ -369,32 +393,19 @@ svg {
   border-radius: 50%;
   flex: none;
 }
-.chapter-caption h1 {
+.chapter-caption :is(h1, h2) {
   font-size: 68px;
   line-height: 1.08;
   letter-spacing: -3.5px;
   text-transform: uppercase;
   margin-top: 8px;
 }
-.chapter-caption h1 button {
+.chapter-caption :is(h1, h2) button {
   text-transform: inherit;
   font: inherit;
   letter-spacing: inherit;
   padding: 0 20px;
   pointer-events: auto;
-}
-.caption-explore {
-  pointer-events: auto;
-  font-family: Italiana, Georgia, serif;
-  font-size: 18px;
-  letter-spacing: 1px;
-  margin-top: 4px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.chapter-caption:hover .caption-explore,
-.caption-explore:focus-visible {
-  opacity: 1;
 }
 .carousel-controls {
   position: absolute;
@@ -502,7 +513,7 @@ svg {
   font-style: normal;
 }
 .intro-name {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 25px;
   letter-spacing: 4px;
 }
@@ -548,13 +559,33 @@ svg {
 .enter-button:hover {
   transform: translateX(-50%) translateY(-2px);
 }
-.intro-direct {
+.intro-shortcut {
   position: absolute;
   right: 40px;
-  bottom: 32px;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+  bottom: 24px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 16px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid #b6c9a5;
+  border-radius: 24px;
+  font-family: Italiana, serif;
+  font-size: 19px;
+  line-height: 1.2;
+  transition:
+    background 0.25s,
+    border-color 0.25s;
+}
+.intro-shortcut:hover {
+  background: var(--sky);
+  border-color: var(--brand-green);
+}
+.intro-shortcut svg {
+  flex: none;
 }
 .intro-poster .handdrawn-decor {
   z-index: 1;
@@ -752,11 +783,6 @@ svg {
     bottom: 14px;
   }
 }
-.intro-skip {
-  position: absolute;
-  right: 40px;
-  bottom: 32px;
-}
 .floating-decor {
   position: absolute;
   inset: 0;
@@ -903,7 +929,7 @@ svg {
   overflow: hidden;
 }
 .editorial-statement {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Italiana, "Times New Roman", serif;
   font-weight: 400;
   font-size: 55px;
   letter-spacing: -1.7px;
@@ -968,7 +994,7 @@ svg {
   gap: 50px;
 }
 .impact-grid strong {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 105px;
   font-weight: 400;
   line-height: 1;
@@ -1012,7 +1038,7 @@ svg {
   margin: 0 auto 25px;
 }
 .practice-card h3 {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 31px;
   line-height: 1.05;
   letter-spacing: -0.6px;
@@ -1036,7 +1062,7 @@ svg {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 100px;
   font-weight: 400;
 }
@@ -1259,7 +1285,6 @@ svg {
 .footer-opening h2 {
   font:
     400 clamp(42px, 4.5vw, 68px)/1.08 Italiana,
-    Georgia,
     serif;
   letter-spacing: -1.2px;
   margin: 24px 0 25px;
@@ -1351,7 +1376,7 @@ svg {
 }
 .footer-link-number {
   font-size: 10px;
-  color: #244d2690;
+  color: #244d26;
 }
 .footer-chapters a > svg {
   margin-left: 12px;
@@ -1531,26 +1556,6 @@ svg {
     transition: none;
   }
 }
-.next-chapter {
-  width: 100%;
-  padding: 110px 20px 125px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 25px;
-}
-.next-title {
-  font-family: Italiana, Georgia, serif;
-  font-size: 86px;
-  text-transform: uppercase;
-  letter-spacing: -3px;
-}
-.next-chapter > svg {
-  transition: transform 0.4s;
-}
-.next-chapter:hover > svg {
-  transform: translateX(15px);
-}
 .menu-dialog {
   color: var(--navy);
   position: fixed;
@@ -1623,7 +1628,7 @@ svg {
   font-size: 12px;
 }
 .menu-dialog nav button > span:last-child {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 62px;
   line-height: 1.1;
   letter-spacing: -2px;
@@ -1735,6 +1740,20 @@ svg {
   font-size: 16px;
   min-height: 46px;
 }
+.contact-dialog select {
+  appearance: none;
+  padding-right: 44px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23244d27' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px 16px;
+}
+@media (forced-colors: active) {
+  .contact-dialog select {
+    appearance: auto;
+    background-image: none;
+  }
+}
 .button {
   display: inline-flex;
   align-items: center;
@@ -1773,13 +1792,12 @@ svg {
   }
 }
 @media (min-width: 1700px) {
-  .chapter-scene {
-    width: 540px;
-    height: 540px;
-    left: calc(50% - 270px);
-    top: calc(44% - 270px);
+  .chapter-carousel {
+    --scene-width: 540px;
+    --scene-height: 540px;
+    --scene-center: 44%;
   }
-  .chapter-caption h1 {
+  .chapter-caption :is(h1, h2) {
     font-size: 80px;
   }
   .hero-title h1 {
@@ -1805,11 +1823,10 @@ svg {
   .decor-bird {
     right: -40px;
   }
-  .chapter-scene {
-    width: 420px;
-    height: 420px;
-    left: calc(50% - 210px);
-    top: calc(44% - 210px);
+  .chapter-carousel {
+    --scene-width: 420px;
+    --scene-height: 420px;
+    --scene-center: 44%;
   }
   .intro-brand {
     width: 350px;
@@ -1850,8 +1867,8 @@ svg {
     width: 17px;
   }
   .sound-toggle {
-    left: 22px;
-    bottom: 25px;
+    right: 65px;
+    top: 32px;
     gap: 2px;
   }
   .sound-toggle span {
@@ -1866,14 +1883,13 @@ svg {
   .sound-toggle span:nth-child(4) {
     height: 7px;
   }
-  .chapter-carousel {
+  .chapter-carousel, .next-chapter-stage {
     min-height: 480px;
   }
-  .chapter-scene {
-    width: 300px;
-    height: 320px;
-    left: calc(50% - 150px);
-    top: calc(43% - 160px);
+  .chapter-carousel {
+    --scene-width: min(300px, calc(100svh - 280px));
+    --scene-height: min(320px, calc(100svh - 260px));
+    --scene-center: 40%;
   }
   .scene-blob {
     inset: 20px;
@@ -1892,27 +1908,19 @@ svg {
     height: 65px;
     top: 0;
   }
-  .chapter-caption {
-    bottom: 17.5%;
-  }
-  .chapter-caption h1 {
-    font-size: 46px;
+  .chapter-caption :is(h1, h2) {
+    font-size: clamp(30px, 10vw, 46px);
     line-height: 1;
     letter-spacing: -2px;
     margin-top: 12px;
   }
-  .chapter-caption h1 button {
-    padding: 0 15px;
+  .chapter-caption :is(h1, h2) button {
+    padding: 0;
   }
   .chapter-tag {
     font-size: 10px;
     gap: 9px;
     letter-spacing: 0;
-  }
-  .caption-explore {
-    opacity: 1;
-    font-size: 15px;
-    margin-top: 11px;
   }
   .carousel-controls {
     bottom: 34px;
@@ -2192,18 +2200,6 @@ svg {
     left: -60px;
     bottom: -45px;
   }
-  .next-chapter {
-    padding: 75px 20px 110px;
-    gap: 18px;
-  }
-  .next-title {
-    font-size: 52px;
-    letter-spacing: -2px;
-    line-height: 1.05;
-  }
-  .next-chapter > svg {
-    width: 30px;
-  }
   .intro-poster {
     width: 90vw;
     height: 75svh;
@@ -2257,23 +2253,18 @@ svg {
   .intro-land {
     height: 18%;
   }
-  .intro-direct {
+  .intro-shortcut {
     right: 22px;
-    bottom: 27px;
-    font-size: 9px;
+    bottom: 22px;
+    gap: 7px;
+    padding: 8px 12px;
+    font-size: 17px;
   }
   .enter-button {
     width: 170px;
     height: 43px;
     bottom: -21px;
     font-size: 11px;
-  }
-  .intro-skip {
-    right: 22px;
-    bottom: 25px;
-    font-size: 10px;
-    padding: 10px 17px;
-    min-height: 34px;
   }
   .menu-dialog {
     width: 95vw;
@@ -2327,17 +2318,13 @@ svg {
   }
 }
 @media (max-height: 700px) and (min-width: 768px) {
-  .chapter-scene {
-    width: 340px;
-    height: 340px;
-    left: calc(50% - 170px);
-    top: calc(43% - 170px);
+  .chapter-carousel {
+    --scene-width: 340px;
+    --scene-height: 340px;
+    --scene-center: 43%;
   }
-  .chapter-caption h1 {
+  .chapter-caption :is(h1, h2) {
     font-size: 55px;
-  }
-  .chapter-caption {
-    bottom: 14%;
   }
   .hero-title h1 {
     font-size: 78px;
@@ -2505,7 +2492,7 @@ svg {
   position: absolute;
   left: 38px;
   bottom: 25px;
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 150px;
   line-height: 1;
 }
@@ -2607,7 +2594,7 @@ svg {
   font-size: 11px;
 }
 .practice-index button > span:nth-child(2) {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 39px;
   letter-spacing: -1px;
 }
@@ -2694,7 +2681,7 @@ svg {
   justify-content: center;
 }
 .moment-copy h3 {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 48px;
   line-height: 1.08;
   letter-spacing: -1px;
@@ -2725,40 +2712,18 @@ svg {
 .photo-plus {
   z-index: 2;
 }
+/* Keep vertical touch scrolling available while entering the footer carousel. */
+.next-chapter-stage .chapter-carousel {
+  touch-action: pan-y;
+}
+
+/* Reuse the landing carousel after the footer. */
 .next-chapter-stage {
-  height: 100svh;
-  min-height: 650px;
   position: relative;
+  height: 100svh;
+  min-height: 550px;
   background: var(--paper);
   overflow: hidden;
-}
-.next-chapter-stage .next-chapter {
-  position: relative;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 18px;
-  width: 100%;
-  height: 100%;
-  padding: 0 25px 90px;
-  isolation: isolate;
-}
-.next-scene {
-  position: absolute;
-  width: 430px;
-  height: 430px;
-  left: calc(50% - 215px);
-  top: calc(40% - 215px);
-  pointer-events: none;
-}
-.next-scene > img:not(.next-flower) {
-  pointer-events: auto;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 .explore-cursor {
   position: fixed;
@@ -2785,33 +2750,6 @@ svg {
   .explore-cursor {
     display: none;
   }
-}
-.next-flower {
-  height: auto;
-  object-fit: contain;
-  position: absolute;
-  width: 80px;
-  left: 10px;
-  top: -20px;
-}
-.next-chapter-stage .next-title {
-  text-transform: uppercase;
-  font-size: 68px;
-  line-height: 1.05;
-  font-family: Italiana, Georgia, serif;
-}
-.next-explore {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  font-family: Italiana, Georgia, serif;
-  font-size: 20px;
-}
-.next-number {
-  position: absolute;
-  bottom: 35px;
-  right: 40px;
-  font-size: 12px;
 }
 @media (max-width: 899px) {
   .life-moments {
@@ -2940,31 +2878,6 @@ svg {
   .moment-copy p {
     font-size: 15px;
   }
-  .next-chapter-stage {
-    min-height: 550px;
-  }
-  .next-chapter-stage .next-chapter {
-    padding-bottom: 100px;
-    gap: 15px;
-  }
-  .next-scene {
-    width: 300px;
-    height: 300px;
-    left: calc(50% - 150px);
-    top: calc(42% - 150px);
-  }
-  .next-chapter-stage .next-title {
-    font-size: 46px;
-    letter-spacing: -1px;
-  }
-  .next-flower {
-    width: 65px;
-    left: 0;
-  }
-  .next-number {
-    right: 22px;
-    bottom: 38px;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .reveal-char {
@@ -3055,9 +2968,14 @@ svg {
   transform: rotate(-5deg);
 }
 .handdrawn-1 .drawn-mango {
-  left: 8%;
-  top: -160px;
+  left: 22%;
+  top: -145px;
   transform: rotate(12deg);
+}
+.drawn-okra-top {
+  width: 300px;
+  top: -70px;
+  right: 7%;
 }
 .handdrawn-1 .drawn-bird {
   top: 42%;
@@ -3077,6 +2995,7 @@ svg {
 
 /* Our Story follows Victoria Wharf's alternating editorial composition. */
 .our-story-layout {
+  --story-gutter: 48px;
   overflow-x: clip;
   background: var(--paper);
   padding-bottom: 120px;
@@ -3086,7 +3005,7 @@ svg {
   text-align: center;
 }
 .story-opening h2 {
-  font-family: Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 54px;
   font-weight: 400;
   line-height: 1.15;
@@ -3094,17 +3013,23 @@ svg {
   max-width: 850px;
   margin: 30px auto 0;
 }
+.story-first-split,
+.story-second-split,
+.story-index {
+  width: min(1280px, calc(100% - 2 * var(--story-gutter)));
+  margin-left: auto;
+  margin-right: auto;
+}
 .story-first-split {
   display: grid;
-  grid-template-columns: 44% 56%;
+  grid-template-columns: minmax(0, 49fr) minmax(0, 51fr);
   position: relative;
   margin-top: 90px;
   align-items: center;
 }
 .story-first-copy {
-  max-width: 365px;
-  margin-left: clamp(70px, 15.5vw, 240px);
-  padding-right: 22px;
+  width: min(450px, 76%);
+  margin: 0 auto;
 }
 .story-first-copy p {
   font-size: 18px;
@@ -3121,7 +3046,7 @@ svg {
 }
 .story-grove-surface {
   position: absolute;
-  inset: 35px -4% 5px 0;
+  inset: 35px 5% 15px 5%;
   background: var(--mint);
   border-radius: 48% 52% 36% 64% / 41% 39% 61% 59%;
   transform: rotate(-7deg);
@@ -3155,19 +3080,22 @@ svg {
   margin-top: 40px;
   overflow: hidden;
 }
+.botanical-picture { display: contents; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.intro-loading-status { position: fixed; z-index: 15; bottom: 24px; left: 90px; font-size: 11px; }
 .story-curved-line svg {
   width: 100%;
   height: 100%;
 }
 .story-curved-line text {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 65px;
   fill: var(--ink);
   letter-spacing: -1px;
 }
 .story-second-split {
   display: grid;
-  grid-template-columns: 53% 47%;
+  grid-template-columns: minmax(0, 53fr) minmax(0, 47fr);
   align-items: center;
   gap: 0;
   margin-top: 90px;
@@ -3175,11 +3103,11 @@ svg {
 }
 .story-farm-frame {
   position: relative;
-  width: 95%;
-  height: 660px;
+  width: 100%;
+  height: 600px;
   border-radius: 45% 55% 40% 60% / 48% 43% 57% 52%;
   overflow: hidden;
-  margin-left: -6%;
+  margin-left: 0;
 }
 .story-farm-frame img {
   width: 100%;
@@ -3191,7 +3119,7 @@ svg {
   position: relative;
 }
 .story-second-copy h2 {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 60px;
   line-height: 1.04;
   letter-spacing: -1.5px;
@@ -3215,7 +3143,6 @@ svg {
   grid-template-columns: minmax(0, 1fr) 335px;
   align-items: start;
   gap: 70px;
-  width: min(1180px, calc(100% - 150px));
   margin: 240px auto 0;
 }
 .story-index-introduction {
@@ -3238,14 +3165,14 @@ svg {
   text-align: left;
   width: 100%;
   padding: 0;
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 64px;
   line-height: 1.05;
   letter-spacing: -1.8px;
   transition: opacity 0.25s;
 }
 .story-index-list button[aria-pressed="false"] {
-  opacity: 0.65;
+  opacity: 0.8;
 }
 .story-index-list button:hover,
 .story-index-list button:focus-visible {
@@ -3302,7 +3229,7 @@ svg {
 }
 .story-facts strong {
   display: block;
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 40px;
   line-height: 1;
   margin-bottom: 8px;
@@ -3344,6 +3271,15 @@ svg {
   letter-spacing: 0.1px;
 }
 @media (min-width: 1700px) {
+  .handdrawn-1 .drawn-mango {
+    left: 16%;
+    width: 260px;
+    top: -145px;
+  }
+  .drawn-okra-top {
+    width: 390px;
+    top: -90px;
+  }
   .drawn-mango {
     width: 290px;
     top: -170px;
@@ -3368,20 +3304,13 @@ svg {
     font-size: 64px;
     max-width: 1000px;
   }
-  .story-first-copy {
-    max-width: 440px;
-  }
   .story-first-copy p {
     font-size: 22px;
   }
   .story-second-copy h2 {
     font-size: 72px;
   }
-  .story-farm-frame {
-    height: 790px;
-  }
   .story-index {
-    width: min(1450px, calc(100% - 220px));
     grid-template-columns: 1fr 400px;
   }
   .story-index-list button {
@@ -3389,10 +3318,6 @@ svg {
   }
 }
 @media (max-width: 1100px) and (min-width: 768px) {
-  .story-first-copy {
-    margin-left: 70px;
-    max-width: 310px;
-  }
   .story-second-copy h2 {
     font-size: 48px;
   }
@@ -3400,8 +3325,7 @@ svg {
     height: 520px;
   }
   .story-index {
-    width: calc(100% - 100px);
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: minmax(0, 1fr) 300px;
     gap: 40px;
   }
   .story-index-list button {
@@ -3446,8 +3370,13 @@ svg {
     top: 58%;
   }
   .handdrawn-1 .drawn-mango {
-    left: 35%;
+    left: 54%;
     top: -130px;
+  }
+  .drawn-okra-top {
+    width: 120px;
+    top: 90px;
+    right: -35px;
   }
   .handdrawn-1 .drawn-bird {
     top: 22%;
@@ -3463,6 +3392,7 @@ svg {
     height: 55px;
   }
   .our-story-layout {
+    --story-gutter: 22px;
     padding-bottom: 70px;
   }
   .story-opening {
@@ -3479,9 +3409,8 @@ svg {
     margin-top: 45px;
   }
   .story-first-copy {
-    max-width: none;
+    width: 100%;
     margin: 0;
-    padding: 0 26px;
   }
   .story-first-copy p {
     font-size: 16px;
@@ -3489,15 +3418,15 @@ svg {
     margin-bottom: 22px;
   }
   .story-grove {
-    width: 94%;
-    margin: 55px 0 0 auto;
+    width: 100%;
+    margin: 55px auto 0;
   }
   .story-grove-surface {
-    inset: 18px -8% 0 0;
+    inset: 18px 6% 0;
   }
   .story-grove-flower {
     width: 80px;
-    left: -10px;
+    left: 0;
     top: 6%;
   }
   .story-grove-bird {
@@ -3524,10 +3453,10 @@ svg {
   .story-farm-frame {
     height: 380px;
     width: 100%;
-    margin-left: -8%;
+    margin-left: 0;
   }
   .story-second-copy {
-    padding: 45px 26px 75px;
+    padding: 45px 0 75px;
   }
   .story-second-copy h2 {
     font-size: 43px;
@@ -3547,7 +3476,6 @@ svg {
     position: relative;
     grid-template-columns: minmax(0, 1fr) 130px;
     gap: 15px;
-    width: calc(100% - 44px);
     margin: 85px auto 0;
   }
   .story-index-introduction {
@@ -3657,7 +3585,7 @@ svg {
   margin: 25px auto 0;
   text-align: center;
   font:
-    60px/1.12 Georgia,
+    60px/1.12 Italiana,
     serif;
   font-weight: 400;
 }
@@ -3753,7 +3681,7 @@ svg {
 }
 .farming-discover-copy h3 {
   font:
-    43px/1.12 Georgia,
+    43px/1.12 Italiana,
     serif;
   font-weight: 400;
   margin: 28px 0;
@@ -3798,7 +3726,7 @@ svg {
   width: min(920px, 82%);
   margin: 25px auto;
   font:
-    76px/1.06 Georgia,
+    76px/1.06 Italiana,
     serif;
   font-weight: 400;
 }
@@ -3868,7 +3796,7 @@ svg {
 }
 .farming-feature-card h3 {
   font:
-    43px/1.1 Georgia,
+    43px/1.1 Italiana,
     serif;
   font-weight: 400;
   margin: 25px 0;
@@ -4131,7 +4059,7 @@ svg {
 .farming-discover-copy h3,
 .natural-farming-layout .farming-explorer h2,
 .farming-feature-card h3 {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-weight: 400;
 }
 @media (max-width: 899px) {
@@ -4252,7 +4180,6 @@ svg {
   margin: 25px auto 0;
   font:
     60px/1.12 Italiana,
-    Georgia,
     serif;
 }
 .life-opening .reveal-word,
@@ -4260,11 +4187,14 @@ svg {
   padding-bottom: 0.14em;
   margin-bottom: -0.14em;
 }
-.life-scribble {
+.life-opening-sprig {
   position: absolute;
-  width: 240px;
-  right: -15px;
-  bottom: -110px;
+  width: 170px;
+  height: auto;
+  right: 24px;
+  bottom: -120px;
+  transform: rotate(-18deg);
+  pointer-events: none;
 }
 .life-first-split {
   display: grid;
@@ -4326,7 +4256,6 @@ svg {
 .life-weekend-copy h3 {
   font:
     44px/1.1 Italiana,
-    Georgia,
     serif;
   margin: 30px 0;
 }
@@ -4372,7 +4301,7 @@ svg {
   bottom: 25px;
 }
 .life-story-media {
-  padding: 0 0 clamp(64px, 6vw, 100px);
+  padding: clamp(48px, 5vw, 80px) 0 clamp(64px, 6vw, 100px);
 }
 .life-story-media .section-container {
   width: min(1130px, calc(100% - 100px));
@@ -4385,14 +4314,13 @@ svg {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 30px 0 40px;
-  gap: 25px;
+  margin: 30px 0 clamp(40px, 4vw, 56px);
+  gap: clamp(28px, 3vw, 40px);
 }
 .life-story-media .gallery-heading h2 {
   text-align: center;
   font:
     100px/1.06 Italiana,
-    Georgia,
     serif;
 }
 .life-story-media .gallery-arrows {
@@ -4444,7 +4372,6 @@ svg {
 .life-impact h2 {
   font:
     53px/1.06 Italiana,
-    Georgia,
     serif;
   margin: 0 0 70px;
 }
@@ -4468,10 +4395,10 @@ svg {
   align-items: baseline;
   justify-content: center;
   gap: 10px;
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
 }
 .life-statistic strong {
-  font-family: Voyage, Georgia, serif;
+  font-family: Voyage, Italiana, serif;
   font-size: 120px;
   line-height: 1;
   font-weight: 400;
@@ -4535,10 +4462,10 @@ svg {
     font-size: 38px;
     width: 100%;
   }
-  .life-scribble {
-    width: 100px;
-    bottom: -90px;
-    right: -25px;
+  .life-opening-sprig {
+    width: 78px;
+    bottom: -85px;
+    right: 22px;
   }
   .life-first-split {
     display: flex;
@@ -4611,8 +4538,8 @@ svg {
     font-size: 48px;
   }
   .life-story-media .gallery-heading {
-    margin-bottom: 25px;
-    gap: 18px;
+    margin-bottom: 32px;
+    gap: 24px;
   }
   .life-story-media .gallery-photo {
     height: auto;
@@ -4836,7 +4763,7 @@ svg {
   display: inline-flex;
   gap: 10px;
   align-items: baseline;
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 37px;
   padding: 0 0 22px;
   opacity: 0.6;
@@ -4956,7 +4883,7 @@ svg {
   opacity: 0.75;
 }
 .gallery-photo-number {
-  font-family: Voyage, Georgia, serif;
+  font-family: Voyage, Italiana, serif;
   font-size: 26px;
   line-height: 1;
 }
@@ -4986,7 +4913,7 @@ svg {
   margin: 40px 0 45px;
 }
 .gallery-video-intro h3 {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 42px;
   margin: 0 0 14px;
 }
@@ -5040,7 +4967,7 @@ svg {
   letter-spacing: 1.2px;
 }
 .gallery-films-grid h3 {
-  font-family: Italiana, Georgia, serif;
+  font-family: Italiana, serif;
   font-size: 27px;
   line-height: 1.25;
   margin: 10px 0 0;

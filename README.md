@@ -39,7 +39,7 @@ Open the Local URL printed by Vite. `npm run build` produces the production webs
 | `src/hooks/useGalleryAnimations.ts`        | Scoped gallery reveals, botanical drift and smooth scrolling                                |
 | `src/components/ContactDialog.tsx`         | Visit enquiry form                                                                          |
 | `src/hooks/useChapterAnimations.ts`        | Chapter-page scroll reveals and parallax                                                    |
-| `src/hooks/useAmbientSound.ts`             | Optional synthesised ambience                                                               |
+| `src/hooks/useAmbientSound.ts`             | Optional original flute and plucked-string tune                                             |
 | `src/styles.css`                           | Fonts, layout, colors, breakpoints, and reduced-motion styling                              |
 
 ## Artwork
@@ -54,7 +54,7 @@ The earlier illustration draft is preserved in `artwork/illustrations/` and `art
 
 The home scene changes with the wheel, touch swipes, arrows, or keyboard arrow keys. Click its artwork or title to open a chapter. Chapters use URL hashes (`#story`, `#farming`, `#living`) so links work with static hosting and refresh correctly. Browser Back returns through visited chapters. The entry sequence is skipped after the first entry in a tab; clear the `farm-entered` sessionStorage value to see it again.
 
-The introduction uses original estate photographs with motion, rather than unrelated reference-site footage. Sound is optional and begins only when the visitor enables it. Reduced-motion preferences turn off parallax and animation. The enquiry form opens a WhatsApp draft; the visitor chooses whether to send it. No form data is stored and no booking is automatically confirmed.
+The introduction uses original estate photographs with motion, rather than unrelated reference-site footage. The tune starts when the visitor taps “Enter the Farm”; the sound toggle can pause or resume it at any time. The original 60-second Farm Natura tune uses a slow, low-register flute-like melody, sparse mellow plucked strings and warm ambient chords, loops across page navigation, fades in and out, and pauses while the tab is hidden. The browser plays the compact AAC version in `public/audio/farm-natura-theme.m4a`. The lossless source is retained in `public/audio/farm-natura-theme.wav` and can be regenerated with `node scripts/compose-theme.mjs`, then encoded on macOS with `afconvert -f m4af -d aac -b 96000 public/audio/farm-natura-theme.wav public/audio/farm-natura-theme.m4a`; it uses no third-party recordings. Reduced-motion preferences turn off parallax and animation. The enquiry form opens a WhatsApp draft; the visitor chooses whether to send it. No form data is stored and no booking is automatically confirmed.
 
 ## Verification
 
@@ -83,3 +83,20 @@ Farm Life follows the About reference. Edit its sections in `src/components/worl
 The dedicated Gallery opens at `#gallery` through the menu or Farm Life. Edit its 29 photo captions, categories and six official videos in `src/data/gallery.ts`. Its camera sketch is an original editable SVG; botanical illustrations reuse our hand-drawn artwork. See [Gallery page notes](docs/gallery-page.md) for the layout, media behavior and editing guide.
 
 The landing and next-chapter illustrations share the pointer-following Explore badge in `src/hooks/useExploreCursor.tsx`. See [Explore cursor notes](docs/explore-cursor.md) for the recording analysis, motion settings and touch/keyboard behavior.
+
+The page sections and photo gallery use the six uploaded photographs in `public/images`, optimized as WebP at their original resolution. Run `node scripts/optimize-photos.mjs` to rebuild these assets; EXIF orientation is applied automatically.
+
+## Performance measurement
+
+Use the production build for Lighthouse comparisons:
+
+```sh
+npm run build
+npm run preview -- --port 4173
+```
+
+Audit `http://127.0.0.1:4173/about-us` (Our Story), `/natural-farming`, `/farmhouses-for-sale-in-hyderabad`, or `/gallery`. Port 5173 serves development modules and hot reload, so its score does not represent the deployed build. Dependency prebundling and gzip improve development loading too; restart `npm run dev` after changing Vite configuration.
+
+The build prerenders the existing redesigned copy, inlines its initial styles, preloads local fonts and hero artwork, and generates canonical links, robots.txt and sitemap.xml. Hosting must serve each generated page HTML and compress HTML/JS/CSS. `_redirects` supports clean URLs on compatible static hosts. Hash chapter links still work.
+
+Scroll smoothing is ready immediately. GSAP choreography loads on visitor interaction; WebGL and photo textures load only near the viewport. The footer carousel reserves its height before its JavaScript arrives. Responsive WebP/AVIF variants and WOFF2 fonts reduce downloads without changing the original source artwork or text. Run `node scripts/optimize-responsive-assets.mjs` to regenerate illustration variants.

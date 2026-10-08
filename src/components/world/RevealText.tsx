@@ -2,7 +2,8 @@
 export default function RevealText({ text }: { text: string }) {
   const words = text.split(" ");
   return (
-    <span className="reveal-text" aria-label={text}>
+    <span className="reveal-text">
+      <span className="sr-only">{text}</span>
       <span aria-hidden="true">
         {words.map((word, index) => (
           <span key={index} className="reveal-word">

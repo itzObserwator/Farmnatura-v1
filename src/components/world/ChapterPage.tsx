@@ -1,3 +1,4 @@
+import ResponsiveImage from "./ResponsiveImage";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import FarmFooter from "./FarmFooter";
@@ -18,11 +19,13 @@ export default function ChapterPage({
   onVisit,
   onNavigate,
   onGallery,
+  blocked,
 }: {
   chapter: Chapter;
   onVisit: () => void;
   onNavigate: (id: ChapterId) => void;
   onGallery: () => void;
+  blocked: boolean;
 }) {
   const reduced = useReducedMotion();
   const [faq, setFaq] = useState<number | null>(null);
@@ -60,8 +63,10 @@ export default function ChapterPage({
             }
             aria-label="Read this chapter"
           >
-            <img
+            <ResponsiveImage
               className="hero-scroll-art"
+              srcSet="/illustrations/hero/marigold-stem-120.webp 120w, /illustrations/hero/marigold-stem-240.webp 240w"
+              sizes="45px"
               src="/illustrations/hero/marigold-stem.webp"
               alt=""
               width={45}
@@ -137,11 +142,11 @@ export default function ChapterPage({
           PLAN YOUR VISIT <ArrowUpRight size={16} />
         </button>
       </section>
+      <NextChapter chapter={next} onNavigate={onNavigate} blocked={blocked} />
       <FarmFooter
         onVisit={onVisit}
         onNavigate={(id) => (id === "gallery" ? onGallery() : onNavigate(id))}
       />
-      <NextChapter chapter={next} onNavigate={onNavigate} />
     </article>
   );
 }

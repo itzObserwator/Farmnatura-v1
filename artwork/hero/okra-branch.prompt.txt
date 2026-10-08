@@ -1,0 +1,5 @@
+Generated with the built-in imagegen tool, transparent background enabled.
+Source: okra-branch.png. Website asset: public/illustrations/hero/okra-branch.webp.
+
+Prompt:
+Use case: illustration-story. Create a single isolated botanical illustration for the top-right corner of a natural farming website. Subject: one gracefully curving okra branch with lobed green leaves, two slender ridged green okra pods and two pale buttery cream-yellow flowers with dark burgundy centers. Style: detailed Indian botanical pen-and-watercolor illustration, fine dark green ink outlines, subtly textured hand-painted shading, lush forest and olive greens, warm natural hues. Elegant organic diagonal composition, branch stems extend toward upper right, leaves and flowers cascade toward lower left. Entire plant visible with a small transparent margin. True transparent background. No ground, pot, scene, text, border, logo, shadow or marigolds. Production-ready decorative botanical cutout.

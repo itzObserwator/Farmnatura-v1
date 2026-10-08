@@ -1,51 +1,82 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import type gsap from "gsap";
 import { MotionConfig, motion } from "framer-motion";
 import BrandLogo from "./components/world/BrandLogo";
+import CursorRing from "./components/world/CursorRing";
 import { Menu } from "lucide-react";
 import { chapters, type ChapterId } from "./data/chapters";
-import Intro from "./components/world/Intro";
-import ChapterCarousel from "./components/world/ChapterCarousel";
+import {
+  IntroView as Intro,
+  CarouselView as ChapterCarousel,
+  GalleryView as GalleryPage,
+} from "./components/world/DeferredViews";
 import ChapterPage from "./components/world/ChapterPage";
-import GalleryPage from "./components/world/GalleryPage";
 import MenuPanel from "./components/world/MenuPanel";
 import ContactDialog from "./components/ContactDialog";
 import { curtainPath, motionTokens } from "./animation/motionTokens";
 import { useAmbientSound } from "./hooks/useAmbientSound";
+import { routePaths, pageMetadata } from "./data/routes";
 type RouteId = ChapterId | "gallery";
 function readRoute(): RouteId | null {
+  if (typeof location === "undefined") return null;
+  const paths: Record<string, RouteId> = {
+    "/about-us": "story",
+    "/natural-farming": "farming",
+    "/farmhouses-for-sale-in-hyderabad": "living",
+    "/gallery": "gallery",
+  };
   if (location.hash === "#gallery") return "gallery";
-  return chapters.find((c) => `#${c.id}` === location.hash)?.id ?? null;
+  return (
+    chapters.find((c) => `#${c.id}` === location.hash)?.id ??
+    paths[location.pathname.replace(/\/$/, "")] ??
+    null
+  );
 }
-export default function App() {
-  const [route, setRoute] = useState<RouteId | null>(readRoute),
+export default function App({
+  initialRoute,
+}: { initialRoute?: RouteId | null } = {}) {
+  const [route, setRoute] = useState<RouteId | null>(() =>
+      initialRoute !== undefined ? initialRoute : readRoute(),
+    ),
     [intro, setIntro] = useState(
-      () => !sessionStorage.getItem("farm-entered") && !readRoute(),
+      () =>
+        !(initialRoute ?? readRoute()) &&
+        (typeof sessionStorage === "undefined" ||
+          !sessionStorage.getItem("farm-entered")),
     ),
     [menu, setMenu] = useState(false),
     [visit, setVisit] = useState(false),
     [active, setActive] = useState(0),
     [footerVisible, setFooterVisible] = useState(false),
     [reading, setReading] = useState(false);
-  const { enabled, toggle } = useAmbientSound();
+  const { audioRef, enabled, start, toggle } = useAmbientSound();
   const curtain = useRef<HTMLDivElement>(null);
   const curtainShape = useRef<SVGPathElement>(null);
   const transition = useRef<gsap.core.Timeline | null>(null);
   const busy = useRef(false);
+  const navigationVersion = useRef(0);
   const enter = useCallback(() => {
     sessionStorage.setItem("farm-entered", "yes");
     setIntro(false);
   }, []);
   const onActive = useCallback((index: number) => setActive(index), []);
   const navigate = useCallback(
-    (id: RouteId | null) => {
+    async (id: RouteId | null) => {
       setMenu(false);
-      if (busy.current || id === route) return;
+      if (busy.current) return;
+      if (id === route) {
+        window.scrollTo({ top: 0, behavior: "instant" });
+        return;
+      }
       const commit = () => {
         history.pushState(
           null,
           "",
-          id ? `#${id}` : location.pathname + location.search,
+          id
+            ? location.pathname === "/" && location.hash
+              ? `#${id}`
+              : routePaths[id]
+            : "/",
         );
         setRoute(id);
         window.scrollTo(0, 0);
@@ -55,13 +86,25 @@ export default function App() {
         return;
       }
       busy.current = true;
+      const version = ++navigationVersion.current;
+      let gsapRuntime: typeof gsap;
+      try {
+        gsapRuntime = (await import("gsap")).default;
+      } catch {
+        if (version === navigationVersion.current) {
+          busy.current = false;
+          commit();
+        }
+        return;
+      }
+      if (version !== navigationVersion.current) return;
       const progress = { value: 0 };
       curtainShape.current?.setAttribute(
         "fill",
         chapters.find((c) => c.id === id)?.color ?? chapters[active].color,
       );
       curtainShape.current?.setAttribute("d", curtainPath(0));
-      transition.current = gsap
+      transition.current = gsapRuntime
         .timeline({
           onComplete: () => {
             busy.current = false;
@@ -96,6 +139,7 @@ export default function App() {
   );
   useEffect(() => {
     const pop = () => {
+      navigationVersion.current++;
       transition.current?.kill();
       busy.current = false;
       if (curtain.current) curtain.current.style.visibility = "hidden";
@@ -106,18 +150,41 @@ export default function App() {
     window.addEventListener("popstate", pop);
     window.addEventListener("hashchange", pop);
     return () => {
+      navigationVersion.current++;
       window.removeEventListener("popstate", pop);
       window.removeEventListener("hashchange", pop);
       transition.current?.kill();
     };
   }, []);
   useEffect(() => {
-    document.title =
-      route === "gallery"
-        ? "Gallery — Farm Natura"
-        : route
-          ? `${chapters.find((c) => c.id === route)?.title} — Farm Natura`
-          : "Farm Natura — A Life Rooted in Nature";
+    const metadata = pageMetadata[route ?? "home"];
+    document.title = metadata.title;
+    for (const [name, content] of Object.entries({
+      description: metadata.description,
+      "og:title": metadata.title,
+      "og:description": metadata.description,
+      "og:image": "https://www.farmnatura.in/branding/farmnatura-logo.png",
+    })) {
+      const attribute = name.startsWith("og:") ? "property" : "name";
+      let meta = document.head.querySelector<HTMLMetaElement>(
+        `meta[${attribute}="${name}"]`,
+      );
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.setAttribute(attribute, name);
+        document.head.append(meta);
+      }
+      meta.content = content;
+    }
+    let canonical = document.head.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]',
+    );
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.append(canonical);
+    }
+    canonical.href = "https://www.farmnatura.in" + routePaths[route ?? "home"];
     document.documentElement.style.overflow = !route || intro ? "hidden" : "";
     return () => {
       document.documentElement.style.overflow = "";
@@ -129,12 +196,21 @@ export default function App() {
     if (!route) return;
     const update = () => setReading(scrollY > innerHeight * 0.65);
     window.addEventListener("scroll", update, { passive: true });
+    const closingSections = new Set<Element>();
     const observer = new IntersectionObserver(
-      (entries) => setFooterVisible(entries[0]?.isIntersecting ?? false),
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) closingSections.add(entry.target);
+          else closingSections.delete(entry.target);
+        }
+        setFooterVisible(closingSections.size > 0);
+      },
       { threshold: 0.55 },
     );
     const next = document.querySelector(".next-chapter-stage");
     if (next) observer.observe(next);
+    const footer = document.querySelector(".farm-footer");
+    if (footer) observer.observe(footer);
     return () => {
       window.removeEventListener("scroll", update);
       observer.disconnect();
@@ -143,6 +219,13 @@ export default function App() {
   const chapter = chapters.find((c) => c.id === route);
   return (
     <MotionConfig reducedMotion="user">
+      <audio
+        ref={audioRef}
+        src="/audio/farm-natura-theme.m4a"
+        loop
+        preload="none"
+        aria-hidden="true"
+      />
       <a
         className="skip-link"
         href="#main-content"
@@ -175,33 +258,44 @@ export default function App() {
         </header>
       )}
       <main id="main-content" tabIndex={-1}>
-        {intro ? (
-          <Intro onComplete={enter} />
-        ) : route === "gallery" ? (
-          <GalleryPage
-            onVisit={() => setVisit(true)}
-            onFarmLife={() => navigate("living")}
-            onNavigate={navigate}
-          />
-        ) : chapter ? (
-          <ChapterPage
-            key={chapter.id}
-            chapter={chapter}
-            onVisit={() => setVisit(true)}
-            onNavigate={navigate}
-            onGallery={() => navigate("gallery")}
-          />
-        ) : (
-          <ChapterCarousel
-            onExplore={navigate}
-            onActive={onActive}
-            blocked={menu || visit}
-          />
-        )}
+        <Suspense
+          fallback={
+            <div className="view-loading" role="status">
+              Welcome to Farm Natura…
+            </div>
+          }
+        >
+          {intro ? (
+            <Intro onComplete={enter} onEnter={start} />
+          ) : route === "gallery" ? (
+            <GalleryPage
+              onVisit={() => setVisit(true)}
+              onFarmLife={() => navigate("living")}
+              onNavigate={navigate}
+            />
+          ) : chapter ? (
+            <ChapterPage
+              key={chapter.id}
+              chapter={chapter}
+              blocked={menu || visit}
+              onVisit={() => setVisit(true)}
+              onNavigate={navigate}
+              onGallery={() => navigate("gallery")}
+            />
+          ) : (
+            <ChapterCarousel
+              onExplore={navigate}
+              onActive={onActive}
+              blocked={menu || visit}
+            />
+          )}
+        </Suspense>
       </main>
+      <CursorRing />
       <div className="world-utilities">
         <button
           className={`round-button sound-toggle ${enabled ? "is-on" : ""}`}
+          title={enabled ? "Pause the farm tune" : "Play the farm tune"}
           aria-label={enabled ? "Turn sound off" : "Turn sound on"}
           aria-pressed={enabled}
           onClick={toggle}
@@ -211,17 +305,9 @@ export default function App() {
           ))}
         </button>
         {!intro && (chapter || route === "gallery") && !footerVisible && (
-          <>
-            <button
-              className="paper-button index-button"
-              onClick={() => setMenu(true)}
-            >
-              INDEX <Menu size={18} strokeWidth={1} />
-            </button>
-            <span className="page-number">
-              {chapter ? `${chapter.number}/03` : "GALLERY"}
-            </span>
-          </>
+          <span className="page-number">
+            {chapter ? `${chapter.number}/03` : "GALLERY"}
+          </span>
         )}
       </div>
       <MenuPanel

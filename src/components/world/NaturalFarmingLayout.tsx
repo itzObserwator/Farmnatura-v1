@@ -1,3 +1,4 @@
+import ResponsiveImage from "./ResponsiveImage";
 import { ArrowUpRight } from "lucide-react";
 import { chapters } from "../../data/chapters";
 import RevealText from "./RevealText";
@@ -25,23 +26,23 @@ export default function NaturalFarmingLayout({
         </h2>
         <div className="farming-about-split">
           <div className="farming-about-art">
-            <img
+            <ResponsiveImage
               className="farming-about-photo"
-              src="/images/goshala.jpg"
-              alt="Farm Natura’s goshala and farm grounds"
+              src="/images/farm-estate.webp"
+              alt="Farmhouses and flowering crops at Farm Natura"
               loading="lazy"
             />
             <LivingSurface
               className="farming-organic-surface"
               color="#fff3b5"
             />
-            <img
+            <ResponsiveImage
               className="farming-crop-art farming-drift"
               src={farming.art}
               alt={farming.alt}
               loading="lazy"
             />
-            <img
+            <ResponsiveImage
               className="farming-about-flower farming-drift"
               src="/illustrations/hero/marigold-stem.webp"
               alt=""
@@ -67,13 +68,13 @@ export default function NaturalFarmingLayout({
       >
         <figure className="farming-panorama">
           <div className="farming-photo-mask" data-farming-image>
-            <img
-              src="/images/farm.jpg"
+            <ResponsiveImage
+              src="/images/story-farmland.webp"
               alt="Aerial view of Farm Natura’s planted fields and estate"
               loading="lazy"
             />
           </div>
-          <img
+          <ResponsiveImage
             className="farming-panorama-leaf farming-drift"
             src="/illustrations/hero/native-foliage.webp"
             alt=""
@@ -99,26 +100,26 @@ export default function NaturalFarmingLayout({
             </p>
           </div>
           <div className="farming-discover-art">
-            <img
+            <ResponsiveImage
               className="farming-detail-photo farming-detail-first"
-              src="/images/farm.jpg"
-              alt="Planted plots and paths at Farm Natura"
+              src="/images/living-fields.webp"
+              alt="Overhead view of green crop beds and banana trees at Farm Natura"
               loading="lazy"
             />
-            <img
+            <ResponsiveImage
               className="farming-detail-photo farming-detail-second"
-              src="/images/goshala.jpg"
-              alt="Farm Natura’s goshala in the managed farming estate"
+              src="/images/sunflowers.webp"
+              alt="Sunflowers and banana trees growing together at Farm Natura"
               loading="lazy"
             />
             <LivingSurface className="farming-bird-surface" color="#dce8cc" />
-            <img
+            <ResponsiveImage
               className="farming-discover-bird farming-drift"
               src="/illustrations/hero/orchard-bird.webp"
               alt="Hand-drawn golden orchard bird perched on a leafy branch"
               loading="lazy"
             />
-            <img
+            <ResponsiveImage
               className="farming-discover-mango farming-drift"
               src="/illustrations/hero/mango-branch.webp"
               alt="Hand-drawn mango branch with fruit and blossoms"

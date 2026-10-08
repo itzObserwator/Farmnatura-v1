@@ -1,8 +1,5 @@
 import { useId, useLayoutEffect, useRef, type ReactNode } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { heroCurveMotion, heroCurvePath } from "../../animation/heroCurve";
-gsap.registerPlugin(ScrollTrigger);
 
 /** Curves only the background and ornaments; the hero headline remains readable above it. */
 export default function HeroBackdrop({
@@ -18,24 +15,44 @@ export default function HeroBackdrop({
   useLayoutEffect(() => {
     const hero = backdrop.current?.closest<HTMLElement>(".page-hero");
     if (!hero || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const progress = { value: 0 };
-    const context = gsap.context(() => {
-      gsap.to(progress, {
-        value: 1,
-        ease: "none",
-        onUpdate: () =>
-          path.current?.setAttribute("d", heroCurvePath(progress.value)),
-        scrollTrigger: {
-          trigger: hero,
-          start: "top top",
-          end: () => `+=${hero.offsetHeight * heroCurveMotion.scrollRange}`,
-          scrub: heroCurveMotion.scrub,
-          invalidateOnRefresh: true,
-        },
-      });
-    });
+    let cancelled = false;
+    let started = false;
+    let cleanup = () => {};
+    const start = () => {
+      if (started) return;
+      started = true;
+      window.removeEventListener("scroll", start);
+      void Promise.all([import("gsap"), import("gsap/ScrollTrigger")])
+        .then(([{ default: gsap }, { ScrollTrigger }]) => {
+          if (cancelled) return;
+          gsap.registerPlugin(ScrollTrigger);
+          const progress = { value: 0 };
+          const context = gsap.context(() => {
+            gsap.to(progress, {
+              value: 1,
+              ease: "none",
+              onUpdate: () =>
+                path.current?.setAttribute("d", heroCurvePath(progress.value)),
+              scrollTrigger: {
+                trigger: hero,
+                start: "top top",
+                end: () =>
+                  `+=${hero.offsetHeight * heroCurveMotion.scrollRange}`,
+                scrub: heroCurveMotion.scrub,
+                invalidateOnRefresh: true,
+              },
+            });
+          });
+          cleanup = () => context.revert();
+        })
+        .catch(() => {});
+    };
+    window.addEventListener("scroll", start, { passive: true });
+    if (scrollY > 0) start();
     return () => {
-      context.revert();
+      cancelled = true;
+      window.removeEventListener("scroll", start);
+      cleanup();
     };
   }, []);
   return (

@@ -1,8 +1,10 @@
+import ResponsiveImage from "./ResponsiveImage";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { chapters, type ChapterId } from "../../data/chapters";
 import { contact } from "../../data/content";
 import BrandLogo from "./BrandLogo";
+import { routePaths } from '../../data/routes';
 
 /** Shared illustrated closing section for the chapters and gallery. */
 export default function FarmFooter({
@@ -40,13 +42,13 @@ export default function FarmFooter({
             </h2>
           </div>
           <div className="footer-orchard" aria-hidden="true">
-            <img
+            <ResponsiveImage
               className="footer-mango"
               src="/illustrations/hero/mango-branch.webp"
               alt=""
               loading="lazy"
             />
-            <img
+            <ResponsiveImage
               className="footer-bird"
               src="/illustrations/hero/orchard-bird.webp"
               alt=""
@@ -80,7 +82,7 @@ export default function FarmFooter({
             ].map(({ id, title }, index) => (
               <a
                 key={id}
-                href={`#${id}`}
+                href={routePaths[id]}
                 onClick={(event) => {
                   event.preventDefault();
                   onNavigate(id);

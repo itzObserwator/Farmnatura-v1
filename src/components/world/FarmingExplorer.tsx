@@ -1,3 +1,4 @@
+import ResponsiveImage from "./ResponsiveImage";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import RevealText from "./RevealText";
@@ -33,13 +34,13 @@ export default function FarmingExplorer() {
       id="our-practice"
       data-motion-section="practices"
     >
-      <img
+      <ResponsiveImage
         className="farming-feature-flower farming-drift"
         src="/illustrations/hero/marigold-stem.webp"
         alt=""
         loading="lazy"
       />
-      <img
+      <ResponsiveImage
         className="farming-feature-foliage farming-drift"
         src="/illustrations/hero/native-foliage.webp"
         alt=""
@@ -103,9 +104,9 @@ export default function FarmingExplorer() {
                 aria-labelledby={`practice-tab-${active}`}
               >
                 <div className="practice-art">
-                  <img
-                    src="/illustrations/farming-bloom.webp"
-                    alt="Original illustration of Farm Natura’s vegetables, native fruit and living roots"
+                  <ResponsiveImage
+                    src="/illustrations/farming-peppers.webp"
+                    alt="Original illustration of tomatoes, aubergines, bell peppers, okra and living roots"
                     loading="lazy"
                   />
                   <AnimatePresence mode="wait">
@@ -121,7 +122,7 @@ export default function FarmingExplorer() {
                       exit={{ opacity: 0, scale: reduced ? 1 : 0.9 }}
                       transition={{ duration: reduced ? 0 : 0.5 }}
                     >
-                      <img
+                      <ResponsiveImage
                         src={`/illustrations/hero/${({ mango: "mango-branch", flower: "marigold-stem", bird: "orchard-bird", sprig: "native-foliage" } as const)[practice.kind]}.webp`}
                         alt=""
                       />
@@ -143,7 +144,7 @@ export default function FarmingExplorer() {
                 </AnimatePresence>
               </article>
               <article className="farming-feature-card farming-managed-card">
-                <img
+                <ResponsiveImage
                   src="/illustrations/hero/native-foliage.webp"
                   alt=""
                   loading="lazy"

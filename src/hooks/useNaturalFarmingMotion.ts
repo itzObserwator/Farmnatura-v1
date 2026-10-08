@@ -10,27 +10,7 @@ export function setupNaturalFarmingMotion() {
   const root = document.querySelector<HTMLElement>(".page-farming");
   if (!root) return () => {};
   const heroWords = root.querySelectorAll(".page-hero .reveal-word");
-  gsap.from(heroWords, {
-    yPercent: 105,
-    duration: 1.1,
-    stagger: 0.007,
-    ease: "farmingReveal",
-    delay: 0.35,
-  });
-  gsap.from(root.querySelectorAll(".page-hero .reveal-char"), {
-    yPercent: 105,
-    duration: 1.1,
-    stagger: (_index, target) =>
-      Array.from(heroWords).indexOf(target.parentElement) * 0.007,
-    ease: "farmingReveal",
-    delay: 0.35,
-  });
-  gsap.from(root.querySelectorAll(".page-hero .chapter-tag, .hero-subtitle"), {
-    opacity: 0,
-    duration: 1.1,
-    delay: 0.7,
-    ease: "farmingReveal",
-  });
+  // Never hide the initial headline after the server has already painted it.
   const observers: IntersectionObserver[] = [];
   const animations = gsap.context(() => {});
   const reveal = (element: HTMLElement) => {

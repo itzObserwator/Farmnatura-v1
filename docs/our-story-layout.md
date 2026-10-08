@@ -4,17 +4,17 @@ Reference: https://jfa-awards.snp.agency/victoria-wharf
 
 The live reference was inspected section by section, including its DOM, responsive CSS, illustration proportions, and sticky list. Its composition informs this page; copy, photographs, and illustration subjects belong to Farm Natura.
 
-| Reference sequence                                     | Farm Natura implementation                                                                    |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| Full-height illustrated title                          | Three-line headline framed by original hand-drawn botanical cutouts                           |
-| Centered editorial lead with generous whitespace       | “Find a little more life between the soil and the sky”                                        |
-| Narrow text left, oversized organic illustration right | Origin story beside the original grove scene                                                  |
-| Curved serif text ribbon                               | “Rooted in the land. Growing together.” with scroll-driven movement                           |
-| Large organic photograph left, statement right         | Estate aerial beside a statement about putting down roots                                     |
-| Oversized list with sticky image and description       | Six themes with hover, focus, and click selection; description and photograph update together |
-| Illustrated closing scene                              | Visit invitation and illustrated next chapter                                                 |
+| Reference sequence                               | Farm Natura implementation                                                                    |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Full-height illustrated title                    | Three-line headline framed by original hand-drawn botanical cutouts                           |
+| Centered editorial lead with generous whitespace | “Find a little more life between the soil and the sky”                                        |
+| Text left, contained organic illustration right  | Origin story beside the original grove scene                                                  |
+| Curved serif text ribbon                         | “Rooted in the land. Growing together.” with scroll-driven movement                           |
+| Large organic photograph left, statement right   | Estate aerial beside a statement about putting down roots                                     |
+| Oversized list with sticky image and description | Six themes with hover, focus, and click selection; description and photograph update together |
+| Illustrated closing scene                        | Visit invitation and illustrated next chapter                                                 |
 
-Desktop keeps the asymmetry, broad spacing, roughly 44/56 first split, reversed 53/47 photo split, and sticky right-hand selector. Mobile stacks the editorial splits and preserves a narrow two-column story list with the photograph beside it. Farm facts follow the list on mobile to remain readable.
+Desktop keeps the asymmetry, broad spacing, a centered 1280px content width matching Farm Life, a 49/51 first split, reversed 53/47 photo split, and sticky right-hand selector. Desktop sections use equal side gutters of at least 48px; mobile uses 22px. Mobile stacks the editorial splits and preserves a narrow two-column story list with the photograph beside it. Farm facts follow the list on mobile to remain readable.
 
 ## Animation responsibilities
 

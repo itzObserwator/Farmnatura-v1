@@ -1,3 +1,4 @@
+import ResponsiveImage from "./ResponsiveImage";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Observer } from "gsap/Observer";
@@ -9,6 +10,7 @@ import HandDrawnMotif from "./HandDrawnMotif";
 import { motionTokens } from "../../animation/motionTokens";
 import { useExploreCursor } from "../../hooks/useExploreCursor";
 gsap.registerPlugin(Observer);
+const ignoreActive = (_index: number) => {};
 const modulo = (value: number, length: number) =>
   ((value % length) + length) % length;
 // Three repeated sets keep a wrapping scene beyond either visible edge.
@@ -18,21 +20,35 @@ const deck = Array.from({ length: 9 }, (_, i) => ({
 }));
 export default function ChapterCarousel({
   onExplore,
-  onActive,
+  onActive = ignoreActive,
   blocked,
+  initialIndex = 0,
+  embedded = false,
 }: {
   onExplore: (id: ChapterId) => void;
-  onActive: (index: number) => void;
+  onActive?: (index: number) => void;
   blocked: boolean;
+  initialIndex?: number;
+  embedded?: boolean;
 }) {
   const reduced = useReducedMotion();
-  const [step, setStep] = useState(0);
+  const Heading = embedded ? motion.h2 : motion.h1;
+  const [step, setStep] = useState(initialIndex);
+  const [visible, setVisible] = useState(!embedded);
   const root = useRef<HTMLDivElement>(null),
-    position = useRef({ value: 0 }),
+    position = useRef({ value: initialIndex }),
     lock = useRef(false);
   const changeRef = useRef<(direction: number) => void>(() => {});
   const active = modulo(step, 3);
-  const exploreCursor = useExploreCursor(!blocked);
+  const exploreCursor = useExploreCursor(!blocked && visible);
+  useEffect(() => {
+    if (!embedded || !root.current) return;
+    const observer = new IntersectionObserver(([entry]) =>
+      setVisible(entry.isIntersecting),
+    );
+    observer.observe(root.current);
+    return () => observer.disconnect();
+  }, [embedded]);
   useEffect(() => {
     exploreCursor.hide();
   }, [step, exploreCursor.hide]);
@@ -84,27 +100,62 @@ export default function ChapterCarousel({
   }, [step, active, onActive, reduced]);
   useEffect(() => {
     if (blocked) return;
+    const isFullyVisible = () => {
+      const bounds = root.current?.getBoundingClientRect();
+      return !!bounds && bounds.top <= 1 && bounds.bottom >= innerHeight - 1;
+    };
+    const leaveCarousel = (direction: number) => {
+      const bounds = root.current?.getBoundingClientRect();
+      if (bounds)
+        window.scrollTo({
+          top: scrollY + bounds.top + direction * innerHeight * 0.75,
+          behavior: reduced ? "instant" : "smooth",
+        });
+    };
     const observer = Observer.create({
       target: root.current,
       type: "wheel,touch",
       preventDefault: true,
       tolerance: 45,
       wheelSpeed: 1,
-      onDown: () => changeRef.current(1),
-      onUp: () => changeRef.current(-1),
+      ignoreCheck: (event) =>
+        !isFullyVisible() ||
+        (embedded &&
+          event.type === "wheel" &&
+          ((active === initialIndex && (event as WheelEvent).deltaY < 0) ||
+            (active === modulo(initialIndex + 2, 3) &&
+              (event as WheelEvent).deltaY > 0))),
+      onDown: () => {
+        if (embedded && active === modulo(initialIndex + 2, 3))
+          leaveCarousel(1);
+        else changeRef.current(1);
+      },
+      onUp: () => {
+        if (embedded && active === initialIndex) leaveCarousel(-1);
+        else changeRef.current(-1);
+      },
       onLeft: () => changeRef.current(1),
       onRight: () => changeRef.current(-1),
     });
     const keyboard = (event: KeyboardEvent) => {
+      if (!isFullyVisible()) return;
       if ((event.target as HTMLElement).closest("button,a,input,dialog"))
         return;
       if (["ArrowDown", "ArrowRight", "PageDown"].includes(event.key)) {
         event.preventDefault();
-        changeRef.current(1);
+        if (
+          embedded &&
+          active === modulo(initialIndex + 2, 3) &&
+          event.key !== "ArrowRight"
+        )
+          leaveCarousel(1);
+        else changeRef.current(1);
       }
       if (["ArrowUp", "ArrowLeft", "PageUp"].includes(event.key)) {
         event.preventDefault();
-        changeRef.current(-1);
+        if (embedded && active === initialIndex && event.key !== "ArrowLeft")
+          leaveCarousel(-1);
+        else changeRef.current(-1);
       }
     };
     window.addEventListener("keydown", keyboard);
@@ -112,9 +163,9 @@ export default function ChapterCarousel({
       observer.kill();
       window.removeEventListener("keydown", keyboard);
     };
-  }, [blocked]);
+  }, [blocked, embedded, initialIndex, active, reduced]);
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || blocked || !visible) return;
     const ctx = gsap.context(
       () =>
         gsap.to(".scene-orbit", {
@@ -138,19 +189,20 @@ export default function ChapterCarousel({
         overwrite: "auto",
       });
     };
-    window.addEventListener("pointermove", move);
+    const node = root.current;
+    node?.addEventListener("pointermove", move);
     return () => {
-      window.removeEventListener("pointermove", move);
+      node?.removeEventListener("pointermove", move);
       ctx.revert();
     };
-  }, [reduced, blocked]);
+  }, [reduced, blocked, visible]);
   return (
     <div
       ref={root}
       className="chapter-carousel"
       aria-label="Explore Farm Natura’s three chapters"
     >
-      <SunlightCanvas active={active} paused={blocked} />
+      <SunlightCanvas active={active} paused={blocked || !visible} />
       <div className="scenes-stage">
         {deck.map(({ slot, chapter }) => {
           const relative = gsap.utils.wrap(-4.5, 4.5, slot - step),
@@ -176,7 +228,7 @@ export default function ChapterCarousel({
                   className="scene-blob"
                   style={{ backgroundColor: chapter.color }}
                 />
-                <img
+                <ResponsiveImage
                   className="scene-illustration"
                   src={chapter.art}
                   alt={chapter.alt}
@@ -188,7 +240,7 @@ export default function ChapterCarousel({
                   className="scene-orbit orbit-one"
                 />
                 <HandDrawnMotif
-                  kind="mango"
+                  kind={chapter.id === "story" ? "mango" : "chilli"}
                   className="scene-orbit orbit-two"
                 />
                 <span className="scene-explore">
@@ -210,7 +262,7 @@ export default function ChapterCarousel({
           transition={{ duration: reduced ? 0 : 0.3 }}
         >
           <span className="chapter-tag">{chapters[active].tag}</span>
-          <h1>
+          <Heading>
             <button
               onClick={() => onExplore(chapters[active].id)}
               aria-label={chapters[active].title}
@@ -232,13 +284,7 @@ export default function ChapterCarousel({
                 </span>
               ))}
             </button>
-          </h1>
-          <button
-            className="caption-explore"
-            onClick={() => onExplore(chapters[active].id)}
-          >
-            explore ↗
-          </button>
+          </Heading>
         </motion.div>
       </AnimatePresence>
       <div className="carousel-controls">

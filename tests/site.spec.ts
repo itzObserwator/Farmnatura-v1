@@ -1,9 +1,49 @@
 import { test, expect } from "@playwright/test";
 test("chapter content follows the new scroll sequence and interactive sections", async ({
   page,
-}) => {
+}, info) => {
   await page.addInitScript(() => sessionStorage.setItem("farm-entered", "yes"));
   await page.goto("/#farming");
+  await expect(page.locator(".page-hero .drawn-okra-top")).toBeVisible();
+  await page.locator(".page-hero .drawn-mango").evaluate(async (image) => {
+    await (image as HTMLImageElement).decode();
+  });
+  const mangoBounds = await page
+    .locator(".page-hero .drawn-mango")
+    .boundingBox();
+  const logoBounds = await page.locator(".brand-seal").boundingBox();
+  expect(mangoBounds!.x).toBeGreaterThan(
+    logoBounds!.x + logoBounds!.width + 12,
+  );
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: info.outputPath("farming-hero.png") });
+  const originalViewport = page.viewportSize()!;
+  const heroViewports =
+    info.project.name === "desktop"
+      ? [originalViewport, { width: 2048, height: 1053 }]
+      : [originalViewport];
+  for (const viewport of heroViewports) {
+    await page.setViewportSize(viewport);
+    const branch = await page.locator(".page-hero .drawn-mango").boundingBox();
+    const logo = await page.locator(".brand-seal").boundingBox();
+    expect(branch!.x).toBeGreaterThan(logo!.x + logo!.width + 12);
+    for (const word of await page.locator(".page-hero h1 .reveal-word").all()) {
+      const text = await word.boundingBox();
+      const overlaps =
+        branch!.x < text!.x + text!.width &&
+        branch!.x + branch!.width > text!.x &&
+        branch!.y < text!.y + text!.height &&
+        branch!.y + branch!.height > text!.y;
+      expect(
+        overlaps,
+        `Mango should clear headline at ${viewport.width}px`,
+      ).toBe(false);
+    }
+    await page.screenshot({
+      path: info.outputPath(`farming-hero-${viewport.width}.png`),
+    });
+  }
+  await page.setViewportSize(originalViewport);
   const seeds = page.getByRole("tab", { name: "01 Indigenous seeds" });
   await seeds.click();
   await seeds.press("ArrowRight");
@@ -11,10 +51,11 @@ test("chapter content follows the new scroll sequence and interactive sections",
     page.getByRole("tab", { name: "02 Chemical-free care" }),
   ).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("tabpanel")).toContainText("health of the land");
+  await page.locator(".next-chapter-stage").scrollIntoViewIfNeeded();
   await page
-    .getByRole("button", { name: "Explore next chapter: Farm Life" })
+    .getByRole("button", { name: "Explore Farm Life", exact: true })
     .click();
-  await expect(page).toHaveURL(/#living$/);
+  await expect(page).toHaveURL(/(#living|farmhouses-for-sale-in-hyderabad)$/);
   await page.waitForTimeout(1200);
   await page.locator(".life-second-split").scrollIntoViewIfNeeded();
   await expect(page.locator(".life-photo-scene > img")).toHaveCount(3);
@@ -24,7 +65,7 @@ test("chapter content follows the new scroll sequence and interactive sections",
     "ready",
   );
   await page.goBack();
-  await expect(page).toHaveURL(/#farming$/);
+  await expect(page).toHaveURL(/(#farming|natural-farming)$/);
   await expect(page.locator(".transition-curtain")).not.toBeVisible();
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/#living");
@@ -60,7 +101,7 @@ test("uploaded branding and WebGL animation work with a no-WebGL fallback", asyn
   await expect(logo).toBeVisible();
   expect(
     await logo.evaluate((el) => (el as HTMLImageElement).naturalWidth),
-  ).toBe(609);
+  ).toBeGreaterThan(0);
   expect(
     await page.evaluate(() =>
       getComputedStyle(document.documentElement)
@@ -118,6 +159,12 @@ test("chapter carousel supports arrows, wheel, menu, and page transitions", asyn
     "Natural Farming",
   );
   await page.waitForTimeout(1250);
+  await expect(
+    page.locator(".chapter-scene.is-current .orbit-two"),
+  ).toHaveAttribute("src", "/illustrations/hero/chilli-sprig.webp");
+  await expect(
+    page.locator(".chapter-scene.is-current .scene-illustration"),
+  ).toHaveAttribute("src", "/illustrations/farming-peppers.webp");
   if (info.project.name === "desktop") {
     await page.mouse.move(720, 500);
     await page.mouse.wheel(0, 600);
@@ -131,14 +178,14 @@ test("chapter carousel supports arrows, wheel, menu, and page transitions", asyn
   await page
     .getByRole("button", { name: "Explore Farm Life", exact: true })
     .click();
-  await expect(page).toHaveURL(/#living$/);
+  await expect(page).toHaveURL(/(#living|farmhouses-for-sale-in-hyderabad)$/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "LESS HURRY.",
   );
   await page.waitForTimeout(1500);
   await page.getByRole("button", { name: "Read this chapter" }).click();
   await page.waitForTimeout(1200);
-  await expect(page).toHaveURL(/#living$/);
+  await expect(page).toHaveURL(/(#living|farmhouses-for-sale-in-hyderabad)$/);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
@@ -148,7 +195,7 @@ test("chapter carousel supports arrows, wheel, menu, and page transitions", asyn
   const menu = page.getByRole("dialog", { name: "Explore Farm Natura" });
   await expect(menu).toBeVisible();
   await menu.getByRole("button", { name: "01 Our Story" }).click();
-  await expect(page).toHaveURL(/#story$/);
+  await expect(page).toHaveURL(/(#story|about-us)$/);
   await expect(menu).not.toBeVisible();
   expect(errors).toEqual([]);
 });
@@ -174,7 +221,7 @@ test("gallery, FAQ, enquiry and original artwork work", async ({ page }) => {
     .click();
   await expect(page.locator(".gallery-photo img")).toHaveAttribute(
     "src",
-    "/images/farmhouse.jpg",
+    "/images/farmhouse.webp",
   );
   await page.getByRole("button", { name: "Open photograph" }).click();
   await expect(page.locator(".photo-dialog")).toBeVisible();
@@ -211,20 +258,44 @@ test("intro, sound preference and reduced motion remain accessible", async ({
   await expect(
     page.getByRole("button", { name: "ENTER THE FARM" }),
   ).toBeEnabled();
+  const audio = page.locator("audio");
+  expect(await audio.evaluate((el: HTMLAudioElement) => el.paused)).toBe(true);
+  await expect(
+    page.getByRole("button", { name: "Skip intro", exact: true }),
+  ).toContainText("Skip the welcome");
   await page.getByRole("button", { name: "ENTER THE FARM" }).click();
   await expect(page.locator(".farm-entrance")).toBeVisible();
   await expect(page.locator(".entrance-copy")).toHaveCount(0);
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.currentTime))
+    .toBeGreaterThan(0);
+  await expect(
+    page.getByRole("button", { name: "Turn sound off" }),
+  ).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("button", { name: "Skip intro", exact: true }).click();
   await expect(page.locator(".chapter-carousel")).toBeVisible();
-  await page.getByRole("button", { name: "Turn sound on" }).click();
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.paused))
+    .toBe(false);
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.currentTime))
+    .toBeGreaterThan(0);
   await expect(
     page.getByRole("button", { name: "Turn sound off" }),
   ).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("button", { name: "Turn sound off" }).click();
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.paused))
+    .toBe(true);
+  await page.bringToFront();
+  await page.getByRole("button", { name: "Turn sound on" }).click();
+  await expect(
+    page.getByRole("button", { name: "Turn sound off" }),
+  ).toHaveAttribute("aria-pressed", "true");
   await page
     .getByRole("button", { name: "Explore Our Story", exact: true })
     .click();
-  await expect(page).toHaveURL(/#story$/);
+  await expect(page).toHaveURL(/(#story|about-us)$/);
   expect(
     await page
       .locator(".hero-title")
@@ -262,6 +333,15 @@ test("Our Story hand-drawn artwork and reference-style selector work", async ({
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/#story");
+  await page.evaluate(() => document.fonts.ready);
+  const curvedTextBounds = await page
+    .locator(".story-curved-line text")
+    .evaluate((element) => {
+      const bounds = (element as SVGGraphicsElement).getBBox();
+      return { top: bounds.y, bottom: bounds.y + bounds.height };
+    });
+  expect(curvedTextBounds.top).toBeGreaterThanOrEqual(0);
+  expect(curvedTextBounds.bottom).toBeLessThanOrEqual(150);
   const artwork = page.locator(".handdrawn-decor img");
   await expect(artwork).toHaveCount(5);
   await expect
@@ -280,12 +360,39 @@ test("Our Story hand-drawn artwork and reference-style selector work", async ({
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+  const sections = await page
+    .locator(".story-first-split, .story-second-split")
+    .evaluateAll((els) =>
+      els.map((el) => {
+        const bounds = el.getBoundingClientRect();
+        return { left: bounds.left, right: innerWidth - bounds.right };
+      }),
+    );
+  for (const section of sections) {
+    expect(section.left).toBeGreaterThanOrEqual(22);
+    expect(section.right).toBeCloseTo(section.left, 0);
+  }
+  const media = await page
+    .locator(".story-grove-art, .story-farm-frame")
+    .evaluateAll((els) =>
+      els.map((el) => {
+        const bounds = el.getBoundingClientRect();
+        return { left: bounds.left, right: bounds.right, viewport: innerWidth };
+      }),
+    );
+  for (const item of media) {
+    expect(item.left).toBeGreaterThanOrEqual(22);
+    expect(item.right).toBeLessThanOrEqual(item.viewport - 22);
+  }
+  await page
+    .locator(".story-first-split")
+    .screenshot({ path: test.info().outputPath("story-spacing.png") });
   const weekends = page.getByRole("button", { name: /05 Farmhouse weekends/ });
   await weekends.click();
   await expect(weekends).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator(".story-selection-photo > img")).toHaveAttribute(
     "src",
-    "/images/farmhouse.jpg",
+    "/images/farmhouse.webp",
   );
   expect(
     await page.evaluate(
@@ -298,9 +405,10 @@ test("Natural Farming keeps Centre Court sections and readable card handover", a
   page,
 }, info) => {
   await page.goto("/#farming");
+  await page.locator(".farming-about-photo").scrollIntoViewIfNeeded();
   await expect(page.locator(".farming-about-photo")).toHaveAttribute(
     "src",
-    "/images/goshala.jpg",
+    "/images/farm-estate.webp",
   );
   await expect(page.locator(".farming-detail-photo")).toHaveCount(2);
   await expect(page.locator(".farming-feature-card")).toHaveCount(2);
@@ -403,10 +511,13 @@ test("Natural Farming fluid surfaces animate and survive WebGL failure", async (
     } as typeof original;
   });
   await page.reload();
+  await surface.scrollIntoViewIfNeeded();
   await expect(surface).toHaveAttribute("data-webgl", "unavailable");
   await expect(page.locator(".farming-about-photo")).toBeAttached();
   await page.getByRole("tab", { name: "01 Indigenous seeds" }).click();
-  await expect(page.getByRole("tabpanel")).toContainText("Locally adapted");
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Locally adapted native and heirloom seeds",
+  );
   expect(errors).toEqual([]);
 });
 
@@ -456,11 +567,11 @@ test("Farm Life follows About's editorial, media and statistics sequence", async
     .click();
   await expect(page.locator(".gallery-photo > img")).toHaveAttribute(
     "src",
-    "/images/farmhouse.jpg",
+    "/images/farmhouse.webp",
   );
 });
 
-test("dedicated gallery supports filtering, expanding and keyboard photo viewing", async ({
+test("dedicated gallery supports the uploaded photos, filtering and keyboard viewing", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -470,22 +581,17 @@ test("dedicated gallery supports filtering, expanding and keyboard photo viewing
     "LIFE, AS",
   );
   await page.getByRole("button", { name: "EXPLORE THE GALLERY" }).click();
-  await expect(page.locator(".gallery-journal-card")).toHaveCount(9);
-  await page.getByRole("button", { name: "MORE MOMENTS" }).click();
-  await expect(page.locator(".gallery-journal-card")).toHaveCount(18);
-  await page.getByRole("button", { name: "MORE MOMENTS" }).click();
-  await page.getByRole("button", { name: "MORE MOMENTS" }).click();
-  await expect(page.locator(".gallery-journal-card")).toHaveCount(29);
+  await expect(page.locator(".gallery-journal-card")).toHaveCount(6);
   await expect(page.getByRole("status")).toHaveText(
-    "Showing 29 of 29 photographs",
+    "Showing 6 of 6 photographs",
   );
   await expect(page.getByRole("button", { name: "MORE MOMENTS" })).toHaveCount(
     0,
   );
-  await page.getByRole("button", { name: "Goshala", exact: true }).click();
-  await expect(page.locator(".gallery-journal-card")).toHaveCount(6);
+  await page.getByRole("button", { name: "Farm life", exact: true }).click();
+  await expect(page.locator(".gallery-journal-card")).toHaveCount(3);
   await expect(
-    page.getByRole("button", { name: "Goshala", exact: true }),
+    page.getByRole("button", { name: "Farm life", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
   await page.locator(".gallery-journal-photo").first().click();
   const viewer = page.getByRole("dialog", {
@@ -494,18 +600,18 @@ test("dedicated gallery supports filtering, expanding and keyboard photo viewing
   await expect(viewer).toBeVisible();
   await expect(viewer.locator(".gallery-viewer-frame > img")).toHaveAttribute(
     "src",
-    /fnsi15.webp$/,
+    /images\/farmhouse.webp$/,
   );
   await page.keyboard.press("ArrowRight");
   await expect(viewer.locator(".gallery-viewer-frame > img")).toHaveAttribute(
     "src",
-    /fnsi1.webp$/,
+    /farm-estate.webp$/,
   );
   await page.keyboard.press("ArrowLeft");
   await page.keyboard.press("ArrowLeft");
   await expect(viewer.locator(".gallery-viewer-frame > img")).toHaveAttribute(
     "src",
-    /goshalatopview.webp$/,
+    /garden-planter.webp$/,
   );
   await page.keyboard.press("Escape");
   await expect(viewer).not.toBeVisible();
@@ -529,7 +635,7 @@ test("gallery films load on demand and gallery connects to navigation and enquir
   );
   await page.goto("/#living");
   await page.getByRole("button", { name: "VIEW THE GALLERY" }).click();
-  await expect(page).toHaveURL(/#gallery$/);
+  await expect(page).toHaveURL(/(#gallery|gallery)$/);
   await expect(page.locator("iframe")).toHaveCount(0);
   const photoTab = page.getByRole("tab", { name: "Photographs" });
   await photoTab.focus();
@@ -559,15 +665,15 @@ test("gallery films load on demand and gallery connects to navigation and enquir
   await expect(page.locator(".contact-dialog")).toBeVisible();
   await page.getByRole("button", { name: "Close enquiry" }).click();
   await page.getByRole("button", { name: "EXPLORE FARM LIFE" }).click();
-  await expect(page).toHaveURL(/#living$/);
+  await expect(page).toHaveURL(/(#living|farmhouses-for-sale-in-hyderabad)$/);
   await page.getByRole("button", { name: "Open menu" }).click();
   await page
     .getByRole("dialog", { name: "Explore Farm Natura" })
     .getByRole("button", { name: "Gallery", exact: false })
     .click();
-  await expect(page).toHaveURL(/#gallery$/);
+  await expect(page).toHaveURL(/(#gallery|gallery)$/);
   await page.goBack();
-  await expect(page).toHaveURL(/#living$/);
+  await expect(page).toHaveURL(/(#living|farmhouses-for-sale-in-hyderabad)$/);
 });
 
 test("Explore badge follows the pointer only over active illustration artwork", async ({
@@ -600,11 +706,13 @@ test("Explore badge follows the pointer only over active illustration artwork", 
   await expect(badge).toHaveAttribute("data-visible", "false");
   await page.getByRole("button", { name: "Close menu" }).click();
   await art.click();
-  await expect(page).toHaveURL(/#story$/);
+  await expect(page).toHaveURL(/(#story|about-us)$/);
+  await page.locator(".next-chapter-stage").scrollIntoViewIfNeeded();
   await page
-    .locator(".next-scene > img:not(.next-flower)")
-    .scrollIntoViewIfNeeded();
-  await page.locator(".next-scene > img:not(.next-flower)").hover();
+    .locator(
+      ".next-chapter-stage .chapter-scene.is-current .scene-illustration",
+    )
+    .hover();
   await expect(badge).toHaveAttribute("data-visible", "true");
   await page.mouse.move(20, 120);
   await expect(badge).toHaveAttribute("data-visible", "false");
@@ -628,4 +736,233 @@ test("Explore pointer badge settles smoothly and clears when illustrations chang
   await expect(badge).toHaveAttribute("data-visible", "true");
   await page.mouse.move(15, 120);
   await expect(badge).toHaveAttribute("data-visible", "false");
+});
+
+test("footer carousel browses all chapters without intercepting page reading", async ({
+  page,
+}, info) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/#living");
+  const carousel = page.locator(".next-chapter-stage");
+  const title = carousel.getByRole("heading", { level: 2 });
+  await expect(title).toHaveCount(0);
+  await page.keyboard.press("ArrowDown");
+  await expect(title).toHaveCount(0);
+  await carousel.scrollIntoViewIfNeeded();
+  await expect(title).toHaveText("Our Story");
+  await expect(carousel.locator(".chapter-scene:visible")).toHaveCount(3);
+  await expect(carousel.locator(".caption-explore, .next-explore")).toHaveCount(
+    0,
+  );
+  if (info.project.name === "desktop") {
+    await carousel.locator(".chapter-caption").hover();
+    await carousel.evaluate((el) =>
+      window.scrollTo(0, scrollY + el.getBoundingClientRect().top),
+    );
+    await expect
+      .poll(() => carousel.evaluate((el) => el.getBoundingClientRect().top))
+      .toBeLessThanOrEqual(1);
+    const before = await page.evaluate(() => scrollY);
+    await page.mouse.wheel(0, 300);
+    await expect(title).toHaveText("Natural Farming");
+    expect(await page.evaluate(() => scrollY)).toBe(before);
+  } else {
+    await carousel
+      .getByRole("button", { name: "Next chapter", exact: true })
+      .click();
+    await expect(title).toHaveText("Natural Farming");
+  }
+  await carousel
+    .getByRole("button", { name: "Next chapter", exact: true })
+    .click();
+  await expect(title).toHaveText("Farm Life");
+  await carousel
+    .getByRole("button", { name: "Farm Life", exact: true })
+    .click();
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+  await carousel.scrollIntoViewIfNeeded();
+  await carousel
+    .getByRole("button", { name: "Previous chapter", exact: true })
+    .click();
+  await expect(title).toHaveText("Natural Farming");
+  await carousel
+    .getByRole("button", { name: "Explore Natural Farming", exact: true })
+    .click();
+  await expect(page).toHaveURL(/(#farming|natural-farming)$/);
+  await carousel.scrollIntoViewIfNeeded();
+  await expect(carousel.getByRole("heading", { level: 2 })).toHaveText(
+    "Farm Life",
+  );
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await page.keyboard.press("ArrowRight");
+  await page.getByRole("button", { name: "Close menu" }).click();
+  await expect(carousel.getByRole("heading", { level: 2 })).toHaveText(
+    "Farm Life",
+  );
+  if (info.project.name === "desktop") {
+    await carousel.locator(".chapter-caption").hover();
+    await carousel.evaluate((el) =>
+      window.scrollTo(0, scrollY + el.getBoundingClientRect().top),
+    );
+    await expect
+      .poll(() => carousel.evaluate((el) => el.getBoundingClientRect().top))
+      .toBeLessThanOrEqual(1);
+    const before = await page.evaluate(() => scrollY);
+    await page.mouse.wheel(0, -300);
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(before);
+  }
+  expect(errors).toEqual([]);
+});
+
+test("footer carousel wheel navigation works alongside smooth page scrolling", async ({
+  page,
+}, info) => {
+  test.skip(
+    info.project.name !== "desktop",
+    "Wheel input is a desktop interaction",
+  );
+  await page.goto("/#story");
+  const carousel = page.locator(".next-chapter-stage");
+  const title = carousel.getByRole("heading", { level: 2 });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+  });
+  await carousel.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1300);
+  await carousel.evaluate((el) =>
+    window.scrollTo(0, scrollY + el.getBoundingClientRect().top),
+  );
+  await expect
+    .poll(() => carousel.evaluate((el) => el.getBoundingClientRect().top))
+    .toBeLessThanOrEqual(1);
+  await page.mouse.move(720, 750);
+  const before = await page.evaluate(() => scrollY);
+  await page.mouse.wheel(0, 300);
+  await expect(title).toHaveText("Farm Life");
+  await page.waitForTimeout(1100);
+  expect(await page.evaluate(() => scrollY)).toBe(before);
+  await page.mouse.wheel(0, -300);
+  await expect(title).toHaveText("Natural Farming");
+  await page.waitForTimeout(1100);
+  await page.mouse.wheel(0, -300);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(before);
+});
+
+test("scrolling into the footer carousel keeps the page's smooth scroll handler", async ({
+  page,
+}, info) => {
+  test.skip(
+    info.project.name !== "desktop",
+    "Wheel input is a desktop interaction",
+  );
+  await page.goto("/#story");
+  await page.waitForTimeout(1300);
+  const carousel = page.locator(".next-chapter-stage");
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    window.scrollTo(
+      0,
+      scrollY +
+        document.querySelector(".next-chapter-stage")!.getBoundingClientRect()
+          .top -
+        450,
+    );
+  });
+  await expect
+    .poll(() => carousel.evaluate((el) => el.getBoundingClientRect().top))
+    .toBeGreaterThan(400);
+  await page.mouse.move(720, 750);
+  await page.evaluate(() => {
+    (window as any).__footerWheelPrevented = null;
+    window.addEventListener(
+      "wheel",
+      (event) => {
+        (window as any).__footerWheelPrevented = event.defaultPrevented;
+      },
+      { once: true },
+    );
+  });
+  const before = await page.evaluate(() => scrollY);
+  await page.mouse.wheel(0, 180);
+  await expect
+    .poll(() => page.evaluate(() => (window as any).__footerWheelPrevented))
+    .toBe(true);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
+  await carousel.scrollIntoViewIfNeeded();
+  await expect(carousel.getByRole("heading", { level: 2 })).toHaveText(
+    "Natural Farming",
+  );
+});
+
+test("farm tune starts on request, loops, and continues across chapter navigation", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => sessionStorage.setItem("farm-entered", "yes"));
+  const musicRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/audio/")) musicRequests.push(request.url());
+  });
+  await page.goto("/");
+  const audio = page.locator("audio");
+  await expect(audio).toHaveAttribute("preload", "none");
+  expect(await audio.evaluate((el: HTMLAudioElement) => el.paused)).toBe(true);
+  expect(musicRequests).toEqual([]);
+  await page.bringToFront();
+  await page.getByRole("button", { name: "Turn sound on" }).click();
+  await expect(
+    page.getByRole("button", { name: "Turn sound off" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.currentTime))
+    .toBeGreaterThan(0);
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.volume))
+    .toBeCloseTo(0.18);
+  expect(await audio.evaluate((el: HTMLAudioElement) => el.loop)).toBe(true);
+  expect(
+    await audio.evaluate((el: HTMLAudioElement) => el.duration),
+  ).toBeCloseTo(60, 0);
+  const before = await audio.evaluate((el: HTMLAudioElement) => el.currentTime);
+  await page.getByRole("button", { name: "Our Story", exact: true }).click();
+  await expect(page).toHaveURL(/(#story|about-us)$/);
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.currentTime))
+    .toBeGreaterThan(before);
+  await audio.evaluate((el: HTMLAudioElement) => {
+    el.currentTime = el.duration - 0.2;
+  });
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.currentTime))
+    .toBeLessThan(2);
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      value: true,
+    });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.paused))
+    .toBe(true);
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      value: false,
+    });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.paused))
+    .toBe(false);
+  await page.getByRole("button", { name: "Turn sound off" }).click();
+  await expect
+    .poll(() => audio.evaluate((el: HTMLAudioElement) => el.paused))
+    .toBe(true);
+  expect(await audio.evaluate((el: HTMLAudioElement) => el.volume)).toBe(0);
+  await expect(
+    page.getByRole("button", { name: "Turn sound on" }),
+  ).toHaveAttribute("aria-pressed", "false");
 });

@@ -1,13 +1,13 @@
+import ResponsiveImage from "./ResponsiveImage";
 import { useRef, useState, useEffect } from "react";
 import PhotoTransition from "./PhotoTransition";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
-const images = [
-  { src: "/images/farm.jpg", label: "The land we return to" },
-  { src: "/images/farmhouse.jpg", label: "A little room to breathe" },
-  { src: "/images/goshala.jpg", label: "Life on the farm" },
-  { src: "/images/dining.jpg", label: "Together around the table" },
-];
+import { galleryPhotos } from "../../data/gallery";
+const images = galleryPhotos.map((photo) => ({
+  src: photo.src,
+  label: photo.title,
+}));
 export default function Gallery({
   variant = "default",
   onOpenGallery,
@@ -48,14 +48,16 @@ export default function Gallery({
             <button
               className="paper-button arrow-button"
               aria-label="Previous photograph"
-              onClick={() => setActive((a) => (a + 3) % 4)}
+              onClick={() =>
+                setActive((a) => (a + images.length - 1) % images.length)
+              }
             >
               <ArrowLeft strokeWidth={1} />
             </button>
             <button
               className="paper-button arrow-button"
               aria-label="Next photograph"
-              onClick={() => setActive((a) => (a + 1) % 4)}
+              onClick={() => setActive((a) => (a + 1) % images.length)}
             >
               <ArrowRight strokeWidth={1} />
             </button>
@@ -66,7 +68,7 @@ export default function Gallery({
           onClick={() => setOpen(true)}
           aria-label="Open photograph"
         >
-          <img
+          <ResponsiveImage
             src={images[active].src}
             alt={images[active].label}
             loading="lazy"
@@ -83,7 +85,9 @@ export default function Gallery({
           >
             {images[active].label}
           </motion.span>
-          <span>0{active + 1} / 04</span>
+          <span>
+            0{active + 1} / {String(images.length).padStart(2, "0")}
+          </span>
         </div>
         <div className="gallery-dots">
           {images.map((img, i) => (
@@ -119,20 +123,22 @@ export default function Gallery({
         >
           <X size={19} />
         </button>
-        <img src={images[active].src} alt={images[active].label} />
+        <ResponsiveImage src={images[active].src} alt={images[active].label} />
         <p>{images[active].label}</p>
         <div className="gallery-arrows">
           <button
             className="paper-button arrow-button"
             aria-label="Previous full-size photograph"
-            onClick={() => setActive((a) => (a + 3) % 4)}
+            onClick={() =>
+              setActive((a) => (a + images.length - 1) % images.length)
+            }
           >
             <ArrowLeft />
           </button>
           <button
             className="paper-button arrow-button"
             aria-label="Next full-size photograph"
-            onClick={() => setActive((a) => (a + 1) % 4)}
+            onClick={() => setActive((a) => (a + 1) % images.length)}
           >
             <ArrowRight />
           </button>

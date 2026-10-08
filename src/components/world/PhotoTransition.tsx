@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
-import gsap from "gsap";
+import { useNearViewport } from "../../hooks/useNearViewport";
 
 /** Original curved image wipe rendered in WebGL; the underlying HTML image is the fallback. */
 export default function PhotoTransition({ src }: { src: string }) {
   const host = useRef<HTMLDivElement>(null);
+  const near = useNearViewport(host);
   const reduced = useReducedMotion();
   const update = useRef<((path: string) => void) | null>(null);
   const latest = useRef(src);
@@ -16,9 +17,10 @@ export default function PhotoTransition({ src }: { src: string }) {
     let cancelled = false;
     let cleanup = () => {};
     const node = host.current;
-    if (!node) return;
+    if (!node || !near) return;
     void import("three")
-      .then((THREE) => {
+      .then(async (THREE) => {
+        const { default: gsap } = await import("gsap");
         if (cancelled) return;
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("webgl2", {
@@ -90,7 +92,16 @@ export default function PhotoTransition({ src }: { src: string }) {
         const show = async (path: string) => {
           const request = ++sequence;
           try {
-            const texture = await loader.loadAsync(path);
+            const responsive =
+              /^\/images\/(story-farmland|farm-estate|farmhouse|garden-planter|living-fields|sunflowers)\.webp$/.test(
+                path,
+              )
+                ? path.replace(
+                    ".webp",
+                    `-${node.clientWidth * Math.min(devicePixelRatio, 1.5) > 1280 ? 1920 : 1280}.webp`,
+                  )
+                : path;
+            const texture = await loader.loadAsync(responsive);
             if (cancelled || request !== sequence) {
               texture.dispose();
               return;
@@ -164,6 +175,6 @@ export default function PhotoTransition({ src }: { src: string }) {
       cancelled = true;
       cleanup();
     };
-  }, [reduced]);
+  }, [reduced, near]);
   return <div ref={host} className="photo-transition" aria-hidden="true" />;
 }

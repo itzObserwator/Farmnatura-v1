@@ -1,0 +1,6 @@
+Tool: built-in imagegen. Transparent background enabled.
+Reference: artwork/jfa/farming-bloom.png.
+Website asset: public/illustrations/farming-peppers.webp.
+
+Prompt:
+Edit this transparent botanical farming illustration. Replace ONLY the two large yellow mango fruits and their mango-like leaves in the upper-right plant with two golden yellow bell peppers growing on a botanically plausible pepper plant with pointed green leaves, delicate small white star-shaped flowers, slender green stems, and green calyxes attaching each pepper to a stem. Keep the replacement in exactly the same upper-right area, same overall silhouette and visual balance. Preserve every other detail unchanged: kingfisher, butterfly, all tomatoes and eggplants, okra pods, marigolds, small flowers, soil cross-section, intricate roots and worms. Match the original detailed Indian folk botanical watercolor and ink texture and color palette perfectly. No mangoes anywhere. Keep genuinely transparent background; no paper rectangle, text, frame or shadow.

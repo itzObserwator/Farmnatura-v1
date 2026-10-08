@@ -1,3 +1,4 @@
+import ResponsiveImage from "./ResponsiveImage";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import BrandLogo from "./BrandLogo";
@@ -203,9 +204,9 @@ export default function FarmEntrance({
             animate={{ x: reduced ? "10%" : "12%" }}
             transition={{ duration: reduced ? 0 : 4.6, ease: "linear" }}
           >
-            <img src="/illustrations/entrance/oxen-plough.webp" alt="" />
+            <ResponsiveImage src="/illustrations/entrance/oxen-plough.webp" alt="" />
           </motion.div>
-          <img
+          <ResponsiveImage
             className="entrance-bird"
             src="/illustrations/hero/orchard-bird.webp"
             alt=""

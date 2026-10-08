@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
-import gsap from "gsap";
+import { useNearViewport } from "../../hooks/useNearViewport";
 import { naturalFarmingMotion } from "../../animation/naturalFarmingMotion";
 
 /** Original pointer-responsive organic surface. CSS retains the shape without WebGL. */
@@ -12,14 +12,16 @@ export default function LivingSurface({
   color: string;
 }) {
   const host = useRef<HTMLDivElement>(null);
+  const near = useNearViewport(host);
   const reduced = useReducedMotion();
   useEffect(() => {
     const node = host.current;
-    if (!node || reduced) return;
+    if (!node || reduced || !near) return;
     let disposed = false;
     let cleanup = () => {};
     void import("three")
-      .then((THREE) => {
+      .then(async (THREE) => {
+        const { default: gsap } = await import("gsap");
         if (disposed) return;
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("webgl2", {
@@ -130,7 +132,7 @@ export default function LivingSurface({
       disposed = true;
       cleanup();
     };
-  }, [color, reduced]);
+  }, [color, reduced, near]);
   return (
     <div
       ref={host}

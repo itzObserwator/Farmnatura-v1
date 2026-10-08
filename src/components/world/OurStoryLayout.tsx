@@ -1,3 +1,4 @@
+import ResponsiveImage from "./ResponsiveImage";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
@@ -36,19 +37,19 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
         </div>
         <div className="story-grove">
           <div className="story-grove-surface" />
-          <img
+          <ResponsiveImage
             className="story-grove-art"
             src={story.art}
             alt={story.alt}
             loading="lazy"
           />
-          <img
+          <ResponsiveImage
             className="story-grove-flower story-drift"
             src="/illustrations/hero/marigold-stem.webp"
             alt=""
             loading="lazy"
           />
-          <img
+          <ResponsiveImage
             className="story-grove-bird story-drift"
             src="/illustrations/hero/orchard-bird.webp"
             alt=""
@@ -58,11 +59,12 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
       </section>
       <div
         className="story-curved-line"
+        role="img"
         aria-label="Rooted in the land. Growing together."
       >
         <svg viewBox="0 0 1440 150" aria-hidden="true">
           <defs>
-            <path id="story-line-curve" d="M-20 92 Q700 -15 1460 100" />
+            <path id="story-line-curve" d="M-20 127 Q700 20 1460 135" />
           </defs>
           <text>
             <textPath
@@ -80,9 +82,9 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
         data-motion-section="story-landscape"
       >
         <div className="story-farm-frame" data-image-reveal>
-          <img
-            src="/images/farm.jpg"
-            alt="Aerial view of the managed farmland at Farm Natura"
+          <ResponsiveImage
+            src="/images/story-farmland.webp"
+            alt="Aerial view of green crop beds and banana trees at Farm Natura"
             loading="lazy"
           />
         </div>
@@ -94,7 +96,7 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
             <RevealText text="A place to put down roots. A little space to simply breathe." />
           </h2>
           <p data-reveal>{story.intro}</p>
-          <img
+          <ResponsiveImage
             className="story-quote-foliage story-drift"
             src="/illustrations/hero/native-foliage.webp"
             alt=""
@@ -153,7 +155,7 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
               </motion.p>
             </AnimatePresence>
             <div className="story-selection-photo">
-              <img src={selected.image} alt={selected.caption} loading="lazy" />
+              <ResponsiveImage src={selected.image} alt={selected.caption} loading="lazy" />
               <PhotoTransition src={selected.image} />
             </div>
             <span className="story-selection-caption">{selected.caption}</span>

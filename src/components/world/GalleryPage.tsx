@@ -1,3 +1,4 @@
+import ResponsiveImage from "./ResponsiveImage";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
@@ -72,21 +73,21 @@ export default function GalleryPage({
       <section className="page-hero gallery-journal-hero">
         <HeroBackdrop color="#f4efd9">
           <div className="gallery-hero-ornaments" aria-hidden="true">
-            <img
+            <ResponsiveImage
               className="gallery-hero-art gallery-hero-mango"
               src="/illustrations/hero/mango-branch.webp"
               alt=""
               width="600"
               height="800"
             />
-            <img
+            <ResponsiveImage
               className="gallery-hero-art gallery-hero-flower"
               src="/illustrations/hero/marigold-stem.webp"
               alt=""
               width="600"
               height="800"
             />
-            <img
+            <ResponsiveImage
               className="gallery-hero-art gallery-hero-leaves"
               src="/illustrations/hero/native-foliage.webp"
               alt=""
@@ -252,7 +253,7 @@ export default function GalleryPage({
                         onClick={() => setSelected(index)}
                         aria-label={`View photograph: ${photo.title}`}
                       >
-                        <img
+                        <ResponsiveImage
                           src={photo.src}
                           alt={photo.title}
                           width="1000"
@@ -316,7 +317,7 @@ export default function GalleryPage({
                       onClick={() => setVideo(film.id)}
                       aria-label={`Play film: ${film.title}`}
                     >
-                      <img
+                      <ResponsiveImage
                         src={film.poster}
                         alt=""
                         width="480"
@@ -337,7 +338,7 @@ export default function GalleryPage({
             </>
           )}
         </div>
-        <img
+        <ResponsiveImage
           className="gallery-collection-bird"
           src="/illustrations/hero/orchard-bird.webp"
           alt=""
@@ -347,7 +348,7 @@ export default function GalleryPage({
         />
       </section>
       <section className="gallery-visit-invitation" data-gallery-reveal>
-        <img
+        <ResponsiveImage
           className="gallery-visit-foliage"
           src="/illustrations/hero/native-foliage.webp"
           alt=""
@@ -409,7 +410,7 @@ export default function GalleryPage({
               className="gallery-viewer-frame"
               style={{ "--photo-ratio": ratio } as CSSProperties}
             >
-              <img
+              <ResponsiveImage
                 src={selectedPhoto.src}
                 alt={selectedPhoto.title}
                 onLoad={(event) =>

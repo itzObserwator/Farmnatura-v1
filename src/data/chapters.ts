@@ -18,7 +18,7 @@ export const chapters = [
       "By Planet Green Infra, Farm Natura brings natural farming and family life together. Dedicated agronomy staff care for everyday farming, leaving you more time to enjoy the land and the people you share it with.",
     section: "OUR ROOTS",
     statement: "Indulge. Involve. Impact nature.",
-    photo: "/images/farm.jpg",
+    photo: "/images/story-farmland.webp",
   },
   {
     id: "farming",
@@ -26,8 +26,8 @@ export const chapters = [
     title: "Natural Farming",
     tag: "GOOD THINGS START IN THE SOIL",
     color: "#dce8cc",
-    art: "/illustrations/farming-bloom.webp",
-    alt: "Original botanical folk art of tomatoes, aubergines, mangoes, marigolds and living roots",
+    art: "/illustrations/farming-peppers.webp",
+    alt: "Original botanical folk art of tomatoes, aubergines, bell peppers, okra, marigolds and living roots",
     hero: ["GROW FOOD.", "GROW HEALTH.", "GROW A LIFE."],
     subtitle:
       "Indigenous seeds, living soil, and the little lives that keep a farm thriving.",
@@ -38,7 +38,7 @@ export const chapters = [
       "Farm Natura describes more than six years of soil revitalisation and ongoing attention to soil health and microbiology. Visit the estate to meet the team and understand how the managed farming programme works.",
     section: "NATURALLY, TOGETHER",
     statement: "Rooted in living soil. Grown with care.",
-    photo: "/images/goshala.jpg",
+    photo: "/images/farm-estate.webp",
   },
   {
     id: "living",
@@ -58,7 +58,7 @@ export const chapters = [
       "Set along the Srisailam Highway corridor in Kandukur, the estate is close enough to return to on a weekend. Explore the farmhouse living concept, current availability and managed maintenance terms with the Farm Natura team.",
     section: "COME, WALK THE LAND",
     statement: "Close enough to visit. Far enough to breathe.",
-    photo: "/images/farmhouse.jpg",
+    photo: "/images/farmhouse.webp",
   },
 ] as const;
 export type Chapter = (typeof chapters)[number];

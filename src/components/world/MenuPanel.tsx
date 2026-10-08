@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import type gsap from "gsap";
 import { X, ArrowUpRight } from "lucide-react";
 import { chapters, type ChapterId } from "../../data/chapters";
 import { contact } from "../../data/content";
@@ -28,55 +28,69 @@ export default function MenuPanel({
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const papers = dialog.querySelectorAll(".menu-paper");
     let animation: gsap.core.Timeline | undefined;
-    if (open) {
-      dialog.showModal();
-      if (!reduced) {
-        animation = gsap
-          .timeline()
-          .fromTo(
-            papers,
-            { xPercent: 105, rotation: 2 },
-            {
-              xPercent: 0,
-              rotation: 0,
-              duration: motionTokens.menu.open,
-              stagger: motionTokens.menu.stagger,
-              ease: "power3.out",
-            },
-          )
-          .fromTo(
-            dialog.querySelectorAll("nav button,.menu-footer"),
-            { y: 20, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              stagger: 0.07,
-              ease: "power3.out",
-            },
-            0.2,
-          );
-      }
-    } else if (dialog.open && !reduced) {
-      animation = gsap
-        .timeline({ onComplete: () => dialog.close() })
-        .to(dialog.querySelectorAll("nav button,.menu-footer"), {
-          opacity: 0,
-          duration: 0.2,
-        })
-        .to(
-          papers,
-          {
-            xPercent: 105,
-            rotation: 2,
-            duration: motionTokens.menu.close,
-            stagger: -0.05,
-            ease: "power2.in",
-          },
-          0,
-        );
-    } else dialog.close();
+    let cancelled = false;
+    if (!open && !dialog.open) return;
+    if (open) dialog.showModal();
+    if (reduced) {
+      if (!open) dialog.close();
+      return;
+    }
+    void import("gsap")
+      .then(({ default: gsap }) => {
+        if (cancelled) return;
+        if (open) {
+          if (!reduced) {
+            animation = gsap
+              .timeline()
+              .fromTo(
+                papers,
+                { xPercent: 105, rotation: 2 },
+                {
+                  xPercent: 0,
+                  rotation: 0,
+                  duration: motionTokens.menu.open,
+                  stagger: motionTokens.menu.stagger,
+                  ease: "power3.out",
+                },
+              )
+              .fromTo(
+                dialog.querySelectorAll("nav button,.menu-footer"),
+                { y: 20, opacity: 0 },
+                {
+                  y: 0,
+                  opacity: 1,
+                  duration: 0.8,
+                  stagger: 0.07,
+                  ease: "power3.out",
+                },
+                0.2,
+              );
+          }
+        } else if (dialog.open && !reduced) {
+          animation = gsap
+            .timeline({ onComplete: () => dialog.close() })
+            .to(dialog.querySelectorAll("nav button,.menu-footer"), {
+              opacity: 0,
+              duration: 0.2,
+            })
+            .to(
+              papers,
+              {
+                xPercent: 105,
+                rotation: 2,
+                duration: motionTokens.menu.close,
+                stagger: -0.05,
+                ease: "power2.in",
+              },
+              0,
+            );
+        } else dialog.close();
+      })
+      .catch(() => {
+        if (!open) dialog.close();
+      });
     return () => {
+      cancelled = true;
       animation?.kill();
     };
   }, [open]);

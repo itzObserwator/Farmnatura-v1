@@ -1,0 +1,5 @@
+Tool: built-in imagegen. Transparent background enabled.
+Website asset: public/illustrations/hero/chilli-sprig.webp.
+
+Prompt:
+Create a single transparent botanical cutout for a natural farming website: a delicate downward-curving green chilli plant sprig with two slender tapered chillies, one deep red ripe chilli and one fresh green chilli, pointed green leaves, a few tiny five-petal white flowers. Both chillies visibly attach to slender green stems with calyxes. Detailed hand-drawn Indian botanical watercolor illustration with fine dark green ink lines, rich natural pigments, subtle paper texture within painted areas. Compact portrait composition, stem starts upper left, leaves frame the two hanging chillies and trail toward lower right. Entire sprig visible with transparent margins. True transparent background, no scene, ground, pot, text, watermark, shadow, mangoes or yellow fruits.
