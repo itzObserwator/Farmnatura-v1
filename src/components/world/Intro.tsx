@@ -88,25 +88,23 @@ export default function Intro({
               </div>
             ))}
             <div className="intro-sky" aria-hidden="true">
+              <svg
+                className="intro-wind-trails"
+                viewBox="0 0 1200 500"
+                preserveAspectRatio="none"
+              >
+                <path d="M-180 165Q70 105 270 150T610 140" />
+                <path d="M310 90Q510 45 710 100T1060 80" />
+                <path d="M650 275Q810 230 1000 270T1400 250" />
+              </svg>
               <div className="intro-flying-bird">
-                <svg viewBox="0 0 100 70" fill="none">
-                  <path d="M16 40 2 49 29 46" fill="#315a36" />
-                  <path
-                    d="M20 37Q41 22 59 32L70 23Q79 18 86 29L96 34 85 38Q80 49 63 45L38 48Z"
-                    fill="#e9be3b"
-                    stroke="#315a36"
-                    strokeWidth="1.2"
-                  />
-                  <path
-                    className="intro-bird-wing"
-                    d="M57 36Q32 9 18 3Q17 25 32 38Q44 45 57 36Z"
-                    fill="#315a36"
-                    stroke="#9aa552"
-                    strokeWidth="1.2"
-                  />
-                  <path d="m86 29 12 5-12 3" fill="#bb7036" />
-                  <circle cx="80" cy="28" r="2" fill="#244b2a" />
-                </svg>
+                <img
+                  className="intro-bird-art"
+                  src="/illustrations/hero/flying-oriole.webp"
+                  alt=""
+                  width={480}
+                  height={320}
+                />
               </div>
             </div>
             <div className="intro-brand">

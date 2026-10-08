@@ -8,6 +8,16 @@ test("welcome bird flies and treetops sway without moving the ground", async ({
     page.getByRole("button", { name: "ENTER THE FARM" }),
   ).toBeEnabled();
   await expect(page.locator(".sound-toggle")).toHaveCount(0);
+  const poster = await page.locator(".intro-poster").boundingBox();
+  expect(poster!.x).toBe(0);
+  expect(poster!.y).toBe(0);
+  expect(poster!.width).toBe(page.viewportSize()!.width);
+  expect(poster!.height).toBe(page.viewportSize()!.height);
+  await expect(page.locator(".intro-bird-art")).toHaveAttribute(
+    "src",
+    /flying-oriole.webp/,
+  );
+  await expect(page.locator(".intro-wind-trails path")).toHaveCount(3);
   const canopy = page.locator(".intro-tree-canopy").first();
   const bird = page.locator(".intro-flying-bird");
   await expect(page.locator(".intro-tree-canopy")).toHaveCount(2);

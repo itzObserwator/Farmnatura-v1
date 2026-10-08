@@ -475,18 +475,18 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring { opacity: 0; }
   position: relative;
 }
 .intro-poster {
-  width: 80vw;
-  height: 80svh;
+  width: 100%;
+  height: 100svh;
   position: relative;
   background: #e8efdd;
   isolation: isolate;
-  overflow: visible;
+  overflow: hidden;
 }
 .intro-poster:before {
   content: "";
   position: absolute;
   inset: 0;
-  border: 1px solid #bacda9;
+  border: 0;
   pointer-events: none;
 }
 .intro-brand {
@@ -547,28 +547,32 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring { opacity: 0; }
   object-fit: contain;
 }
 .intro-tree-canopy {
-  clip-path: inset(0 0 62% 0);
-  transform-origin: 50% 39%;
-  animation: intro-tree-breeze 6s ease-in-out infinite alternate;
+  mask-image: linear-gradient(to bottom, #000 43%, transparent 48%);
+  transform-origin: 50% 60%;
+  animation: intro-tree-breeze 4.8s ease-in-out infinite alternate;
 }
-.intro-tree-ground { clip-path: inset(36% 0 0 0); }
+.intro-tree-ground { mask-image: linear-gradient(to bottom, transparent 41%, #000 46%); }
 .intro-art-right .intro-tree-canopy { animation-delay: -2.5s; animation-duration: 7s; }
 .intro-sky { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 2; }
 .intro-flying-bird {
   position: absolute;
   left: 0;
   top: 12%;
-  width: clamp(36px, 4vw, 65px);
+  width: clamp(75px, 7vw, 130px);
   animation: intro-bird-flight 14s linear infinite;
 }
-.intro-flying-bird svg { display: block; width: 100%; overflow: visible; }
-.intro-bird-wing { transform-origin: 55px 36px; animation: intro-wingbeat 0.65s ease-in-out infinite alternate; }
+.intro-bird-art { display: block; width: 100%; height: auto; animation: intro-bird-glide 1.6s ease-in-out infinite alternate; }
+.intro-wind-trails { position: absolute; inset: 0; width: 100%; height: 60%; fill: none; stroke: #6e9163; stroke-width: 1.2; stroke-linecap: round; opacity: 0.22; }
+.intro-wind-trails path { stroke-dasharray: 100 700; animation: intro-wind-flow 5s linear infinite; }
+.intro-wind-trails path:nth-child(2) { animation-delay: -2s; }
+.intro-wind-trails path:nth-child(3) { animation-delay: -3.5s; }
 .intro-poster.is-paused .intro-tree-canopy,
 .intro-poster.is-paused .intro-flying-bird,
-.intro-poster.is-paused .intro-bird-wing { animation-play-state: paused; }
+.intro-poster.is-paused .intro-bird-art,
+.intro-poster.is-paused .intro-wind-trails path { animation-play-state: paused; }
 @keyframes intro-tree-breeze {
-  from { transform: rotate(-0.8deg) skewX(-0.25deg); }
-  to { transform: rotate(0.9deg) skewX(0.3deg); }
+  from { transform: rotate(-2deg) skewX(-0.65deg); }
+  to { transform: rotate(2.2deg) skewX(0.8deg); }
 }
 @keyframes intro-bird-flight {
   0% { transform: translate3d(-8vw, 15px, 0); }
@@ -576,12 +580,14 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring { opacity: 0; }
   70% { transform: translate3d(60vw, 10px, 0); }
   100% { transform: translate3d(100vw, -8px, 0); }
 }
-@keyframes intro-wingbeat {
-  from { transform: rotate(-15deg) scaleY(1); }
-  to { transform: rotate(22deg) scaleY(0.25); }
+@keyframes intro-bird-glide {
+  from { transform: rotate(-5deg) translateY(-3px); }
+  to { transform: rotate(4deg) translateY(4px); }
 }
+@keyframes intro-wind-flow { to { stroke-dashoffset: -800; } }
 @media (prefers-reduced-motion: reduce) {
-  .intro-tree-canopy, .intro-flying-bird, .intro-bird-wing { animation: none; }
+  .intro-tree-canopy, .intro-flying-bird, .intro-bird-art, .intro-wind-trails path { animation: none; }
+  .intro-wind-trails { display: none; }
   .intro-flying-bird { left: 22%; }
 }
 .intro-land {
@@ -595,7 +601,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring { opacity: 0; }
 .enter-button {
   position: absolute;
   z-index: 5;
-  bottom: -24px;
+  bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
   width: 190px;
@@ -2246,8 +2252,8 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring { opacity: 0; }
     bottom: -45px;
   }
   .intro-poster {
-    width: 90vw;
-    height: 75svh;
+    width: 100%;
+    height: 100svh;
   }
   .intro-brand {
     width: 85%;
@@ -5319,4 +5325,10 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring { opacity: 0; }
   .gallery-film-poster > img {
     transition: none;
   }
+}
+
+@media (max-width: 767px) {
+  .intro-poster .enter-button { bottom: 84px; }
+  .intro-poster .intro-art { bottom: 100px; }
+  .intro-poster .intro-land { height: 30%; }
 }
