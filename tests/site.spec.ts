@@ -240,7 +240,7 @@ test("gallery, FAQ, enquiry and original artwork work", async ({ page }) => {
   await expect(page.locator(".photo-dialog")).toBeVisible();
   await page.getByRole("button", { name: "Close photograph" }).click();
   await page.goto("/about-us");
-  await page.getByRole("button", { name: "Where is Farm Natura?" }).click();
+  await page.getByRole("button", { name: "01 Where is Farm Natura?" }).click();
   await expect(page.locator("#answer-0")).toBeVisible();
   await page
     .getByRole("button", { name: "PLAN YOUR VISIT", exact: true })

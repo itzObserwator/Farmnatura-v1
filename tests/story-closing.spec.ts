@@ -53,7 +53,7 @@ test("estate overview and questions sit before the Our Story visit invitation", 
   await expect(page.locator(".contact-dialog")).not.toBeVisible();
 
   const question = page.getByRole("button", {
-    name: "Where is Farm Natura?",
+    name: "01 Where is Farm Natura?",
     exact: true,
   });
   await question.click();

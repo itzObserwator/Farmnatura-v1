@@ -2,7 +2,8 @@ import ResponsiveImage from "./ResponsiveImage";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Observer } from "gsap/Observer";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, useReducedMotion } from "framer-motion";
+import * as motion from "framer-motion/m";
 import SunlightCanvas from "./SunlightCanvas";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
@@ -328,6 +329,9 @@ export default function ChapterCarousel({
           exit={{ opacity: 0, y: reduced ? 0 : -18 }}
           transition={{ duration: reduced ? 0 : 0.3 }}
         >
+          <span className="chapter-tag">
+            {carouselDestinations[active].tag}
+          </span>
           <Heading>
             <button
               onClick={() => onExplore(carouselDestinations[active].id)}
@@ -369,6 +373,7 @@ export default function ChapterCarousel({
           <ArrowRight size={23} strokeWidth={1} />
         </button>
       </div>
+      <span className="scroll-instruction">SCROLL TO DISCOVER</span>
       <div className="chapter-pagination" aria-live="polite">
         <span className="pagination-orbit" />
         <span className="pagination-mask">

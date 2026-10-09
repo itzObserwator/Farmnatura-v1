@@ -1,6 +1,7 @@
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import type gsap from "gsap";
-import { MotionConfig, motion } from "framer-motion";
+import { MotionConfig, LazyMotion, domAnimation } from "framer-motion";
+import * as motion from "framer-motion/m";
 import BrandLogo from "./components/world/BrandLogo";
 import CursorRing from "./components/world/CursorRing";
 import { Menu } from "lucide-react";
@@ -234,111 +235,113 @@ export default function App({
     (c) => c.id === (route ?? (!intro ? "story" : null)),
   );
   return (
-    <MotionConfig reducedMotion="user">
-      <audio
-        ref={audioRef}
-        src="/audio/farm-natura-theme.m4a"
-        loop
-        preload="none"
-        aria-hidden="true"
-      />
-      <a
-        className="skip-link"
-        href="#main-content"
-        onClick={(e) => {
-          e.preventDefault();
-          document.getElementById("main-content")?.focus();
-        }}
-      >
-        Skip to content
-      </a>
-      {!intro && (
-        <header className={`world-header ${reading ? "is-reading" : ""}`}>
-          <motion.button
-            whileHover={{ scale: 1.025 }}
-            whileTap={{ scale: 0.97 }}
-            className="brand-seal"
-            aria-label="Farm Natura home"
-            onClick={() => navigate(null)}
-          >
-            <BrandLogo />
-          </motion.button>
-          <button
-            className="round-button header-menu"
-            aria-label="Open menu"
-            aria-expanded={menu}
-            onClick={() => setMenu(true)}
-          >
-            <Menu size={21} strokeWidth={1} />
-          </button>
-        </header>
-      )}
-      <main id="main-content" tabIndex={-1}>
-        <Suspense
-          fallback={
-            <div className="view-loading" role="status">
-              Welcome to Farm Natura…
-            </div>
-          }
+    <LazyMotion features={domAnimation} strict>
+      <MotionConfig reducedMotion="user">
+        <audio
+          ref={audioRef}
+          src="/audio/farm-natura-theme.m4a"
+          loop
+          preload="none"
+          aria-hidden="true"
+        />
+        <a
+          className="skip-link"
+          href="#main-content"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById("main-content")?.focus();
+          }}
         >
-          {intro ? (
-            <Intro onEnter={enterWithSound} onComplete={finishEntry} />
-          ) : route === "gallery" ? (
-            <GalleryPage
-              onVisit={() => setVisit(true)}
-              onFarmLife={() => navigate("living")}
-              onNavigate={navigate}
-            />
-          ) : chapter ? (
-            <ChapterPage
-              key={chapter.id}
-              chapter={chapter}
-              blocked={menu || visit}
-              onVisit={() => setVisit(true)}
-              onNavigate={navigate}
-              onGallery={() => navigate("gallery")}
-            />
-          ) : null}
-        </Suspense>
-      </main>
-      <CursorRing />
-      <div className="world-utilities">
-        {soundControlVisible && (
-          <button
-            className={`round-button sound-toggle ${enabled ? "is-on" : ""}`}
-            title={enabled ? "Pause the farm tune" : "Play the farm tune"}
-            aria-label={enabled ? "Turn sound off" : "Turn sound on"}
-            aria-pressed={enabled}
-            onClick={toggle}
+          Skip to content
+        </a>
+        {!intro && (
+          <header className={`world-header ${reading ? "is-reading" : ""}`}>
+            <motion.button
+              whileHover={{ scale: 1.025 }}
+              whileTap={{ scale: 0.97 }}
+              className="brand-seal"
+              aria-label="Farm Natura home"
+              onClick={() => navigate(null)}
+            >
+              <BrandLogo />
+            </motion.button>
+            <button
+              className="round-button header-menu"
+              aria-label="Open menu"
+              aria-expanded={menu}
+              onClick={() => setMenu(true)}
+            >
+              <Menu size={21} strokeWidth={1} />
+            </button>
+          </header>
+        )}
+        <main id="main-content" tabIndex={-1}>
+          <Suspense
+            fallback={
+              <div className="view-loading" role="status">
+                Welcome to Farm Natura…
+              </div>
+            }
           >
-            {[0, 1, 2, 3, 4].map((i) => (
-              <span key={i} />
-            ))}
-          </button>
-        )}
-        {!intro && (chapter || route === "gallery") && !footerVisible && (
-          <span className="page-number">
-            {chapter ? `${chapter.number}/03` : "GALLERY"}
-          </span>
-        )}
-      </div>
-      <MenuPanel
-        open={menu}
-        onClose={() => setMenu(false)}
-        onNavigate={navigate}
-        onHome={() => navigate(null)}
-        onGallery={() => navigate("gallery")}
-        onVisit={() => {
-          setMenu(false);
-          setVisit(true);
-        }}
-      />
-      <ContactDialog open={visit} onClose={() => setVisit(false)} />
-      <div ref={curtain} className="transition-curtain" aria-hidden="true">
-        <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
-          <path ref={curtainShape} />
-        </svg>
-      </div>
-    </MotionConfig>
+            {intro ? (
+              <Intro onEnter={enterWithSound} onComplete={finishEntry} />
+            ) : route === "gallery" ? (
+              <GalleryPage
+                onVisit={() => setVisit(true)}
+                onFarmLife={() => navigate("living")}
+                onNavigate={navigate}
+              />
+            ) : chapter ? (
+              <ChapterPage
+                key={chapter.id}
+                chapter={chapter}
+                blocked={menu || visit}
+                onVisit={() => setVisit(true)}
+                onNavigate={navigate}
+                onGallery={() => navigate("gallery")}
+              />
+            ) : null}
+          </Suspense>
+        </main>
+        <CursorRing />
+        <div className="world-utilities">
+          {soundControlVisible && (
+            <button
+              className={`round-button sound-toggle ${enabled ? "is-on" : ""}`}
+              title={enabled ? "Pause the farm tune" : "Play the farm tune"}
+              aria-label={enabled ? "Turn sound off" : "Turn sound on"}
+              aria-pressed={enabled}
+              onClick={toggle}
+            >
+              {[0, 1, 2, 3, 4].map((i) => (
+                <span key={i} />
+              ))}
+            </button>
+          )}
+          {!intro && (chapter || route === "gallery") && !footerVisible && (
+            <span className="page-number">
+              {chapter ? `${chapter.number}/03` : "GALLERY"}
+            </span>
+          )}
+        </div>
+        <MenuPanel
+          open={menu}
+          onClose={() => setMenu(false)}
+          onNavigate={navigate}
+          onHome={() => navigate(null)}
+          onGallery={() => navigate("gallery")}
+          onVisit={() => {
+            setMenu(false);
+            setVisit(true);
+          }}
+        />
+        <ContactDialog open={visit} onClose={() => setVisit(false)} />
+        <div ref={curtain} className="transition-curtain" aria-hidden="true">
+          <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+            <path ref={curtainShape} />
+          </svg>
+        </div>
+      </MotionConfig>
+    </LazyMotion>
   );
 }

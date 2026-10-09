@@ -1,7 +1,7 @@
 import ResponsiveImage from "./ResponsiveImage";
 import { useRef, useState, useEffect } from "react";
 import PhotoTransition from "./PhotoTransition";
-import { useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import { galleryPhotos } from "../../data/gallery";
 export default function Gallery({
@@ -46,6 +46,9 @@ export default function Gallery({
       data-motion-section="gallery"
     >
       <div className="section-container">
+        <span className="chapter-tag" data-reveal>
+          {variant === "story" ? "A LITTLE LOOK AROUND" : "FROM THE FARM"}
+        </span>
         <div className="gallery-heading" data-reveal>
           <h2>
             {variant === "story" ? (
@@ -90,6 +93,14 @@ export default function Gallery({
           {variant !== "story" && <span className="photo-plus">+</span>}
         </button>
         <div className="gallery-meta">
+          <motion.span
+            key={active}
+            initial={{ opacity: 0, y: reduced ? 0 : 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduced ? 0 : 0.4 }}
+          >
+            {images[active].label}
+          </motion.span>
           <span>
             {String(active + 1).padStart(2, "0")} /{" "}
             {String(images.length).padStart(2, "0")}
@@ -130,6 +141,7 @@ export default function Gallery({
           <X size={19} />
         </button>
         <ResponsiveImage src={images[active].src} alt={images[active].label} />
+        <p>{images[active].label}</p>
         <div className="gallery-arrows">
           <button
             className="paper-button arrow-button"

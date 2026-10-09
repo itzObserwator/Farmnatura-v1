@@ -1,10 +1,11 @@
 import ResponsiveImage from "./ResponsiveImage";
-import { motion, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
+import * as motion from "framer-motion/m";
 import { ArrowUpRight } from "lucide-react";
 import { chapters, type ChapterId } from "../../data/chapters";
 import { contact } from "../../data/content";
 import BrandLogo from "./BrandLogo";
-import { routePaths } from "../../data/routes";
+import { routePaths } from '../../data/routes';
 
 /** Shared illustrated closing section for the chapters and gallery. */
 export default function FarmFooter({
@@ -34,6 +35,7 @@ export default function FarmFooter({
           transition={{ duration: 0.7 }}
         >
           <div>
+            <span className="chapter-tag">A LIFE ROOTED IN NATURE</span>
             <h2>
               Rooted in nature.
               <br />
@@ -53,6 +55,7 @@ export default function FarmFooter({
               alt=""
               loading="lazy"
             />
+            <span className="footer-field-note">Good days begin outdoors.</span>
           </div>
         </motion.div>
         <svg
@@ -66,12 +69,14 @@ export default function FarmFooter({
         <div className="footer-columns">
           <div className="footer-brand">
             <BrandLogo className="footer-logo" />
+            <span className="footer-label">BY PLANET GREEN</span>
             <p>
               Natural farming. Shared harvests.
               <br />A little closer to the land.
             </p>
           </div>
           <nav className="footer-chapters" aria-label="Footer chapters">
+            <span className="footer-label">WANDER A LITTLE</span>
             {[
               ...chapters.map(({ id, title }) => ({ id, title })),
               { id: "gallery" as const, title: "Gallery" },
@@ -91,6 +96,7 @@ export default function FarmFooter({
             ))}
           </nav>
           <div className="footer-contact">
+            <span className="footer-label">LET’S KEEP IN TOUCH</span>
             <a className="footer-phone" href={`tel:${contact.tel}`}>
               {contact.phone}
               <ArrowUpRight size={18} strokeWidth={1.2} />
@@ -116,6 +122,9 @@ export default function FarmFooter({
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} FARM NATURA</span>
+          <span className="footer-bottom-note">
+            <span aria-hidden="true">✳</span> GROW SLOW. LIVE WELL.
+          </span>
         </div>
       </div>
     </footer>

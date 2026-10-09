@@ -1,6 +1,6 @@
 @font-face {
   font-family: Voyage;
-  src: url("/fonts/voyage-regular.otf") format("opentype");
+  src: url("/fonts/voyage-numbers.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -811,7 +811,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
   text-align: center;
   font-size: 11px;
   letter-spacing: 0.6px;
-  transform: rotate(-4deg);
+  transform: none;
 }
 .entrance-status {
   position: absolute;
@@ -1251,7 +1251,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 }
 .gallery-meta {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   font-size: 12px;
   margin-top: 18px;
 }
@@ -3304,14 +3304,14 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
   font-size: 64px;
   line-height: 1.05;
   letter-spacing: -1.8px;
-  transition: opacity 0.25s;
+  transition: color 0.25s;
 }
 .story-index-list button[aria-pressed="false"] {
-  opacity: 0.3;
+  color: #59755b;
 }
 .story-index-list button:hover,
 .story-index-list button:focus-visible {
-  opacity: 1;
+  color: var(--ink);
 }
 .story-index-number {
   font-family: Lato, Arial, sans-serif;
@@ -5180,7 +5180,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 }
 .gallery-viewer-caption {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 20px;
   font-size: 14px;
   margin-top: 20px;
@@ -5965,7 +5965,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
     height: auto;
     max-height: calc(100svh - 104px);
     display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
     gap: clamp(28px, 4svh, 44px);
   }
   .story-index-panel > .chapter-tag {
@@ -6218,7 +6218,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 }
 .story-question-number {
   font-size: 12px;
-  color: #637b57;
+  color: #59755b;
 }
 .story-question-arrow {
   display: grid;

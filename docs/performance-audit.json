@@ -16,15 +16,15 @@
       "metrics": {
         "first-contentful-paint": {
           "value": 2931.2970000000005,
-          "display": "2.9\u00a0s"
+          "display": "2.9 s"
         },
         "largest-contentful-paint": {
           "value": 5558.396000000004,
-          "display": "5.6\u00a0s"
+          "display": "5.6 s"
         },
         "total-blocking-time": {
           "value": 159,
-          "display": "160\u00a0ms"
+          "display": "160 ms"
         },
         "cumulative-layout-shift": {
           "value": 0,
@@ -47,15 +47,15 @@
       "metrics": {
         "first-contentful-paint": {
           "value": 876.64565,
-          "display": "0.9\u00a0s"
+          "display": "0.9 s"
         },
         "largest-contentful-paint": {
           "value": 2716.9369500000003,
-          "display": "2.7\u00a0s"
+          "display": "2.7 s"
         },
         "total-blocking-time": {
           "value": 41.5,
-          "display": "40\u00a0ms"
+          "display": "40 ms"
         },
         "cumulative-layout-shift": {
           "value": 0,
@@ -78,15 +78,15 @@
       "metrics": {
         "first-contentful-paint": {
           "value": 228.2932,
-          "display": "0.2\u00a0s"
+          "display": "0.2 s"
         },
         "largest-contentful-paint": {
           "value": 566.8796,
-          "display": "0.6\u00a0s"
+          "display": "0.6 s"
         },
         "total-blocking-time": {
           "value": 0,
-          "display": "0\u00a0ms"
+          "display": "0 ms"
         },
         "cumulative-layout-shift": {
           "value": 0,
@@ -95,5 +95,126 @@
       },
       "initialJavaScriptTransferBytes": 137617
     }
-  ]
+  ],
+  "reportFollowup": {
+    "date": "2026-10-09",
+    "uploadedReport": {
+      "performance": 89,
+      "accessibility": 96,
+      "best-practices": 96,
+      "seo": 100,
+      "extensionWarning": true
+    },
+    "results": [
+      {
+        "profile": "clean deployed mobile baseline",
+        "url": "https://farmnatura.vercel.app/about-us",
+        "lighthouseVersion": "13.5.0",
+        "fetchTime": "2026-10-09T12:48:37.510Z",
+        "scores": {
+          "performance": 97,
+          "accessibility": 96,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": {
+            "value": 1490.79,
+            "display": "1.5 s"
+          },
+          "largest-contentful-paint": {
+            "value": 2368.79,
+            "display": "2.4 s"
+          },
+          "total-blocking-time": {
+            "value": 0,
+            "display": "0 ms"
+          },
+          "cumulative-layout-shift": {
+            "value": 0.05095397315969994,
+            "display": "0.051"
+          }
+        },
+        "diagnostics": {
+          "unusedJavaScriptBytes": 74945,
+          "unusedCssBytes": 14102,
+          "imageDeliveryPassed": false,
+          "consoleErrors": []
+        }
+      },
+      {
+        "profile": "local production mobile",
+        "url": "http://127.0.0.1:4173/about-us",
+        "lighthouseVersion": "13.5.0",
+        "fetchTime": "2026-10-09T13:13:43.685Z",
+        "scores": {
+          "performance": 96,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": {
+            "value": 838.40925,
+            "display": "0.8 s"
+          },
+          "largest-contentful-paint": {
+            "value": 2713.22775,
+            "display": "2.7 s"
+          },
+          "total-blocking-time": {
+            "value": 0,
+            "display": "0 ms"
+          },
+          "cumulative-layout-shift": {
+            "value": 0,
+            "display": "0"
+          }
+        },
+        "diagnostics": {
+          "unusedJavaScriptBytes": 51025,
+          "unusedCssBytes": 11715,
+          "imageDeliveryPassed": true,
+          "consoleErrors": []
+        }
+      },
+      {
+        "profile": "local production desktop",
+        "url": "http://127.0.0.1:4173/about-us",
+        "lighthouseVersion": "13.5.0",
+        "fetchTime": "2026-10-09T13:15:51.665Z",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": {
+            "value": 239.64965,
+            "display": "0.2 s"
+          },
+          "largest-contentful-paint": {
+            "value": 570.94895,
+            "display": "0.6 s"
+          },
+          "total-blocking-time": {
+            "value": 0,
+            "display": "0 ms"
+          },
+          "cumulative-layout-shift": {
+            "value": 0,
+            "display": "0"
+          }
+        },
+        "diagnostics": {
+          "unusedJavaScriptBytes": 51143,
+          "unusedCssBytes": 13162,
+          "imageDeliveryPassed": true,
+          "consoleErrors": []
+        }
+      }
+    ],
+    "note": "Local fixes are not deployed. Residual unused-code estimates include interactive and below-fold code; Trusted Types enforcement remains a manual compatibility review."
+  }
 }

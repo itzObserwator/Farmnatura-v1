@@ -1,6 +1,7 @@
 import ResponsiveImage from "./ResponsiveImage";
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
+import * as motion from "framer-motion/m";
 import BrandLogo from "./BrandLogo";
 import { chapters } from "../../data/chapters";
 import HeroBotanicals from "./HeroBotanicals";
@@ -191,6 +192,7 @@ export default function Intro({
           </div>
         </div>
         <div className="intro-brand">
+          <span className="mini-label">PLANET GREEN PRESENTS</span>
           <motion.h1
             initial={false}
             animate={{ opacity: 1, y: 0 }}
@@ -201,6 +203,7 @@ export default function Intro({
             <em>the land.</em>
           </motion.h1>
           <BrandLogo className="intro-logo" />
+          <p>ROOTED IN NATURE. GROWN TOGETHER.</p>
         </div>
         <svg
           className="intro-land"

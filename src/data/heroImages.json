@@ -1,0 +1,11 @@
+{
+  "widths": [120, 180, 240, 360, 480, 800],
+  "sizes": {
+    "mango-branch": "(max-width: 767px) 130px, (max-width: 1199px) 190px, (min-width: 1700px) 290px, 235px",
+    "marigold-stem": "(max-width: 767px) 190px, (min-width: 1700px) 390px, 330px",
+    "native-foliage": "(max-width: 767px) 235px, (min-width: 1700px) 470px, 400px",
+    "orchard-bird": "(max-width: 767px) 80px, (max-width: 1199px) 150px, (min-width: 1700px) 220px, 185px",
+    "okra-branch": "(max-width: 767px) 95px, (min-width: 1700px) 390px, 300px"
+  },
+  "storyOkraSizes": "(max-width: 767px) 95px, clamp(180px, 14vw, 280px)"
+}

@@ -4,9 +4,11 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { chapters, type Chapter, type ChapterId } from "../../data/chapters";
 import { BotanicalMotif } from "./BotanicalMotifs";
 import { useChapterAnimations } from "../../hooks/useChapterAnimations";
-import FarmLifeLayout from "./FarmLifeLayout";
+import {
+  FarmLifeLayoutView as FarmLifeLayout,
+  FarmingLayoutView as NaturalFarmingLayout,
+} from "./DeferredViews";
 import RevealText from "./RevealText";
-import NaturalFarmingLayout from "./NaturalFarmingLayout";
 import NextChapter from "./NextChapter";
 import HeroBotanicals from "./HeroBotanicals";
 import OurStoryLayout from "./OurStoryLayout";
@@ -37,6 +39,7 @@ export default function ChapterPage({
           </div>
         </HeroBackdrop>
         <div className="hero-title">
+          <span className="chapter-tag">{chapter.tag}</span>
           <h1>
             {chapter.hero.map((line) => (
               <span className="title-line" key={line}>
@@ -60,7 +63,7 @@ export default function ChapterPage({
           >
             <ResponsiveImage
               className="hero-scroll-art"
-              srcSet="/illustrations/hero/marigold-stem-120.webp 120w, /illustrations/hero/marigold-stem-240.webp 240w"
+              srcSet="/illustrations/hero/marigold-stem-120.avif 120w, /illustrations/hero/marigold-stem-240.avif 240w"
               sizes="45px"
               src="/illustrations/hero/marigold-stem.webp"
               alt=""
@@ -84,6 +87,9 @@ export default function ChapterPage({
         style={{ backgroundColor: chapter.color }}
       >
         <BotanicalMotif kind="sprig" className="invitation-sprig" />
+        <span className="chapter-tag" data-reveal>
+          A NEW CHAPTER STARTS WITH A WALK
+        </span>
         <h2 data-reveal>
           A little more land.
           <br />A little more life.

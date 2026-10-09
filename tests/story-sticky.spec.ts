@@ -48,16 +48,16 @@ test("desktop story panel fits the viewport and follows the scrolling chapter", 
         .toBe(true);
       await expect
         .poll(() =>
-          buttons.nth(index).evaluate((el) => getComputedStyle(el).opacity),
+          buttons.nth(index).evaluate((el) => getComputedStyle(el).color),
         )
-        .toBe("1");
+        .toBe("rgb(36, 77, 38)");
       await expect
         .poll(() =>
           buttons
             .nth((index + 1) % 6)
-            .evaluate((el) => getComputedStyle(el).opacity),
+            .evaluate((el) => getComputedStyle(el).color),
         )
-        .toBe("0.3");
+        .toBe("rgb(89, 117, 91)");
     }
     await page.screenshot({
       path: info.outputPath(`story-desktop-${viewport.width}.png`),

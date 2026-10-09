@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { gzipSync } from "node:zlib";
+import deployment from "./vercel.json" with { type: "json" };
 export default defineConfig({
   resolve: {
     alias: [{ find: /^lucide-react$/, replacement: resolve("src/icons.ts") }],
@@ -95,6 +96,8 @@ export default defineConfig({
       name: "prerendered-clean-urls",
       configurePreviewServer(server) {
         server.middlewares.use((req, res, next) => {
+          for (const { key, value } of deployment.headers[0].headers)
+            res.setHeader(key, value);
           const pathname = (req.url ?? "/").split("?")[0].replace(/\/$/, "");
           if (
             !/^\/(about-us|natural-farming|farmhouses-for-sale-in-hyderabad|gallery)$/.test(

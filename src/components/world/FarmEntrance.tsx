@@ -1,6 +1,7 @@
 import ResponsiveImage from "./ResponsiveImage";
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
+import * as motion from "framer-motion/m";
 import BrandLogo from "./BrandLogo";
 
 const cropSprites = [
@@ -50,6 +51,7 @@ export default function FarmEntrance({
     >
       <div className="entrance-header">
         <BrandLogo />
+        <span>PLANET GREEN PRESENTS</span>
       </div>
       <div className="entrance-world">
         <div className="entrance-field-scene" aria-hidden="true">
@@ -203,6 +205,9 @@ export default function FarmEntrance({
             src="/illustrations/hero/orchard-bird.webp"
             alt=""
           />
+          <span className="entrance-art-note">
+            Experience Loading...
+          </span>
         </div>
       </div>
       <div className="entrance-status">
