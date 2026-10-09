@@ -56,9 +56,6 @@ export default function FarmingExplorer() {
         loading="lazy"
       />
       <div className="section-container">
-        <span className="chapter-tag" data-farming-reveal>
-          WORKING WITH NATURE
-        </span>
         <div className="farming-feature-stage">
           <div className="farming-feature-heading">
             <h2 data-farming-reveal>
@@ -93,7 +90,6 @@ export default function FarmingExplorer() {
                         sizes="(max-width: 767px) 220px, 280px"
                       />
                     </div>
-                    <span className="chapter-tag">{practice.tag}</span>
                     <h3 id={`practice-heading-${index}`}>
                       {practice.headline}
                     </h3>

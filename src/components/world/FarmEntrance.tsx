@@ -50,7 +50,6 @@ export default function FarmEntrance({
     >
       <div className="entrance-header">
         <BrandLogo />
-        <span>PLANET GREEN PRESENTS</span>
       </div>
       <div className="entrance-world">
         <div className="entrance-field-scene" aria-hidden="true">
@@ -204,9 +203,6 @@ export default function FarmEntrance({
             src="/illustrations/hero/orchard-bird.webp"
             alt=""
           />
-          <span className="entrance-art-note">
-            Restoring the land, season by season.
-          </span>
         </div>
       </div>
       <div className="entrance-status">

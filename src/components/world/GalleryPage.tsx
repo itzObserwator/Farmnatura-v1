@@ -98,7 +98,6 @@ export default function GalleryPage({
           </div>
         </HeroBackdrop>
         <div className="hero-title">
-          <span className="chapter-tag">THE FARM NATURA JOURNAL</span>
           <h1>
             <span className="title-line">
               <RevealText text="LIFE, AS" />
@@ -123,13 +122,9 @@ export default function GalleryPage({
             EXPLORE THE GALLERY <ArrowDown size={17} strokeWidth={1} />
           </button>
         </div>
-        <span className="gallery-hero-footnote">
-          KANDUKUR, HYDERABAD · FIELD NOTES
-        </span>
       </section>
       <section id="gallery-collection" className="gallery-collection">
         <div className="gallery-collection-intro" data-gallery-reveal>
-          <span className="chapter-tag">A LITTLE LOOK AROUND</span>
           <h2>
             Some moments deserve
             <br />a little longer.
@@ -203,9 +198,6 @@ export default function GalleryPage({
               </button>
             ))}
           </div>
-          <span className="gallery-collection-note">
-            COLLECTED FROM THE FARM
-          </span>
         </div>
         <div
           id="gallery-collection-panel"
@@ -268,15 +260,6 @@ export default function GalleryPage({
                           <Plus size={22} strokeWidth={1} />
                         </span>
                       </motion.button>
-                      <figcaption>
-                        <span>
-                          <small>{photo.category}</small>
-                          {photo.title}
-                        </span>
-                        <span className="gallery-photo-number">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                      </figcaption>
                     </motion.figure>
                   ))}
                 </AnimatePresence>
@@ -330,7 +313,6 @@ export default function GalleryPage({
                       </span>
                     </button>
                     <figcaption>
-                      <small>FILM {String(index + 1).padStart(2, "0")}</small>
                       <h3>{film.title}</h3>
                     </figcaption>
                   </motion.figure>
@@ -357,7 +339,6 @@ export default function GalleryPage({
           height="800"
           loading="lazy"
         />
-        <span className="chapter-tag">THE BEST VIEW IS FROM HERE</span>
         <h2>
           Step out of the picture.
           <br />
@@ -424,7 +405,6 @@ export default function GalleryPage({
               <PhotoTransition src={selectedPhoto.src} />
             </div>
             <div className="gallery-viewer-caption" aria-live="polite">
-              <span>{selectedPhoto.title}</span>
               <span>
                 {String((selected ?? 0) + 1).padStart(2, "0")} /{" "}
                 {String(photos.length).padStart(2, "0")}
@@ -459,7 +439,6 @@ export default function GalleryPage({
               referrerPolicy="strict-origin-when-cross-origin"
             />
             <div className="gallery-viewer-caption">
-              <span>{selectedVideo.title}</span>
               <a href={selectedVideo.url} target="_blank" rel="noreferrer">
                 WATCH ON YOUTUBE ↗
               </a>

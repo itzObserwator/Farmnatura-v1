@@ -37,7 +37,6 @@ export default function ChapterPage({
           </div>
         </HeroBackdrop>
         <div className="hero-title">
-          <span className="chapter-tag">{chapter.tag}</span>
           <h1>
             {chapter.hero.map((line) => (
               <span className="title-line" key={line}>
@@ -85,9 +84,6 @@ export default function ChapterPage({
         style={{ backgroundColor: chapter.color }}
       >
         <BotanicalMotif kind="sprig" className="invitation-sprig" />
-        <span className="chapter-tag" data-reveal>
-          A NEW CHAPTER STARTS WITH A WALK
-        </span>
         <h2 data-reveal>
           A little more land.
           <br />A little more life.

@@ -18,9 +18,6 @@ export default function NaturalFarmingLayout({
         id="chapter-intro"
         data-motion-section="farming-about"
       >
-        <span className="chapter-tag" data-farming-reveal>
-          ABOUT NATURAL FARMING
-        </span>
         <h2 data-farming-reveal>
           <RevealText text="Care for the soil, and the soil cares for us." />
         </h2>
@@ -88,15 +85,9 @@ export default function NaturalFarmingLayout({
             alt=""
             loading="lazy"
           />
-          <figcaption>
-            A living landscape. A season of possibilities.
-          </figcaption>
         </figure>
         <div className="farming-discover-split">
           <div className="farming-discover-copy">
-            <span className="chapter-tag" data-farming-reveal>
-              LIFE BETWEEN THE ROWS
-            </span>
             <h3 data-farming-reveal>
               <RevealText text="Good things grow together." />
             </h3>

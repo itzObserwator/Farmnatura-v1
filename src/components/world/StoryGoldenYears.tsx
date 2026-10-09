@@ -9,9 +9,6 @@ export default function StoryGoldenYears() {
       aria-labelledby="golden-years-title"
     >
       <header>
-        <span className="chapter-tag" data-text-reveal>
-          <RevealText text="THE GOLDEN YEARS" />
-        </span>
         <h2 id="golden-years-title" data-text-reveal>
           <RevealText text="An ideal way to spend your golden years." />
         </h2>
@@ -49,11 +46,8 @@ export default function StoryGoldenYears() {
           <aside
             className="story-golden-advantage"
             data-reveal
-            aria-labelledby="golden-years-advantage"
+            aria-label="Airport proximity"
           >
-            <h3 id="golden-years-advantage" className="chapter-tag">
-              ADVANTAGE
-            </h3>
             <p data-reveal>
               Its nearness to the International Airport makes it a natural
               choice for NRI families and elders who want their years healthy,

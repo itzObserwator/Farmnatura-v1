@@ -22,9 +22,6 @@ export default function FarmLifeLayout({
         id="chapter-intro"
         data-motion-section="life-introduction"
       >
-        <span className="chapter-tag" data-reveal>
-          ABOUT FARM LIFE
-        </span>
         <h2 data-text-reveal>
           <RevealText text="A little more space for the things that matter. For family, for nature, and for a life that grows with you." />
         </h2>
@@ -66,7 +63,6 @@ export default function FarmLifeLayout({
         data-motion-section="life-weekends"
       >
         <div className="life-weekend-copy" data-reveal>
-          <span className="chapter-tag">TIME TOGETHER</span>
           <h3>A weekend with room to breathe.</h3>
           <p>
             Return to the farmhouse, share a meal, and enjoy a slower day with

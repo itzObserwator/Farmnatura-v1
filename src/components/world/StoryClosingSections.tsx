@@ -20,9 +20,6 @@ export default function StoryClosingSections({
       <section className="story-estate" aria-labelledby="story-estate-title">
         <div className="story-estate-intro">
           <header>
-            <span className="chapter-tag" data-text-reveal>
-              <RevealText text="GROWING A FULLER LIFE" />
-            </span>
             <h2 id="story-estate-title" data-text-reveal>
               <RevealText text="A little closer to the land. A little closer to each other." />
             </h2>
@@ -67,11 +64,6 @@ export default function StoryClosingSections({
           </dl>
         </div>
         <div className="story-estate-footnote">
-          <p>
-            Figures and travel times are as described by Farm Natura; journeys
-            vary with route and traffic. The three values are Indulge, Involve
-            and Impact nature. Confirm current maintenance terms with our team.
-          </p>
           <a
             className="paper-button"
             href="https://www.google.com/maps/search/?api=1&query=Farm+Natura+Kandukur"
@@ -88,9 +80,6 @@ export default function StoryClosingSections({
         aria-labelledby="story-questions-title"
       >
         <header className="story-questions-heading">
-          <span className="chapter-tag" data-text-reveal>
-            <RevealText text="A LITTLE MORE TO KNOW" />
-          </span>
           <h2 id="story-questions-title" data-text-reveal>
             <RevealText text="Before you put down roots." />
           </h2>

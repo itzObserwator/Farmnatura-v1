@@ -60,9 +60,6 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
         id="chapter-intro"
         data-motion-section="introduction"
       >
-        <span className="chapter-tag" data-reveal>
-          THE JOY OF FARM NATURA
-        </span>
         <h2 data-text-reveal>
           <RevealText text="Find a little more life between the soil and the sky." />
         </h2>
@@ -130,9 +127,6 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
           />
         </div>
         <div className="story-second-copy">
-          <span className="chapter-tag" data-reveal>
-            A LIFE THAT GROWS WITH YOU
-          </span>
           <h2 data-text-reveal>
             <RevealText text="A place to put down roots. A little space to simply breathe." />
           </h2>
@@ -151,7 +145,6 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
         aria-label="Discover our story"
       >
         <div className="story-index-introduction">
-          <span className="chapter-tag">OUR STORY, CHAPTER BY CHAPTER</span>
           <p>
             Good living starts with the land. Discover the people, practices and
             everyday pleasures that make Farm Natura.
@@ -181,7 +174,6 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
           id="story-index-panel"
           ref={panelRef}
         >
-          <span className="chapter-tag">OUR STORY, CHAPTER BY CHAPTER</span>
           <p className="story-index-about">
             Good living starts with the land. Discover the people, practices and
             everyday pleasures that make Farm Natura.

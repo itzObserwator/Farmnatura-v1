@@ -1251,7 +1251,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 }
 .gallery-meta {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   font-size: 12px;
   margin-top: 18px;
 }
@@ -5180,7 +5180,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 }
 .gallery-viewer-caption {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 20px;
   font-size: 14px;
   margin-top: 20px;
@@ -5965,7 +5965,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
     height: auto;
     max-height: calc(100svh - 104px);
     display: grid;
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
     gap: clamp(10px, 1.5svh, 18px);
   }
   .story-index-panel > .chapter-tag {
