@@ -18,7 +18,7 @@ export const chapters = [
       "By Planet Green Infra, Farm Natura brings natural farming and family life together. Dedicated agronomy staff care for everyday farming, leaving you more time to enjoy the land and the people you share it with.",
     section: "OUR ROOTS",
     statement: "Indulge. Involve. Impact nature.",
-    photo: "/images/story-farmland.webp",
+    photo: "/images/gallery/farmnatura-upscaled-1.webp",
   },
   {
     id: "farming",
@@ -38,7 +38,7 @@ export const chapters = [
       "Farm Natura describes more than six years of soil revitalisation and ongoing attention to soil health and microbiology. Visit the estate to meet the team and understand how the managed farming programme works.",
     section: "NATURALLY, TOGETHER",
     statement: "Rooted in living soil. Grown with care.",
-    photo: "/images/farm-estate.webp",
+    photo: "/images/gallery/farmnatura-upscaled-3.webp",
   },
   {
     id: "living",
@@ -58,7 +58,7 @@ export const chapters = [
       "Set along the Srisailam Highway corridor in Kandukur, the estate is close enough to return to on a weekend. Explore the farmhouse living concept, current availability and managed maintenance terms with the Farm Natura team.",
     section: "COME, WALK THE LAND",
     statement: "Close enough to visit. Far enough to breathe.",
-    photo: "/images/farmhouse.webp",
+    photo: "/images/gallery/farmnatura-upscaled-2.webp",
   },
 ] as const;
 export type Chapter = (typeof chapters)[number];

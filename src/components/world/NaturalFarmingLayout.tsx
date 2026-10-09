@@ -28,8 +28,9 @@ export default function NaturalFarmingLayout({
           <div className="farming-about-art">
             <ResponsiveImage
               className="farming-about-photo"
-              src="/images/farm-estate.webp"
-              alt="Farmhouses and flowering crops at Farm Natura"
+              src="/images/gallery/farmnatura-upscaled-3.webp"
+              sizes="(max-width: 767px) calc(100vw - 44px), 45vw"
+              alt="A tractor beside growing rows and cultivated soil at Farm Natura"
               loading="lazy"
             />
             <LivingSurface
@@ -73,10 +74,10 @@ export default function NaturalFarmingLayout({
         <figure className="farming-panorama">
           <div className="farming-photo-mask" data-farming-image>
             <ResponsiveImage
-              src="/images/natural-farm-aerial.webp"
-              alt="Generated aerial impression of vegetable beds and banana plants in a natural-farming landscape"
-              width={1942}
-              height={809}
+              src="/images/gallery/farmnatura-upscaled-5.webp"
+              alt="Aerial view of banana plots, farmhouses and country paths at Farm Natura"
+              width={1254}
+              height={1254}
               sizes="(min-width: 1536px) 1440px, (min-width: 768px) calc(100vw - 96px), calc(100vw - 44px)"
               loading="lazy"
             />
@@ -109,14 +110,16 @@ export default function NaturalFarmingLayout({
           <div className="farming-discover-art">
             <ResponsiveImage
               className="farming-detail-photo farming-detail-first"
-              src="/images/living-fields.webp"
-              alt="Overhead view of green crop beds and banana trees at Farm Natura"
+              src="/images/gallery/farmnatura-upscaled-5.webp"
+              sizes="(max-width: 767px) 70vw, 30vw"
+              alt="Banana plots and farmhouses seen from above at Farm Natura"
               loading="lazy"
             />
             <ResponsiveImage
               className="farming-detail-photo farming-detail-second"
-              src="/images/sunflowers.webp"
-              alt="Sunflowers and banana trees growing together at Farm Natura"
+              src="/images/gallery/farmnatura-upscaled-1.webp"
+              sizes="(max-width: 767px) 60vw, 25vw"
+              alt="Cultivated fields, orchard rows and the farm community from above"
               loading="lazy"
             />
             <LivingSurface className="farming-bird-surface" color="#dce8cc" />

@@ -1,10 +1,92 @@
 import ResponsiveImage from "./ResponsiveImage";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import BrandLogo from "./BrandLogo";
 import { chapters } from "../../data/chapters";
 import HeroBotanicals from "./HeroBotanicals";
 import FarmEntrance from "./FarmEntrance";
+// A continuous displacement field bends only the crown. The neutral lower
+// half keeps the people, baskets and ground at their original pixels.
+const breezeMap = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><defs><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8000"/><stop offset="0.36" stop-color="#b08000"/><stop offset="0.47" stop-color="#808000"/><stop offset="1" stop-color="#808000"/></linearGradient></defs><rect width="100" height="100" fill="url(#b)"/></svg>`)}`;
+
+function TreeBreeze({ index, active }: { index: number; active: boolean }) {
+  const displacement = useRef<SVGFEDisplacementMapElement>(null);
+  const filterSvg = useRef<SVGSVGElement>(null);
+  useEffect(() => {
+    if (!active) {
+      displacement.current?.setAttribute("scale", "0");
+      return;
+    }
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    let last = 0;
+    let strength = 0;
+    const art = filterSvg.current?.parentElement?.querySelector("img");
+    const measure = () => {
+      // Match the original broad sway, proportional to the artwork size.
+      // Displacement peaks at half the scale: about 4% of the tree height.
+      strength = (art?.clientHeight ?? 0) * 0.08;
+    };
+    const observer = new ResizeObserver(measure);
+    if (art) observer.observe(art);
+    measure();
+    const tick = (time: number) => {
+      if (time - last > 32) {
+        const wave = Math.sin(time / (index ? 2200 : 1900) + index * 2.5);
+        displacement.current?.setAttribute("scale", String(wave * strength));
+        last = time;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    const updatePreference = () => {
+      cancelAnimationFrame(frame);
+      if (preference.matches) displacement.current?.setAttribute("scale", "0");
+      else frame = requestAnimationFrame(tick);
+    };
+    updatePreference();
+    preference.addEventListener("change", updatePreference);
+    return () => {
+      cancelAnimationFrame(frame);
+      preference.removeEventListener("change", updatePreference);
+      observer.disconnect();
+    };
+  }, [active, index]);
+  return (
+    <svg ref={filterSvg} className="intro-breeze-filter" aria-hidden="true">
+      <defs>
+        <filter
+          id={`tree-breeze-${index}`}
+          x="0"
+          y="0"
+          width="1"
+          height="1"
+          colorInterpolationFilters="sRGB"
+        >
+          <feImage
+            href={breezeMap}
+            width="100%"
+            height="100%"
+            preserveAspectRatio="none"
+            result="breeze"
+          />
+          <feComponentTransfer in="breeze" result="field">
+            <feFuncR type="linear" slope="1" intercept={-1 / 510} />
+            <feFuncG type="linear" slope="1" intercept={-1 / 510} />
+          </feComponentTransfer>
+          <feDisplacementMap
+            ref={displacement}
+            in="SourceGraphic"
+            in2="field"
+            scale="0"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
+    </svg>
+  );
+}
+
 export default function Intro({
   onEnter,
   onComplete,
@@ -78,15 +160,10 @@ export default function Intro({
             key={chapter.id}
             className={`intro-art intro-art-${index === 0 ? "left" : "right"}`}
           >
+            <TreeBreeze index={index} active={!reduced && !paused} />
             <ResponsiveImage
-              className="intro-tree-canopy"
-              src={chapter.art}
-              alt=""
-              aria-hidden="true"
-              sizes="(max-width: 767px) 52vw, 32vw"
-            />
-            <ResponsiveImage
-              className="intro-tree-ground"
+              style={{ filter: `url(#tree-breeze-${index})` }}
+              className="intro-tree-art"
               src={chapter.art}
               alt={chapter.alt}
               sizes="(max-width: 767px) 52vw, 32vw"

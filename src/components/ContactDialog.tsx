@@ -132,7 +132,7 @@ export default function ContactDialog({
             </select>
           </div>
           <button className="button dark" type="submit">
-            Continue on WhatsApp <ArrowUpRight size={18} />
+            Submit enquiry <ArrowUpRight size={18} />
           </button>
           <a className="call-link" href={`tel:${contact.tel}`}>
             Or call {contact.phone}

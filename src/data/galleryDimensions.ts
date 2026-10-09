@@ -19,6 +19,26 @@ export const galleryDimensions: Record<
     width: 487,
     height: 480,
   },
+  "farmnatura-upscaled-1": {
+    width: 1254,
+    height: 1254,
+  },
+  "farmnatura-upscaled-2": {
+    width: 1254,
+    height: 1254,
+  },
+  "farmnatura-upscaled-3": {
+    width: 1254,
+    height: 1254,
+  },
+  "farmnatura-upscaled-4": {
+    width: 1254,
+    height: 1254,
+  },
+  "farmnatura-upscaled-5": {
+    width: 1254,
+    height: 1254,
+  },
   fnsi1: {
     width: 1280,
     height: 853,

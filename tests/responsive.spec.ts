@@ -118,7 +118,7 @@ test("touch dialogs remain usable when scrolled and when screen height shrinks",
     page.getByRole("button", { name: "Close enquiry" }),
   ).toBeInViewport();
   await expect(
-    page.getByRole("button", { name: "Continue on WhatsApp" }),
+    page.getByRole("button", { name: "Submit enquiry" }),
   ).toBeInViewport();
   expect(
     await page
@@ -245,7 +245,7 @@ test("mobile gallery keeps the selected thumbnail reachable when wrapping", asyn
     .getByRole("button", { name: "Previous photograph", exact: true })
     .tap();
   const selected = gallery.locator('.gallery-dots button[aria-pressed="true"]');
-  await expect(selected).toHaveAttribute("aria-label", "Show photograph 20");
+  await expect(selected).toHaveAttribute("aria-label", "Show photograph 25");
   expect(
     await selected.evaluate((el) => {
       const box = el.getBoundingClientRect();

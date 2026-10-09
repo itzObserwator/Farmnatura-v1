@@ -37,6 +37,31 @@ const collection: [string, string, Exclude<GalleryCategory, "All moments">][] =
     ["fnsi19", "Tomatoes ripening on the vine", "Land & harvest"],
     ["fnsi20", "A water lily on the pond", "Farm life"],
     ["fnsi21", "An aerial view of the farm community", "Farm life"],
+    [
+      "farmnatura-upscaled-1",
+      "Farm fields and the community from above",
+      "Land & harvest",
+    ],
+    [
+      "farmnatura-upscaled-2",
+      "The farm courtyard and blue-roofed pavilion",
+      "Farm life",
+    ],
+    [
+      "farmnatura-upscaled-3",
+      "A tractor beside the growing rows",
+      "Land & harvest",
+    ],
+    [
+      "farmnatura-upscaled-4",
+      "Field paths beneath an open sky",
+      "Land & harvest",
+    ],
+    [
+      "farmnatura-upscaled-5",
+      "Banana plots and farmhouses from above",
+      "Land & harvest",
+    ],
   ];
 export const galleryPhotos = collection.map(([id, title, category]) => ({
   id,

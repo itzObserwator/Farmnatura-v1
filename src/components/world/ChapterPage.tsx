@@ -1,10 +1,7 @@
 import ResponsiveImage from "./ResponsiveImage";
-import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import FarmFooter from "./FarmFooter";
-import { ArrowDown, ArrowUpRight, Plus, Minus } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { chapters, type Chapter, type ChapterId } from "../../data/chapters";
-import { faqs } from "../../data/content";
 import { BotanicalMotif } from "./BotanicalMotifs";
 import { useChapterAnimations } from "../../hooks/useChapterAnimations";
 import FarmLifeLayout from "./FarmLifeLayout";
@@ -14,6 +11,7 @@ import NextChapter from "./NextChapter";
 import HeroBotanicals from "./HeroBotanicals";
 import OurStoryLayout from "./OurStoryLayout";
 import HeroBackdrop from "./HeroBackdrop";
+import StoryClosingSections from "./StoryClosingSections";
 export default function ChapterPage({
   chapter,
   onVisit,
@@ -27,8 +25,6 @@ export default function ChapterPage({
   onGallery: () => void;
   blocked: boolean;
 }) {
-  const reduced = useReducedMotion();
-  const [faq, setFaq] = useState<number | null>(null);
   useChapterAnimations();
   const next =
     chapters[(chapters.findIndex((c) => c.id === chapter.id) + 1) % 3];
@@ -83,48 +79,7 @@ export default function ChapterPage({
       ) : (
         <FarmLifeLayout onVisit={onVisit} onGallery={onGallery} />
       )}
-      {chapter.id === "living" && (
-        <section className="faq-section" id="questions">
-          <div className="section-container">
-            <span className="chapter-tag" data-reveal>
-              A LITTLE MORE TO KNOW
-            </span>
-            <h2 data-reveal>
-              Before you put
-              <br />
-              down roots.
-            </h2>
-            <div className="faq-list">
-              {faqs.map(([q, a], i) => (
-                <div key={q}>
-                  <button
-                    aria-expanded={faq === i}
-                    aria-controls={`answer-${i}`}
-                    onClick={() => setFaq(faq === i ? null : i)}
-                  >
-                    {q}
-                    {faq === i ? <Minus size={20} /> : <Plus size={20} />}
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {faq === i && (
-                      <motion.div
-                        id={`answer-${i}`}
-                        initial={{ height: reduced ? "auto" : 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: reduced ? "auto" : 0, opacity: 0 }}
-                        transition={{ duration: reduced ? 0 : 0.3 }}
-                        style={{ overflow: "hidden" }}
-                      >
-                        <p>{a}</p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {chapter.id === "story" && <StoryClosingSections onVisit={onVisit} />}
       <section
         className="visit-invitation"
         style={{ backgroundColor: chapter.color }}

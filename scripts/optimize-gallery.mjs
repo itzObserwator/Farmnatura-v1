@@ -1,7 +1,21 @@
 import sharp from "sharp";
-import { readdir, mkdir, writeFile } from "node:fs/promises";
+import { readdir, mkdir, writeFile, access } from "node:fs/promises";
 const directory = "public/images/gallery";
 await mkdir(`${directory}/responsive`, { recursive: true });
+// Keep the uploaded PNG originals and produce smaller web assets separately.
+const uploadedDirectory = "public/images/Farmnatura upscaled Images";
+for (let index = 1; index <= 5; index++) {
+  const source = `${uploadedDirectory}/Image ${index}.png`;
+  try {
+    await access(source);
+  } catch {
+    continue;
+  }
+  await sharp(source)
+    .autoOrient()
+    .webp({ quality: 86, effort: 5 })
+    .toFile(`${directory}/farmnatura-upscaled-${index}.webp`);
+}
 const names = (await readdir(directory))
   .filter((name) => name.endsWith(".webp") && !name.startsWith("video-"))
   .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));

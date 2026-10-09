@@ -1,7 +1,6 @@
 import ResponsiveImage from "./ResponsiveImage";
 import { ArrowUpRight } from "lucide-react";
 import { chapters } from "../../data/chapters";
-import { lifeFacts } from "../../data/life";
 import RevealText from "./RevealText";
 import LivingSurface from "./LivingSurface";
 import Gallery from "./Gallery";
@@ -82,8 +81,9 @@ export default function FarmLifeLayout({
           <LivingSurface className="life-photo-surface" color="#dce8cc" />
           <ResponsiveImage
             className="life-weekend-photo"
-            src="/images/farmhouse.webp"
-            alt="A farmhouse at Farm Natura"
+            src="/images/gallery/farmnatura-upscaled-2.webp"
+            sizes="(max-width: 767px) calc(100vw - 44px), 45vw"
+            alt="Farmhouses, gardens and the blue-roofed pavilion at Farm Natura"
             loading="lazy"
           />
           <ResponsiveImage
@@ -101,70 +101,6 @@ export default function FarmLifeLayout({
         </div>
       </section>
       <Gallery variant="story" onOpenGallery={onGallery} />
-      <section className="life-impact" data-motion-section="life-impact">
-        <div className="life-impact-label">
-          <span className="chapter-tag" data-reveal>
-            GROWING A FULLER LIFE
-          </span>
-          <ResponsiveImage
-            src="/illustrations/hero/mango-branch.webp"
-            alt=""
-            loading="lazy"
-          />
-        </div>
-        <div className="life-impact-copy">
-          <h2 data-text-reveal>
-            <RevealText text="A little closer to the land. A little closer to each other." />
-          </h2>
-          <p data-reveal>
-            You own the land while a dedicated team cares for everyday farming.
-            Make space for time outdoors, shared harvests and the people you
-            love.
-          </p>
-          <p data-reveal>
-            Farm Natura brings managed natural farming and farmhouse living
-            together in Kandukur, near Hyderabad. Meet the team to understand
-            current availability, ownership details and the maintenance
-            programme.
-          </p>
-        </div>
-      </section>
-      <section
-        className="life-statistics"
-        aria-label="Farm Natura in numbers"
-        data-motion-section="life-statistics"
-      >
-        {lifeFacts.map((fact) => (
-          <div className="life-statistic" key={fact.label}>
-            <div className="life-statistic-value">
-              <strong data-count={fact.value}>{fact.value}</strong>
-              <span>{fact.suffix}</span>
-            </div>
-            <svg viewBox="0 0 300 10" aria-hidden="true">
-              <path
-                d="M1 3Q130 10 299 3"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth=".7"
-              />
-            </svg>
-            <p>{fact.label}</p>
-          </div>
-        ))}
-        <p className="life-statistics-note">
-          Figures and travel times are as described by Farm Natura; journeys
-          vary with route and traffic. The three values are Indulge, Involve and
-          Impact nature. Confirm current maintenance terms with our team.
-        </p>
-        <a
-          className="paper-button"
-          href="https://www.google.com/maps/search/?api=1&query=Farm+Natura+Kandukur"
-          target="_blank"
-          rel="noreferrer"
-        >
-          FIND YOUR WAY <ArrowUpRight size={16} />
-        </a>
-      </section>
     </div>
   );
 }

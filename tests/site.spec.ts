@@ -69,7 +69,6 @@ test("chapter content follows the new scroll sequence and interactive sections",
   await expect(page.locator(".transition-curtain")).not.toBeVisible();
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/#living");
-  await expect(page.locator(".life-statistic")).toHaveCount(6);
   const galleryCtaGap = await page
     .locator(".life-story-media")
     .evaluate(
@@ -235,11 +234,12 @@ test("gallery, FAQ, enquiry and original artwork work", async ({ page }) => {
   );
   await expect(page.locator(".photo-gallery .photo-plus")).toHaveCount(0);
   await expect(page.locator(".photo-gallery .gallery-dots button")).toHaveCount(
-    20,
+    25,
   );
   await page.getByRole("button", { name: "Open photograph" }).click();
   await expect(page.locator(".photo-dialog")).toBeVisible();
   await page.getByRole("button", { name: "Close photograph" }).click();
+  await page.goto("/about-us");
   await page.getByRole("button", { name: "Where is Farm Natura?" }).click();
   await expect(page.locator("#answer-0")).toBeVisible();
   await page
@@ -257,7 +257,7 @@ test("gallery, FAQ, enquiry and original artwork work", async ({ page }) => {
     .selectOption("1/2 Acre (2420 sq.yards)");
   const [popup] = await Promise.all([
     page.waitForEvent("popup"),
-    page.getByRole("button", { name: "Continue on WhatsApp" }).click(),
+    page.getByRole("button", { name: "Submit enquiry" }).click(),
   ]);
   expect(popup.url()).toMatch(/wa\.me|api\.whatsapp\.com/);
   await popup.close();
@@ -322,6 +322,35 @@ test("ploughing loader completes into Our Story and preserves entry on reload", 
   await page.getByRole("button", { name: "ENTER THE FARM" }).click();
   await expect(page.locator(".entrance-plough-team img")).toBeVisible();
   await expect(page.locator(".entrance-status")).toContainText("01 / 03");
+  const crops = page.locator(".entrance-crop-art");
+  await expect(crops).toHaveCount(32);
+  const sources = await crops.evaluateAll((els) => [
+    ...new Set(els.map((el) => el.getAttribute("href"))),
+  ]);
+  expect(sources).toHaveLength(3);
+  const loadedCrops = await page.evaluate(
+    async (urls) =>
+      Promise.all(
+        urls.map(
+          (src) =>
+            new Promise<boolean>((resolve) => {
+              const image = new Image();
+              image.onload = () => resolve(image.naturalWidth > 1);
+              image.onerror = () => resolve(false);
+              image.src = src!;
+            }),
+        ),
+      ),
+    sources,
+  );
+  expect(loadedCrops.every(Boolean)).toBe(true);
+  await page.waitForTimeout(3900);
+  const sway = page.locator(".entrance-crop-sway").first();
+  const before = await sway.getAttribute("style");
+  await page.waitForTimeout(250);
+  expect(await sway.getAttribute("style")).not.toBe(before);
+  await page.screenshot({ path: test.info().outputPath("folk-crops.png") });
+
   await expect(page.locator(".sound-toggle")).toBeVisible();
   await expect(page).toHaveURL(/about-us$/, { timeout: 10000 });
   await expect(page.locator(".page-hero")).toBeVisible();
@@ -521,7 +550,7 @@ test("Natural Farming fluid surfaces animate and survive WebGL failure", async (
   expect(errors).toEqual([]);
 });
 
-test("Farm Life follows About's editorial, media and statistics sequence", async ({
+test("Farm Life keeps its editorial and gallery sequence", async ({
   page,
 }, info) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -536,13 +565,7 @@ test("Farm Life follows About's editorial, media and statistics sequence", async
     "life-botanical",
     "life-weekends",
     "gallery",
-    "life-impact",
-    "life-statistics",
   ]);
-  await expect(page.locator(".life-statistic")).toHaveCount(6);
-  await expect(
-    page.locator(".life-statistic").first().locator("strong"),
-  ).toHaveText("110");
   if (info.project.name === "mobile") {
     await expect(page.locator(".life-flower-scene")).toBeHidden();
     const photoBottom = await page
@@ -552,10 +575,6 @@ test("Farm Life follows About's editorial, media and statistics sequence", async
       .locator(".life-weekend-copy")
       .evaluate((el) => el.getBoundingClientRect().top);
     expect(copyTop).toBeGreaterThan(photoBottom);
-    const lefts = await page
-      .locator(".life-statistic")
-      .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().left));
-    expect(new Set(lefts).size).toBe(1);
   }
   expect(
     await page.evaluate(
@@ -567,7 +586,7 @@ test("Farm Life follows About's editorial, media and statistics sequence", async
     .click();
   await expect(page.locator(".gallery-photo > img")).toHaveAttribute(
     "src",
-    "/images/gallery/farmhouse.webp",
+    "/images/gallery/fnsi3.webp",
   );
 });
 
@@ -583,17 +602,46 @@ test("dedicated gallery supports the uploaded photos, filtering and keyboard vie
   await page.getByRole("button", { name: "EXPLORE THE GALLERY" }).click();
   await expect(page.locator(".gallery-journal-card")).toHaveCount(9);
   await expect(page.getByRole("status")).toHaveText(
-    "Showing 9 of 29 photographs",
+    "Showing 9 of 34 photographs",
   );
   for (let i = 0; i < 3; i++)
     await page.getByRole("button", { name: "MORE MOMENTS" }).click();
-  await expect(page.locator(".gallery-journal-card")).toHaveCount(29);
+  await expect(page.locator(".gallery-journal-card")).toHaveCount(34);
   await expect(page.getByRole("status")).toHaveText(
-    "Showing 29 of 29 photographs",
+    "Showing 34 of 34 photographs",
   );
   await expect(page.getByRole("button", { name: "MORE MOMENTS" })).toHaveCount(
     0,
   );
+  const newPhotos = page.locator(
+    'button[aria-label^="View photograph: Farm fields and the community"] img, button[aria-label^="View photograph: The farm courtyard"] img, button[aria-label^="View photograph: A tractor"] img, button[aria-label^="View photograph: Field paths"] img, button[aria-label^="View photograph: Banana plots"] img',
+  );
+  await expect(newPhotos).toHaveCount(5);
+  for (const image of await newPhotos.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() =>
+        image.evaluate(
+          (el: HTMLImageElement) => el.complete && el.naturalWidth > 1,
+        ),
+      )
+      .toBe(true);
+    await expect(image).toHaveAttribute(
+      "srcset",
+      /responsive\/farmnatura-upscaled-.*-480.webp 480w/,
+    );
+  }
+  await page
+    .getByRole("button", {
+      name: "View photograph: Banana plots and farmhouses from above",
+      exact: true,
+    })
+    .click();
+  await expect(page.locator(".gallery-viewer-frame > img")).toHaveAttribute(
+    "src",
+    /farmnatura-upscaled-5.webp$/,
+  );
+  await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Farm life", exact: true }).click();
   await expect(page.locator(".gallery-journal-card")).toHaveCount(9);
   await expect(
@@ -617,7 +665,7 @@ test("dedicated gallery supports the uploaded photos, filtering and keyboard vie
   await page.keyboard.press("ArrowLeft");
   await expect(viewer.locator(".gallery-viewer-frame > img")).toHaveAttribute(
     "src",
-    /fnsi21.webp$/,
+    /farmnatura-upscaled-2.webp$/,
   );
   await page.keyboard.press("Escape");
   await expect(viewer).not.toBeVisible();

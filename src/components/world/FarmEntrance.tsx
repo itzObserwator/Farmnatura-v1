@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import BrandLogo from "./BrandLogo";
 
+const cropSprites = [
+  "tomato-seedling",
+  "okra-seedling",
+  "marigold-seedling",
+] as const;
 const sceneCount = 3;
 const sceneDuration = 2200;
 const entranceDuration = sceneDuration * sceneCount;
@@ -151,42 +156,27 @@ export default function FarmEntrance({
                       ease: [0.22, 1, 0.36, 1],
                     }}
                   >
-                    <path
-                      d="M0 0Q3-13 0-25"
-                      fill="none"
-                      stroke="#244d26"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M1-12Q-18-11-16-26Q-1-28 1-12Z"
-                      fill={i % 3 ? "#3c7a3a" : "#72954e"}
-                      stroke="#244d26"
-                      strokeWidth="1"
-                    />
-                    <path
-                      d="M1-18Q3-35 17-33Q18-18 1-18Z"
-                      fill="#85a75f"
-                      stroke="#244d26"
-                      strokeWidth="1"
-                    />
-                    <path
-                      d="M0-13L-12-23M2-20L12-29"
-                      stroke="#c9d89a"
-                      strokeWidth=".8"
-                    />
-                    {i % 5 === 0 && (
-                      <>
-                        <path d="M1-24L1-38" stroke="#244d26" />
-                        <circle
-                          cx="1"
-                          cy="-38"
-                          r="5"
-                          fill="#ffd500"
-                          stroke="#94751f"
-                          strokeWidth="1"
-                        />
-                      </>
-                    )}
+                    <motion.g
+                      className="entrance-crop-sway"
+                      animate={{ rotate: reduced ? 0 : [-2, 2, -2] }}
+                      style={{ originX: "0px", originY: "0px" }}
+                      transition={{
+                        delay: reduced ? 0 : 3.4 + col * 0.12 + row * 0.14,
+                        duration: reduced ? 0 : 2.1 + (i % 3) * 0.25,
+                        repeat: reduced ? 0 : Infinity,
+                        ease: "easeInOut",
+                      }}
+                    >
+                      <image
+                        className="entrance-crop-art"
+                        href={`/illustrations/entrance/${cropSprites[(col + row) % cropSprites.length]}.webp`}
+                        x={-23}
+                        y={-44}
+                        width={46}
+                        height={55}
+                        preserveAspectRatio="xMidYMid meet"
+                      />
+                    </motion.g>
                   </motion.g>
                 </g>
               );
@@ -204,7 +194,10 @@ export default function FarmEntrance({
             animate={{ x: reduced ? "10%" : "12%" }}
             transition={{ duration: reduced ? 0 : 4.6, ease: "linear" }}
           >
-            <ResponsiveImage src="/illustrations/entrance/oxen-plough.webp" alt="" />
+            <ResponsiveImage
+              src="/illustrations/entrance/oxen-plough.webp"
+              alt=""
+            />
           </motion.div>
           <ResponsiveImage
             className="entrance-bird"

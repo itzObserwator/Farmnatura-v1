@@ -1,5 +1,5 @@
 import ResponsiveImage from "./ResponsiveImage";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { chapters } from "../../data/chapters";
@@ -11,8 +11,48 @@ const story = chapters[0];
 /** Victoria Wharf's editorial structure, with Farm Natura's story and original artwork. */
 export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
   const [active, setActive] = useState(0);
+  const listRef = useRef<HTMLOListElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const selected = storyChapters[active];
+  useEffect(() => {
+    let frame = 0;
+    const panel = panelRef.current;
+    const sizeObserver = new ResizeObserver(() => {
+      if (panel)
+        listRef.current?.style.setProperty(
+          "--story-preview-height",
+          `${panel.offsetHeight}px`,
+        );
+    });
+    if (panel) sizeObserver.observe(panel);
+    const updateChapter = () => {
+      frame = 0;
+      const rows = listRef.current?.children;
+      if (!rows?.length) return;
+      const readingLine = Math.min(
+        240,
+        Math.max(150, window.innerHeight * 0.3),
+      );
+      let chapter = 0;
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].getBoundingClientRect().top <= readingLine) chapter = i;
+      }
+      setActive(chapter);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(updateChapter);
+    };
+    updateChapter();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      sizeObserver.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
   return (
     <div className="our-story-layout">
       <section
@@ -83,8 +123,9 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
       >
         <div className="story-farm-frame" data-image-reveal>
           <ResponsiveImage
-            src="/images/story-farmland.webp"
-            alt="Aerial view of green crop beds and banana trees at Farm Natura"
+            src="/images/gallery/farmnatura-upscaled-5.webp"
+            sizes="(max-width: 767px) calc(100vw - 44px), 50vw"
+            alt="Aerial view of banana plots, farmhouses and paths at Farm Natura"
             loading="lazy"
           />
         </div>
@@ -116,7 +157,7 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
             everyday pleasures that make Farm Natura.
           </p>
         </div>
-        <ol className="story-index-list">
+        <ol className="story-index-list" ref={listRef}>
           {storyChapters.map((item, i) => (
             <li key={item.title} data-reveal>
               <button
@@ -135,13 +176,16 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
             </li>
           ))}
         </ol>
-        <aside className="story-index-panel" id="story-index-panel">
+        <aside
+          className="story-index-panel"
+          id="story-index-panel"
+          ref={panelRef}
+        >
           <span className="chapter-tag">OUR STORY, CHAPTER BY CHAPTER</span>
           <p className="story-index-about">
             Good living starts with the land. Discover the people, practices and
             everyday pleasures that make Farm Natura.
           </p>
-          <StoryFacts />
           <div className="story-selection">
             <AnimatePresence mode="wait">
               <motion.p
@@ -157,6 +201,7 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
             <div className="story-selection-photo">
               <ResponsiveImage
                 src={selected.image}
+                sizes="(max-width: 767px) calc(100vw - 44px), 40vw"
                 alt={selected.caption}
                 loading="lazy"
               />
@@ -166,35 +211,6 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
           </div>
         </aside>
       </section>
-      <div className="story-index-mobile-facts">
-        <StoryFacts />
-      </div>
     </div>
-  );
-}
-
-function StoryFacts() {
-  return (
-    <>
-      <div className="story-facts" aria-label="Farm Natura in numbers">
-        {[
-          ["110", "+", "Acres of managed farmland"],
-          ["6", "+", "Years of soil revitalisation"],
-          ["4", "", "Years of managed maintenance"],
-        ].map(([number, suffix, label]) => (
-          <div key={number}>
-            <strong data-count={number} data-suffix={suffix}>
-              {number}
-              {suffix}
-            </strong>
-            <span>{label}</span>
-          </div>
-        ))}
-      </div>
-      <p className="story-facts-note">
-        As described by Farm Natura. Ask our team for current agreements and
-        availability.
-      </p>
-    </>
   );
 }
