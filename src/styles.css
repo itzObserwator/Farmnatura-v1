@@ -3663,7 +3663,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
     font-size: 12px;
     line-height: 1.4;
     min-height: 0;
-    margin: 0 0 15px;
+    margin: 0 0 24px;
   }
   .story-selection-photo {
     height: 110px;
@@ -5966,7 +5966,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
     max-height: calc(100svh - 104px);
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
-    gap: clamp(10px, 1.5svh, 18px);
+    gap: clamp(28px, 4svh, 44px);
   }
   .story-index-panel > .chapter-tag {
     font-size: 11px;
@@ -6008,7 +6008,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
     align-content: start;
-    gap: 10px;
+    gap: clamp(24px, 3svh, 32px);
   }
   .story-selection > p {
     font:
