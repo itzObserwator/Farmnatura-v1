@@ -207,7 +207,6 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
               />
               <PhotoTransition src={selected.image} />
             </div>
-            <span className="story-selection-caption">{selected.caption}</span>
           </div>
         </aside>
       </section>

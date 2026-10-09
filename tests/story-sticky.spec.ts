@@ -37,15 +37,11 @@ test("desktop story panel fits the viewport and follows the scrolling chapter", 
             const photo = el
               .querySelector(".story-selection-photo")!
               .getBoundingClientRect();
-            const caption = el
-              .querySelector(".story-selection-caption")!
-              .getBoundingClientRect();
             return (
               Math.abs(rect.top - 72) < 2 &&
               rect.bottom <= innerHeight - 30 &&
               photo.height >= 80 &&
-              Math.abs(caption.top - photo.bottom - 10) < 2 &&
-              caption.bottom <= rect.bottom + 1
+              photo.bottom <= rect.bottom + 1
             );
           }),
         )
