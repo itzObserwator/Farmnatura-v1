@@ -58,64 +58,8 @@ export function setupNaturalFarmingMotion() {
       ".natural-farming-layout [data-farming-reveal]",
     )
     .forEach(reveal);
-  const media = gsap.matchMedia();
-  media.add("(min-width: 900px)", () => {
-    const stage = root.querySelector<HTMLElement>(".farming-feature-stage");
-    const cards = root.querySelector<HTMLElement>(".farming-cards");
-    const first = cards?.querySelector<HTMLElement>(".practice-window");
-    const second = cards?.querySelector<HTMLElement>(".farming-managed-card");
-    if (!stage || !cards || !first || !second) return;
-    const gap = parseFloat(getComputedStyle(second).marginTop) || 0;
-    // Reserve only the final stack's height. Pin spacing supplies the scroll runway.
-    // The moving card keeps its original starting position without a vacant flow slot.
-    gsap.set(cards, {
-      height: () =>
-        Math.max(first.offsetHeight, second.offsetHeight) +
-        motion.cards.overlap,
-    });
-    gsap.set(second, {
-      position: "absolute",
-      marginTop: 0,
-      left: 0,
-      width: "100%",
-      top: () => first.offsetTop + first.offsetHeight + gap,
-    });
-    const cardTravel = () =>
-      Math.max(0, second.offsetTop - first.offsetTop - motion.cards.overlap);
-    // Only the second moves; the first stays opaque and maintains the stack's layout.
-    gsap.fromTo(
-      second,
-      { y: 0, rotation: -1.4 },
-      {
-        y: () => -cardTravel(),
-        rotation: motion.cards.rotation,
-        ease: "none",
-        scrollTrigger: {
-          id: "farming-card-handover",
-          trigger: stage,
-          pin: true,
-          start: () =>
-            `top ${motion.cards.top - (first.getBoundingClientRect().top - stage.getBoundingClientRect().top)}px`,
-          end: () =>
-            `+=${Math.max(
-              window.innerHeight * motion.cards.viewportDistance,
-              cardTravel() * motion.cards.travelDistance,
-            )}`,
-          scrub: motion.cards.scrub,
-          onRefreshInit: () => {
-            // Update measurements without recapturing GSAP's original styles,
-            // so breakpoint changes can restore the ordinary stacked layout.
-            cards.style.height = `${Math.max(first.offsetHeight, second.offsetHeight) + motion.cards.overlap}px`;
-            second.style.top = `${first.offsetTop + first.offsetHeight + gap}px`;
-          },
-          invalidateOnRefresh: true,
-        },
-      },
-    );
-  });
   return () => {
     observers.forEach((observer) => observer.disconnect());
     animations.revert();
-    media.revert();
   };
 }

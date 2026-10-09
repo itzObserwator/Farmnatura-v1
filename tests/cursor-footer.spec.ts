@@ -25,6 +25,10 @@ test("chapter carousel precedes the footer and allows scrolling onward", async (
   );
   await page.keyboard.press("ArrowDown");
   await expect(carousel.getByRole("heading", { level: 2 })).toHaveText(
+    "Gallery",
+  );
+  await page.keyboard.press("ArrowDown");
+  await expect(carousel.getByRole("heading", { level: 2 })).toHaveText(
     "Our Story",
   );
   const before = await page.evaluate(() => scrollY);

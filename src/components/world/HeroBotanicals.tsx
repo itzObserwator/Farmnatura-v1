@@ -5,8 +5,8 @@ export default function HeroBotanicals({ variant = 0 }: { variant?: number }) {
     <div className={`handdrawn-decor handdrawn-${variant}`} aria-hidden="true">
       <HandDrawnMotif kind="mango" className="decor-piece drawn-mango" />
       <HandDrawnMotif
-        kind={variant === 1 ? "okra" : "flower"}
-        className={`decor-piece ${variant === 1 ? "drawn-okra-top" : "drawn-marigold-top"}`}
+        kind={variant === 0 || variant === 1 ? "okra" : "flower"}
+        className={`decor-piece ${variant === 0 || variant === 1 ? "drawn-okra-top" : "drawn-marigold-top"}`}
       />
       <HandDrawnMotif kind="sprig" className="decor-piece drawn-foliage" />
       <HandDrawnMotif

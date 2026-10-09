@@ -12,7 +12,7 @@ for (const [path, route] of [['','home'],['about-us','story'],['natural-farming'
   let html = template.replace(/<title>.*?<\/title>/s,'').replace(/<meta name="description"[^>]*\/>/,'').replace('</head>',metadata+'</head>');
   html = html.replace(/<link rel="stylesheet"[^>]*>/,`<style>${css}</style>`).replace('<script type="module"','<script fetchpriority="low" type="module"').replaceAll('<link rel="modulepreload"','<link fetchpriority="low" rel="modulepreload"');
   if (['story','farming','living'].includes(route)) {
-    const heroAssets = ['mango-branch',route==='farming'?'okra-branch':'marigold-stem','native-foliage','orchard-bird'];
+    const heroAssets = ['mango-branch',route==='farming'?'okra-branch':'marigold-stem','native-foliage','orchard-bird',...(route==='story'?['okra-branch']:[])];
     const preloads = heroAssets.map(name=>`<link rel="preload" as="image" fetchpriority="${name==='marigold-stem'?'high':'low'}" type="image/avif" imagesrcset="/illustrations/hero/${name}-240.avif 240w, /illustrations/hero/${name}-480.avif 480w, /illustrations/hero/${name}-800.avif 800w" imagesizes="(max-width: 767px) 180px, 400px"/>`).join('');
     html = html.replace('</head>',preloads+'</head>');
   }

@@ -51,6 +51,10 @@ export default function NaturalFarmingLayout({
           </div>
           <div className="farming-about-copy">
             <p data-farming-reveal>
+              We've spent 6+ years revitalising this soil to be 100%
+              chemical-free through authentic <strong>natural farming</strong>.
+            </p>
+            <p data-farming-reveal>
               <RevealText text={farming.body} />
             </p>
             <p data-farming-reveal>

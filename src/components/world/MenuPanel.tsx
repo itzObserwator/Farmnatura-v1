@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import type gsap from "gsap";
-import { X, ArrowUpRight } from "lucide-react";
+import { X, ArrowUpRight, Phone } from "lucide-react";
 import { chapters, type ChapterId } from "../../data/chapters";
 import { contact } from "../../data/content";
 import { motionTokens } from "../../animation/motionTokens";
 import BrandLogo from "./BrandLogo";
-import { BotanicalMotif } from "./BotanicalMotifs";
+import HandDrawnMotif from "./HandDrawnMotif";
 export default function MenuPanel({
   open,
   onClose,
@@ -110,7 +110,7 @@ export default function MenuPanel({
     >
       <div className="menu-paper paper-back-one" />
       <div className="menu-paper paper-back-two" />
-      <div className="menu-paper paper-front">
+      <div className="menu-tools">
         <button
           className="round-button menu-close"
           onClick={onClose}
@@ -118,6 +118,8 @@ export default function MenuPanel({
         >
           <X size={20} strokeWidth={1} />
         </button>
+      </div>
+      <div className="menu-paper paper-front">
         <button
           className="menu-home"
           onClick={onHome}
@@ -133,11 +135,11 @@ export default function MenuPanel({
             </button>
           ))}
           <button onClick={onGallery}>
-            <span>↗</span>
+            <span>04</span>
             <span>Gallery</span>
           </button>
         </nav>
-        <BotanicalMotif kind="flower" className="menu-flower" />
+        <HandDrawnMotif kind="flower" className="menu-flower" loading="lazy" />
         <div className="menu-footer">
           <p>
             A life rooted in nature.
@@ -147,14 +149,36 @@ export default function MenuPanel({
           <button className="paper-button" onClick={onVisit}>
             PLAN A VISIT <ArrowUpRight size={16} />
           </button>
-          <div>
-            <a href={`tel:${contact.tel}`}>{contact.phone}</a>
+          <div className="menu-contact-links">
+            <a href={`tel:${contact.tel}`}>
+              <Phone size={18} strokeWidth={1.5} aria-hidden="true" />
+              {contact.phone}
+            </a>
             <a
-              href="https://www.farmnatura.in/"
+              href="https://www.instagram.com/farmnatura.in/"
               target="_blank"
               rel="noreferrer"
             >
-              farmnatura.in ↗
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                aria-hidden="true"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle
+                  cx="17.5"
+                  cy="6.5"
+                  r="1"
+                  fill="currentColor"
+                  stroke="none"
+                />
+              </svg>
+              Instagram
             </a>
           </div>
         </div>

@@ -155,16 +155,20 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
               </motion.p>
             </AnimatePresence>
             <div className="story-selection-photo">
-              <ResponsiveImage src={selected.image} alt={selected.caption} loading="lazy" />
+              <ResponsiveImage
+                src={selected.image}
+                alt={selected.caption}
+                loading="lazy"
+              />
               <PhotoTransition src={selected.image} />
             </div>
             <span className="story-selection-caption">{selected.caption}</span>
           </div>
         </aside>
-        <div className="story-index-mobile-facts">
-          <StoryFacts />
-        </div>
       </section>
+      <div className="story-index-mobile-facts">
+        <StoryFacts />
+      </div>
     </div>
   );
 }

@@ -7,7 +7,6 @@ import { Menu } from "lucide-react";
 import { chapters, type ChapterId } from "./data/chapters";
 import {
   IntroView as Intro,
-  CarouselView as ChapterCarousel,
   GalleryView as GalleryPage,
 } from "./components/world/DeferredViews";
 import ChapterPage from "./components/world/ChapterPage";
@@ -46,7 +45,6 @@ export default function App({
     ),
     [menu, setMenu] = useState(false),
     [visit, setVisit] = useState(false),
-    [active, setActive] = useState(0),
     [footerVisible, setFooterVisible] = useState(false),
     [reading, setReading] = useState(false);
   const { audioRef, enabled, start, toggle } = useAmbientSound();
@@ -55,16 +53,18 @@ export default function App({
     setSoundControlVisible(true);
     start();
   }, [start]);
+  const finishEntry = useCallback(() => {
+    sessionStorage.setItem("farm-entered", "yes");
+    history.pushState(null, "", routePaths.story);
+    setRoute("story");
+    setIntro(false);
+    window.scrollTo(0, 0);
+  }, []);
   const curtain = useRef<HTMLDivElement>(null);
   const curtainShape = useRef<SVGPathElement>(null);
   const transition = useRef<gsap.core.Timeline | null>(null);
   const busy = useRef(false);
   const navigationVersion = useRef(0);
-  const enter = useCallback(() => {
-    sessionStorage.setItem("farm-entered", "yes");
-    setIntro(false);
-  }, []);
-  const onActive = useCallback((index: number) => setActive(index), []);
   const navigate = useCallback(
     async (id: RouteId | null) => {
       setMenu(false);
@@ -84,6 +84,7 @@ export default function App({
             : "/",
         );
         setRoute(id);
+        if (!id) setIntro(true);
         window.scrollTo(0, 0);
       };
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -106,7 +107,7 @@ export default function App({
       const progress = { value: 0 };
       curtainShape.current?.setAttribute(
         "fill",
-        chapters.find((c) => c.id === id)?.color ?? chapters[active].color,
+        chapters.find((c) => c.id === id)?.color ?? chapters[0].color,
       );
       curtainShape.current?.setAttribute("d", curtainPath(0));
       transition.current = gsapRuntime
@@ -140,7 +141,7 @@ export default function App({
         })
         .set(curtain.current, { visibility: "hidden" });
     },
-    [route, active],
+    [route],
   );
   useEffect(() => {
     const pop = () => {
@@ -148,7 +149,9 @@ export default function App({
       transition.current?.kill();
       busy.current = false;
       if (curtain.current) curtain.current.style.visibility = "hidden";
-      setRoute(readRoute());
+      const destination = readRoute();
+      setRoute(destination);
+      setIntro(!destination);
       setMenu(false);
       window.scrollTo(0, 0);
     };
@@ -161,6 +164,12 @@ export default function App({
       transition.current?.kill();
     };
   }, []);
+  useEffect(() => {
+    if (!intro && !route) {
+      history.replaceState(null, "", routePaths.story);
+      setRoute("story");
+    }
+  }, [intro, route]);
   useEffect(() => {
     const metadata = pageMetadata[route ?? "home"];
     document.title = metadata.title;
@@ -221,7 +230,9 @@ export default function App({
       observer.disconnect();
     };
   }, [route]);
-  const chapter = chapters.find((c) => c.id === route);
+  const chapter = chapters.find(
+    (c) => c.id === (route ?? (!intro ? "story" : null)),
+  );
   return (
     <MotionConfig reducedMotion="user">
       <audio
@@ -271,7 +282,7 @@ export default function App({
           }
         >
           {intro ? (
-            <Intro onComplete={enter} onEnter={enterWithSound} />
+            <Intro onEnter={enterWithSound} onComplete={finishEntry} />
           ) : route === "gallery" ? (
             <GalleryPage
               onVisit={() => setVisit(true)}
@@ -287,13 +298,7 @@ export default function App({
               onNavigate={navigate}
               onGallery={() => navigate("gallery")}
             />
-          ) : (
-            <ChapterCarousel
-              onExplore={navigate}
-              onActive={onActive}
-              blocked={menu || visit}
-            />
-          )}
+          ) : null}
         </Suspense>
       </main>
       <CursorRing />

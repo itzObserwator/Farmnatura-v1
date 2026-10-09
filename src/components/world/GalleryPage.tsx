@@ -256,8 +256,9 @@ export default function GalleryPage({
                         <ResponsiveImage
                           src={photo.src}
                           alt={photo.title}
-                          width="1000"
-                          height="700"
+                          width={photo.width}
+                          height={photo.height}
+                          sizes="(max-width: 767px) 100vw, (max-width: 1100px) 50vw, 33vw"
                           loading="lazy"
                         />
                         <span

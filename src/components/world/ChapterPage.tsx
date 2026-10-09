@@ -142,7 +142,11 @@ export default function ChapterPage({
           PLAN YOUR VISIT <ArrowUpRight size={16} />
         </button>
       </section>
-      <NextChapter chapter={next} onNavigate={onNavigate} blocked={blocked} />
+      <NextChapter
+        chapter={next}
+        onNavigate={(id) => (id === "gallery" ? onGallery() : onNavigate(id))}
+        blocked={blocked}
+      />
       <FarmFooter
         onVisit={onVisit}
         onNavigate={(id) => (id === "gallery" ? onGallery() : onNavigate(id))}

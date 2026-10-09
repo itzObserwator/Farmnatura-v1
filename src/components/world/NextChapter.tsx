@@ -1,4 +1,5 @@
-import type { Chapter, ChapterId } from "../../data/chapters";
+import type { Chapter } from "../../data/chapters";
+import type { CarouselDestinationId } from "../../data/carousel";
 import { CarouselView as ChapterCarousel } from "./DeferredViews";
 import { Suspense, useRef } from "react";
 import { useNearViewport } from "../../hooks/useNearViewport";
@@ -9,20 +10,26 @@ export default function NextChapter({
   blocked,
 }: {
   chapter: Chapter;
-  onNavigate: (id: ChapterId) => void;
+  onNavigate: (id: CarouselDestinationId) => void;
   blocked: boolean;
 }) {
   const stage = useRef<HTMLElement>(null);
   const near = useNearViewport(stage);
   return (
-    <section ref={stage} className="next-chapter-stage" data-motion-section="next-chapter">
+    <section
+      ref={stage}
+      className="next-chapter-stage"
+      data-motion-section="next-chapter"
+    >
       {near && (
-      <Suspense fallback={null}><ChapterCarousel
-        initialIndex={Number(chapter.number) - 1}
-        embedded
-        blocked={blocked}
-        onExplore={onNavigate}
-      /></Suspense>
+        <Suspense fallback={null}>
+          <ChapterCarousel
+            initialIndex={Number(chapter.number) - 1}
+            embedded
+            blocked={blocked}
+            onExplore={onNavigate}
+          />
+        </Suspense>
       )}
     </section>
   );

@@ -4,10 +4,6 @@ import PhotoTransition from "./PhotoTransition";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import { galleryPhotos } from "../../data/gallery";
-const images = galleryPhotos.map((photo) => ({
-  src: photo.src,
-  label: photo.title,
-}));
 export default function Gallery({
   variant = "default",
   onOpenGallery,
@@ -15,10 +11,30 @@ export default function Gallery({
   variant?: "default" | "story";
   onOpenGallery?: () => void;
 }) {
+  const images = (
+    variant === "story" ? galleryPhotos.slice(9) : galleryPhotos
+  ).map((photo) => ({
+    src: photo.src,
+    label: photo.title,
+  }));
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0),
     [open, setOpen] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
+  const dots = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const strip = dots.current;
+    const selected = strip?.children[active] as HTMLElement | undefined;
+    if (strip && selected && strip.scrollWidth > strip.clientWidth) {
+      strip.scrollTo({
+        left:
+          selected.offsetLeft -
+          strip.clientWidth / 2 +
+          selected.clientWidth / 2,
+        behavior: reduced ? "instant" : "smooth",
+      });
+    }
+  }, [active, reduced]);
   useEffect(() => {
     if (open) dialog.current?.showModal();
     else dialog.current?.close();
@@ -74,7 +90,7 @@ export default function Gallery({
             loading="lazy"
           />
           <PhotoTransition src={images[active].src} />
-          <span className="photo-plus">+</span>
+          {variant !== "story" && <span className="photo-plus">+</span>}
         </button>
         <div className="gallery-meta">
           <motion.span
@@ -86,10 +102,11 @@ export default function Gallery({
             {images[active].label}
           </motion.span>
           <span>
-            0{active + 1} / {String(images.length).padStart(2, "0")}
+            {String(active + 1).padStart(2, "0")} /{" "}
+            {String(images.length).padStart(2, "0")}
           </span>
         </div>
-        <div className="gallery-dots">
+        <div ref={dots} className="gallery-dots">
           {images.map((img, i) => (
             <button
               key={img.src}

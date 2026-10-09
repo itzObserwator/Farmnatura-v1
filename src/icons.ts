@@ -9,3 +9,4 @@ export { default as Play } from "lucide-react/dist/esm/icons/play.mjs";
 export { default as Plus } from "lucide-react/dist/esm/icons/plus.mjs";
 export { default as Sprout } from "lucide-react/dist/esm/icons/sprout.mjs";
 export { default as X } from "lucide-react/dist/esm/icons/x.mjs";
+export { default as Phone } from "lucide-react/dist/esm/icons/phone.mjs";

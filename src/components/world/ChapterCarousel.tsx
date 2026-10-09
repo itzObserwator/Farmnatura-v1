@@ -5,7 +5,10 @@ import { Observer } from "gsap/Observer";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import SunlightCanvas from "./SunlightCanvas";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { chapters, type ChapterId } from "../../data/chapters";
+import {
+  carouselDestinations,
+  type CarouselDestinationId,
+} from "../../data/carousel";
 import HandDrawnMotif from "./HandDrawnMotif";
 import { motionTokens } from "../../animation/motionTokens";
 import { useExploreCursor } from "../../hooks/useExploreCursor";
@@ -13,10 +16,12 @@ gsap.registerPlugin(Observer);
 const ignoreActive = (_index: number) => {};
 const modulo = (value: number, length: number) =>
   ((value % length) + length) % length;
-// Three repeated sets keep a wrapping scene beyond either visible edge.
-const deck = Array.from({ length: 9 }, (_, i) => ({
-  slot: i - 3,
-  chapter: chapters[modulo(i - 3, 3)],
+// Repeated sets keep a wrapping scene beyond either visible edge.
+const count = carouselDestinations.length;
+const deckLength = count * 3;
+const deck = Array.from({ length: deckLength }, (_, i) => ({
+  slot: i - count,
+  chapter: carouselDestinations[modulo(i - count, count)],
 }));
 export default function ChapterCarousel({
   onExplore,
@@ -25,7 +30,7 @@ export default function ChapterCarousel({
   initialIndex = 0,
   embedded = false,
 }: {
-  onExplore: (id: ChapterId) => void;
+  onExplore: (id: CarouselDestinationId) => void;
   onActive?: (index: number) => void;
   blocked: boolean;
   initialIndex?: number;
@@ -39,7 +44,9 @@ export default function ChapterCarousel({
     position = useRef({ value: initialIndex }),
     lock = useRef(false);
   const changeRef = useRef<(direction: number) => void>(() => {});
-  const active = modulo(step, 3);
+  const active = modulo(step, count);
+  const activeRef = useRef(active);
+  activeRef.current = active;
   const exploreCursor = useExploreCursor(!blocked && visible);
   useEffect(() => {
     if (!embedded || !root.current) return;
@@ -64,8 +71,8 @@ export default function ChapterCarousel({
         ?.querySelectorAll<HTMLElement>(".chapter-scene")
         .forEach((el) => {
           const relative = gsap.utils.wrap(
-            -4.5,
-            4.5,
+            -deckLength / 2,
+            deckLength / 2,
             Number(el.dataset.slot) - position.current.value,
           );
           const distance = Math.min(Math.abs(relative), 1);
@@ -102,7 +109,12 @@ export default function ChapterCarousel({
     if (blocked) return;
     const isFullyVisible = () => {
       const bounds = root.current?.getBoundingClientRect();
-      return !!bounds && bounds.top <= 1 && bounds.bottom >= innerHeight - 1;
+      return (
+        !!bounds &&
+        bounds.height <= innerHeight + 1 &&
+        bounds.top >= -1 &&
+        bounds.bottom <= innerHeight + 1
+      );
     };
     const leaveCarousel = (direction: number) => {
       const bounds = root.current?.getBoundingClientRect();
@@ -112,31 +124,64 @@ export default function ChapterCarousel({
           behavior: reduced ? "instant" : "smooth",
         });
     };
+    const atBoundary = (direction: number) =>
+      embedded &&
+      ((direction < 0 && activeRef.current === initialIndex) ||
+        (direction > 0 &&
+          activeRef.current === modulo(initialIndex + count - 1, count)));
     const observer = Observer.create({
       target: root.current,
-      type: "wheel,touch",
+      type: "wheel",
       preventDefault: true,
       tolerance: 45,
       wheelSpeed: 1,
       ignoreCheck: (event) =>
         !isFullyVisible() ||
-        (embedded &&
-          event.type === "wheel" &&
-          ((active === initialIndex && (event as WheelEvent).deltaY < 0) ||
-            (active === modulo(initialIndex + 2, 3) &&
-              (event as WheelEvent).deltaY > 0))),
-      onDown: () => {
-        if (embedded && active === modulo(initialIndex + 2, 3))
-          leaveCarousel(1);
-        else changeRef.current(1);
-      },
-      onUp: () => {
-        if (embedded && active === initialIndex) leaveCarousel(-1);
-        else changeRef.current(-1);
-      },
-      onLeft: () => changeRef.current(1),
-      onRight: () => changeRef.current(-1),
+        atBoundary((event as WheelEvent).deltaY > 0 ? 1 : -1),
+      onDown: () => changeRef.current(1),
+      onUp: () => changeRef.current(-1),
     });
+    // Track one complete touch gesture without rebuilding listeners when
+    // the selected chapter changes. Leave boundary swipes to native scrolling.
+    let gesture: { x: number; y: number; dx: number; dy: number } | null = null;
+    const touchStart = (event: TouchEvent) => {
+      const target = event.target as HTMLElement;
+      if (
+        event.touches.length !== 1 ||
+        !isFullyVisible() ||
+        target.closest(".carousel-controls, .chapter-caption a")
+      )
+        return;
+      const touch = event.touches[0];
+      gesture = { x: touch.clientX, y: touch.clientY, dx: 0, dy: 0 };
+    };
+    const touchMove = (event: TouchEvent) => {
+      if (!gesture || event.touches.length !== 1) return;
+      gesture.dx = event.touches[0].clientX - gesture.x;
+      gesture.dy = event.touches[0].clientY - gesture.y;
+      const vertical = Math.abs(gesture.dy) > Math.abs(gesture.dx);
+      if (vertical && atBoundary(gesture.dy < 0 ? 1 : -1)) {
+        gesture = null;
+        return;
+      }
+      if (event.cancelable) event.preventDefault();
+    };
+    const touchEnd = () => {
+      if (!gesture) return;
+      const { dx, dy } = gesture;
+      gesture = null;
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < 45) return;
+      const direction = (Math.abs(dx) > Math.abs(dy) ? dx : dy) < 0 ? 1 : -1;
+      changeRef.current(direction);
+    };
+    const touchCancel = () => {
+      gesture = null;
+    };
+    const node = root.current;
+    node?.addEventListener("touchstart", touchStart, { passive: true });
+    node?.addEventListener("touchmove", touchMove, { passive: false });
+    node?.addEventListener("touchend", touchEnd);
+    node?.addEventListener("touchcancel", touchCancel);
     const keyboard = (event: KeyboardEvent) => {
       if (!isFullyVisible()) return;
       if ((event.target as HTMLElement).closest("button,a,input,dialog"))
@@ -145,7 +190,7 @@ export default function ChapterCarousel({
         event.preventDefault();
         if (
           embedded &&
-          active === modulo(initialIndex + 2, 3) &&
+          activeRef.current === modulo(initialIndex + count - 1, count) &&
           event.key !== "ArrowRight"
         )
           leaveCarousel(1);
@@ -153,7 +198,11 @@ export default function ChapterCarousel({
       }
       if (["ArrowUp", "ArrowLeft", "PageUp"].includes(event.key)) {
         event.preventDefault();
-        if (embedded && active === initialIndex && event.key !== "ArrowLeft")
+        if (
+          embedded &&
+          activeRef.current === initialIndex &&
+          event.key !== "ArrowLeft"
+        )
           leaveCarousel(-1);
         else changeRef.current(-1);
       }
@@ -161,9 +210,13 @@ export default function ChapterCarousel({
     window.addEventListener("keydown", keyboard);
     return () => {
       observer.kill();
+      node?.removeEventListener("touchstart", touchStart);
+      node?.removeEventListener("touchmove", touchMove);
+      node?.removeEventListener("touchend", touchEnd);
+      node?.removeEventListener("touchcancel", touchCancel);
       window.removeEventListener("keydown", keyboard);
     };
-  }, [blocked, embedded, initialIndex, active, reduced]);
+  }, [blocked, embedded, initialIndex, reduced]);
   useEffect(() => {
     if (reduced || blocked || !visible) return;
     const ctx = gsap.context(
@@ -200,18 +253,22 @@ export default function ChapterCarousel({
     <div
       ref={root}
       className="chapter-carousel"
-      aria-label="Explore Farm Natura’s three chapters"
+      aria-label="Explore Farm Natura’s pages"
     >
       <SunlightCanvas active={active} paused={blocked || !visible} />
       <div className="scenes-stage">
         {deck.map(({ slot, chapter }) => {
-          const relative = gsap.utils.wrap(-4.5, 4.5, slot - step),
+          const relative = gsap.utils.wrap(
+              -deckLength / 2,
+              deckLength / 2,
+              slot - step,
+            ),
             current = relative === 0;
           return (
             <button
               key={slot}
               data-slot={slot}
-              className={`chapter-scene scene-${modulo(slot, 3)} ${current ? "is-current" : ""}`}
+              className={`chapter-scene scene-${modulo(slot, count)} ${current ? "is-current" : ""}`}
               aria-label={
                 current ? `Explore ${chapter.title}` : `Show ${chapter.title}`
               }
@@ -236,11 +293,21 @@ export default function ChapterCarousel({
                   {...(current && !blocked ? exploreCursor.handlers : {})}
                 />
                 <HandDrawnMotif
-                  kind={chapter.id === "living" ? "bird" : "flower"}
+                  kind={
+                    chapter.id === "living" || chapter.id === "gallery"
+                      ? "bird"
+                      : "flower"
+                  }
                   className="scene-orbit orbit-one"
                 />
                 <HandDrawnMotif
-                  kind={chapter.id === "story" ? "mango" : "chilli"}
+                  kind={
+                    chapter.id === "story"
+                      ? "mango"
+                      : chapter.id === "gallery"
+                        ? "sprig"
+                        : "chilli"
+                  }
                   className="scene-orbit orbit-two"
                 />
                 <span className="scene-explore">
@@ -261,13 +328,15 @@ export default function ChapterCarousel({
           exit={{ opacity: 0, y: reduced ? 0 : -18 }}
           transition={{ duration: reduced ? 0 : 0.3 }}
         >
-          <span className="chapter-tag">{chapters[active].tag}</span>
+          <span className="chapter-tag">
+            {carouselDestinations[active].tag}
+          </span>
           <Heading>
             <button
-              onClick={() => onExplore(chapters[active].id)}
-              aria-label={chapters[active].title}
+              onClick={() => onExplore(carouselDestinations[active].id)}
+              aria-label={carouselDestinations[active].title}
             >
-              {[...chapters[active].title].map((char, i) => (
+              {[...carouselDestinations[active].title].map((char, i) => (
                 <span className="caption-character-mask" key={i}>
                   <motion.span
                     aria-hidden="true"
@@ -319,7 +388,7 @@ export default function ChapterCarousel({
             0{active + 1}
           </motion.span>
         </span>
-        <span>/03</span>
+        <span>/{String(count).padStart(2, "0")}</span>
       </div>
       {exploreCursor.cursor}
     </div>
