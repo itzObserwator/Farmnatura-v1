@@ -1,4 +1,5 @@
-/** Original hand-drawn botanical ornaments, kept as SVG so petals and foliage can move independently. */
+import ResponsiveImage from "./ResponsiveImage";
+/** Hand-painted sprig with the original SVG ornaments for other motif types. */
 export function BotanicalMotif({
   kind = "flower",
   className = "",
@@ -6,6 +7,21 @@ export function BotanicalMotif({
   kind?: "flower" | "mango" | "sprig" | "bird";
   className?: string;
 }) {
+  if (kind === "sprig")
+    return (
+      <ResponsiveImage
+        src="/illustrations/folk-leafy-sprig.webp"
+        srcSet="/illustrations/folk-leafy-sprig-240.webp 240w, /illustrations/folk-leafy-sprig-480.webp 480w, /illustrations/folk-leafy-sprig-800.webp 800w, /illustrations/folk-leafy-sprig.webp 1000w"
+        sizes="(max-width: 767px) 130px, 250px"
+        className={className}
+        alt=""
+        aria-hidden="true"
+        width={1096}
+        height={1436}
+        loading="lazy"
+        draggable="false"
+      />
+    );
   return (
     <svg
       viewBox="0 0 220 280"
@@ -88,35 +104,6 @@ export function BotanicalMotif({
                 fill="#e3a967"
                 stroke="none"
               />
-            ))}
-          </>
-        ) : kind === "sprig" ? (
-          <>
-            <path
-              d="M91 280c21-81 18-145 42-250m-25 143-55-49m65 4 42-58"
-              stroke="#3c7a3a"
-              strokeWidth="6"
-            />
-            {[
-              [122, 39, -15],
-              [99, 94, -57],
-              [149, 88, 30],
-              [67, 131, -70],
-              [96, 167, -46],
-              [139, 165, 33],
-              [95, 222, -52],
-            ].map(([x, y, r], i) => (
-              <g key={i} transform={`translate(${x} ${y}) rotate(${r})`}>
-                <path
-                  d="M0 20C-23-5-18-53 0-64 23-32 21 2 0 20Z"
-                  fill={i % 2 ? "#81a85e" : "#3c7a3a"}
-                />
-                <path
-                  d="M0 14v-68m0 16-10-10m10 23 12-12m-12 24-12-11m12 22 11-12"
-                  stroke="#bad39c"
-                  strokeWidth=".8"
-                />
-              </g>
             ))}
           </>
         ) : (

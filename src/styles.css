@@ -1364,6 +1364,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
   left: -50px;
   bottom: -80px;
   width: 250px;
+  height: auto;
   transform: rotate(25deg);
   pointer-events: none;
 }
