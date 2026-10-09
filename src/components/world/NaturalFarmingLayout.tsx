@@ -73,8 +73,11 @@ export default function NaturalFarmingLayout({
         <figure className="farming-panorama">
           <div className="farming-photo-mask" data-farming-image>
             <ResponsiveImage
-              src="/images/story-farmland.webp"
-              alt="Aerial view of Farm Natura’s planted fields and estate"
+              src="/images/natural-farm-aerial.webp"
+              alt="Generated aerial impression of vegetable beds and banana plants in a natural-farming landscape"
+              width={1942}
+              height={809}
+              sizes="(min-width: 1536px) 1440px, (min-width: 768px) calc(100vw - 96px), calc(100vw - 44px)"
               loading="lazy"
             />
           </div>

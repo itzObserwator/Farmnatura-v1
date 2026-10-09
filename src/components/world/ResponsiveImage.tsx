@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useNearViewport } from "../../hooks/useNearViewport";
 const photos = new Set([
   "story-farmland",
+  "natural-farm-aerial",
   "farm-estate",
   "farmhouse",
   "garden-planter",
