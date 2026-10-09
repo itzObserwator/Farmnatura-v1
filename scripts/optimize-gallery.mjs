@@ -16,6 +16,26 @@ for (let index = 1; index <= 5; index++) {
     .webp({ quality: 86, effort: 5 })
     .toFile(`${directory}/farmnatura-upscaled-${index}.webp`);
 }
+// Latest uploads replace their exact existing matches, including gallery aliases.
+const replacements = [
+  ["Image - 1.png", ["farmnatura-upscaled-4", "openfarm"]],
+  ["Image - 2.png", ["farmnatura-upscaled-3", "openplace2"]],
+  ["Image -3.png", ["farmnatura-upscaled-1", "goshalatopview"]],
+  ["Image - 4.png", ["farmnatura-upscaled-2", "goshala"]],
+];
+for (const [filename, matches] of replacements) {
+  const source = `public/images/FarmNatura images 2/${filename}`;
+  try {
+    await access(source);
+  } catch {
+    continue;
+  }
+  for (const name of matches)
+    await sharp(source)
+      .autoOrient()
+      .webp({ quality: 86, effort: 5 })
+      .toFile(`${directory}/${name}.webp`);
+}
 const names = (await readdir(directory))
   .filter((name) => name.endsWith(".webp") && !name.startsWith("video-"))
   .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));

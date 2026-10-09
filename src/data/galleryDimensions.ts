@@ -124,19 +124,19 @@ export const galleryDimensions: Record<
     height: 900,
   },
   goshala: {
-    width: 487,
-    height: 480,
+    width: 1254,
+    height: 1254,
   },
   goshalatopview: {
-    width: 487,
-    height: 480,
+    width: 1254,
+    height: 1254,
   },
   openfarm: {
-    width: 487,
-    height: 480,
+    width: 1254,
+    height: 1254,
   },
   openplace2: {
-    width: 487,
-    height: 480,
+    width: 1254,
+    height: 1254,
   },
 };
