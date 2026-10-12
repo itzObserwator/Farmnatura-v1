@@ -15,3 +15,7 @@ export const FarmingLayoutView = import.meta.env.SSR
 export const FarmLifeLayoutView = import.meta.env.SSR
   ? (await import("./FarmLifeLayout")).default
   : lazy(() => import("./FarmLifeLayout"));
+
+export const ImpactView = import.meta.env.SSR
+  ? (await import("./ImpactPage")).default
+  : lazy(() => import("./ImpactPage"));

@@ -6,6 +6,7 @@ export function useAmbientSound(autoStart = false) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const requested = useRef(false);
   const waitingForGesture = useRef(false);
+  const playbackAttempt = useRef(0);
   const frame = useRef<number | null>(null);
 
   const cancelFade = useCallback(() => {
@@ -36,6 +37,7 @@ export function useAmbientSound(autoStart = false) {
   );
 
   const stopOnError = useCallback(() => {
+    playbackAttempt.current++;
     requested.current = false;
     cancelFade();
     audioRef.current?.pause();
@@ -45,15 +47,17 @@ export function useAmbientSound(autoStart = false) {
   const play = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    const attempt = ++playbackAttempt.current;
     void audio
       .play()
       .then(() => {
-        if (!requested.current) return;
+        if (attempt !== playbackAttempt.current || !requested.current) return;
         waitingForGesture.current = false;
         setEnabled(true);
         fadeTo(0.18);
       })
       .catch((error: unknown) => {
+        if (attempt !== playbackAttempt.current) return;
         if (!(
           error instanceof DOMException && error.name === "NotAllowedError"
         ))
@@ -77,6 +81,7 @@ export function useAmbientSound(autoStart = false) {
     if (!audio) return;
     if (!requested.current) start();
     else {
+      playbackAttempt.current++;
       waitingForGesture.current = false;
       requested.current = false;
       setEnabled(false);
@@ -98,8 +103,10 @@ export function useAmbientSound(autoStart = false) {
     };
     const visibility = () => {
       cancelFade();
-      if (document.hidden) audio?.pause();
-      else if (requested.current) {
+      if (document.hidden) {
+        playbackAttempt.current++;
+        audio?.pause();
+      } else if (requested.current) {
         if (audio) audio.volume = 0;
         play();
       }
@@ -109,6 +116,7 @@ export function useAmbientSound(autoStart = false) {
     window.addEventListener("keydown", unlock);
     document.addEventListener("visibilitychange", visibility);
     return () => {
+      playbackAttempt.current++;
       requested.current = false;
       waitingForGesture.current = false;
       cancelFade();

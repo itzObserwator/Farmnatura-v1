@@ -42,9 +42,8 @@ for (const afterLoader of [false, true]) {
   }) => {
     await page.addInitScript(() => {
       const original = HTMLMediaElement.prototype.play;
-      let attempts = 0;
       HTMLMediaElement.prototype.play = function () {
-        if (++attempts === 1)
+        if (!navigator.userActivation.isActive)
           return Promise.reject(
             new DOMException("Autoplay blocked", "NotAllowedError"),
           );

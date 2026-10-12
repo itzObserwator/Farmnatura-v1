@@ -1,15 +1,19 @@
-import type { Chapter } from "../../data/chapters";
-import type { CarouselDestinationId } from "../../data/carousel";
-import { CarouselView as ChapterCarousel } from "./DeferredViews";
-import { Suspense, useRef } from "react";
+import {
+  carouselDestinations,
+  type CarouselDestinationId,
+} from "../../data/carousel";
+import { lazy, Suspense, useRef } from "react";
 import { useNearViewport } from "../../hooks/useNearViewport";
 
+// This section loads only near the viewport, including on prerendered pages.
+const ChapterCarousel = lazy(() => import("./ChapterCarousel"));
+
 export default function NextChapter({
-  chapter,
+  pageId,
   onNavigate,
   blocked,
 }: {
-  chapter: Chapter;
+  pageId: CarouselDestinationId;
   onNavigate: (id: CarouselDestinationId) => void;
   blocked: boolean;
 }) {
@@ -24,7 +28,9 @@ export default function NextChapter({
       {near && (
         <Suspense fallback={null}>
           <ChapterCarousel
-            initialIndex={Number(chapter.number) - 1}
+            initialIndex={carouselDestinations.findIndex(
+              (page) => page.id === pageId,
+            )}
             embedded
             blocked={blocked}
             onExplore={onNavigate}

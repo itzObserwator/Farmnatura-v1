@@ -8,7 +8,7 @@ const css = cssFile ? await readFile('dist'+cssFile,'utf8') : '';
 const heroImages = JSON.parse(await readFile('src/data/heroImages.json', 'utf8'));
 const storyHeroImages = JSON.parse(await readFile('src/data/storyHeroImages.json', 'utf8'));
 const escape = s => s.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
-for (const [path, route] of [['','home'],['about-us','story'],['natural-farming','farming'],['farmhouses-for-sale-in-hyderabad','living'],['gallery','gallery']]) {
+for (const [path, route] of [['','home'],['about-us','story'],['natural-farming','farming'],['farmhouses-for-sale-in-hyderabad','living'],['gallery','gallery'],['involve-indulge-impact','impact']]) {
   const copy = pageMetadata[route];
   const metadata = `<title>${escape(copy.title)}</title><meta name="description" content="${escape(copy.description)}"/><link rel="canonical" href="https://www.farmnatura.in/${path}"/><meta name="robots" content="index, follow"/><meta property="og:title" content="${escape(copy.title)}"/><meta property="og:description" content="${escape(copy.description)}"/><meta property="og:url" content="https://www.farmnatura.in/${path}"/><meta property="og:image" content="https://www.farmnatura.in/branding/farmnatura-logo.png"/><meta name="twitter:card" content="summary_large_image"/><link rel="preload" href="/fonts/italiana.woff2" as="font" type="font/woff2" crossorigin/><link rel="preload" href="/fonts/lato.woff2" as="font" type="font/woff2" crossorigin/><link rel="preload" href="/fonts/lato-bold.woff2" as="font" type="font/woff2" crossorigin/>`;
   let html = template.replace(/<title>.*?<\/title>/s,'').replace(/<meta name="description"[^>]*\/>/,'').replace('</head>',metadata+'</head>');
@@ -26,6 +26,6 @@ for (const [path, route] of [['','home'],['about-us','story'],['natural-farming'
   await mkdir(`dist/${path}`,{recursive:true});
   await writeFile(`dist/${path?path+'/':''}index.html`,html);
 }
-await writeFile('dist/sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+['','about-us','natural-farming','farmhouses-for-sale-in-hyderabad','gallery'].map(path=>`<url><loc>https://www.farmnatura.in/${path}</loc></url>`).join('')+'</urlset>');
+await writeFile('dist/sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+['','about-us','natural-farming','farmhouses-for-sale-in-hyderabad','gallery','involve-indulge-impact'].map(path=>`<url><loc>https://www.farmnatura.in/${path}</loc></url>`).join('')+'</urlset>');
 
-await writeFile("dist/_redirects", ["about-us","natural-farming","farmhouses-for-sale-in-hyderabad","gallery"].map(path=>`/${path} /${path}/index.html 200`).join("\n")+"\n");
+await writeFile("dist/_redirects", ["about-us","natural-farming","farmhouses-for-sale-in-hyderabad","gallery","involve-indulge-impact"].map(path=>`/${path} /${path}/index.html 200`).join("\n")+"\n");

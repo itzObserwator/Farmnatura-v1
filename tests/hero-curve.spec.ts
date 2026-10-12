@@ -27,6 +27,8 @@ test("every scrolling hero bows its backdrop and restores it on scroll back", as
       /V([\d.]+)Q0.5 (-?[\d.]+)/,
     )!;
     expect(Number(shape[1])).toBeLessThan(1);
+    // A modest scroll should retain most of the artwork rather than collapsing it.
+    expect(Number(shape[1])).toBeGreaterThan(0.9);
     expect(Number(shape[2])).toBeLessThan(Number(shape[1]));
     expect(
       await hero

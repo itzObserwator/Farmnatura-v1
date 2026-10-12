@@ -4,8 +4,10 @@ import { contact, visitInterests, visitPlotSizes } from "../data/content";
 export default function ContactDialog({
   open,
   onClose,
+  purpose = "visit",
 }: {
   open: boolean;
+  purpose?: "visit" | "legal";
   onClose: () => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -40,16 +42,25 @@ export default function ContactDialog({
         </button>
       </div>
       <div className="contact-dialog-content">
-        <span className="eyebrow">COME, WALK THE LAND</span>
-        <h2 id="visit-enquiry-title">Book a site visit</h2>
+        <span className="eyebrow">
+          {purpose === "legal" ? "KNOW YOUR LAND" : "COME, WALK THE LAND"}
+        </span>
+        <h2 id="visit-enquiry-title">
+          {purpose === "legal"
+            ? "Request legal documentation"
+            : "Book a site visit"}
+        </h2>
         <p id="visit-enquiry-description">
-          Tell us a little about your visit. Your enquiry opens in WhatsApp for
-          you to send to the Farm Natura team.
+          {purpose === "legal"
+            ? "Request the title documents, survey details and managed-farming agreement. "
+            : "Tell us a little about your visit. "}
+          Your enquiry opens in WhatsApp for you to send to the Farm Natura
+          team.
         </p>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            const message = `Hello Farm Natura! I would like to arrange a site visit.\nFull name: ${name.trim()}\nEmail address: ${email.trim()}\nPhone number: ${phone.trim()}\nInterested in: ${interest}\nLooking for plot size: ${plotSize}`;
+            const message = `Hello Farm Natura! ${purpose === "legal" ? "I would like to request the legal documentation kit, including title documents, survey details and the managed-farming agreement." : "I would like to arrange a site visit."}\nFull name: ${name.trim()}\nEmail address: ${email.trim()}\nPhone number: ${phone.trim()}\nInterested in: ${interest}\nLooking for plot size: ${plotSize}`;
             window.open(
               `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(message)}`,
               "_blank",

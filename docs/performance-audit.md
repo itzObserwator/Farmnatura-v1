@@ -1,5 +1,13 @@
 # Performance verification — 8 October 2026
 
+## Development rendering follow-up — 12 October 2026
+
+The subsequent screenshot measured `http://localhost:5173/about-us` at 95 Performance and LCP 1.4 seconds. Critical images were already preloaded, but development HTML still waited for the React module graph before rendering the page. The development server now renders current source HTML with its initial stylesheet, using [Vite's SSR support](https://vite.dev/guide/ssr), while retaining client hydration and hot reload. Startup warms the server module graph; every request reads current source and route metadata. The inline initial stylesheet is removed after Vite installs its live stylesheet, so deleted CSS rules do not persist during HMR.
+
+The final isolated desktop audit on that exact localhost URL measured **100 Performance, 100 Accessibility, 100 Best Practices and 100 SEO**, with FCP 0.5 seconds, LCP 0.7 seconds, zero blocking time and zero layout shift. Other verification runs scored 99–100. The screenshot's Best Practices failure did not reproduce in clean browser runs; no console errors were found. Details and timestamps are recorded under `developmentRenderingFollowup` in [performance-audit.json](performance-audit.json).
+
+Verification covers HTML visible without JavaScript, route metadata, hydration on all four pages, menus, live CSS updates and removed rules, wind animation, deferred engines, debugging maps and SEO. The checks also exposed stale audio-play callbacks during React's development effect restart. Playback attempts now ignore canceled callbacks; preloader autoplay, gesture fallback and mute pass on desktop/mobile in both development and production. Production build passed; its existing prerendering remains in place.
+
 ## Animated Our Story hero — 12 October 2026
 
 The supplied screenshot measured the development route `/about-us` at 88 Performance, with LCP 2.2 seconds. An isolated clean-browser reproduction measured 96 before these fixes; the screenshot's exact score did not reproduce. The production mobile baseline exposed a larger image-delivery cost after the animated scene became the hero.

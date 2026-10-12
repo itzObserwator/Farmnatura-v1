@@ -701,8 +701,8 @@ test("gallery films load on demand and gallery connects to navigation and enquir
   const photoTab = page.getByRole("tab", { name: "Photographs" });
   await photoTab.focus();
   await photoTab.press("ArrowRight");
-  await expect(page.getByRole("tab", { name: "Films" })).toBeFocused();
-  await expect(page.getByRole("tab", { name: "Films" })).toHaveAttribute(
+  await expect(page.getByRole("tab", { name: "Our Stories" })).toBeFocused();
+  await expect(page.getByRole("tab", { name: "Our Stories" })).toHaveAttribute(
     "aria-selected",
     "true",
   );
@@ -997,7 +997,7 @@ test("farm tune starts on request, loops, and continues across chapter navigatio
   const before = await audio.evaluate((el: HTMLAudioElement) => el.currentTime);
   await page.getByRole("button", { name: "Open menu" }).click();
   await page
-    .getByRole("button", { name: "02 Natural Farming", exact: true })
+    .getByRole("button", { name: "03 Natural Farming", exact: true })
     .click();
   await expect(page).toHaveURL(/natural-farming$/);
   await expect

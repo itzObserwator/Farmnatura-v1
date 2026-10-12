@@ -1,9 +1,9 @@
-/** The backdrop recedes faster than the text, as in the uploaded hero-scroll recording. */
+/** Let the curve unfold gradually while the hero naturally scrolls out of view. */
 export const heroCurveMotion = {
-  scrollRange: 0.72,
+  scrollRange: 1.25,
   edgeRetreat: 0.7,
   bow: 0.4,
-  scrub: 0.55,
+  scrub: 0.9,
 } as const;
 
 /** Object-bounding-box coordinates scale the same smooth curve to every hero. */

@@ -1,4 +1,4 @@
-/** Photos supplied in public/images/gallery; film thumbnails stay in the Films tab. */
+/** Photos supplied in public/images/gallery; film thumbnails stay in the Our Stories tab. */
 import collection from "./galleryCollection.json";
 import { galleryDimensions } from "./galleryDimensions";
 export const galleryCategories = [

@@ -40,6 +40,15 @@ export default function HeroBackdrop({
                   `+=${hero.offsetHeight * heroCurveMotion.scrollRange}`,
                 scrub: heroCurveMotion.scrub,
                 invalidateOnRefresh: true,
+                onRefresh: (trigger) => {
+                  // Deferred content can refresh measurements after the first
+                  // scroll; keep the curve at that scroll position.
+                  progress.value = trigger.progress;
+                  path.current?.setAttribute(
+                    "d",
+                    heroCurvePath(trigger.progress),
+                  );
+                },
               },
             });
           });

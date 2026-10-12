@@ -45,6 +45,9 @@ export default function ChapterCarousel({
     position = useRef({ value: initialIndex }),
     lock = useRef(false);
   const changeRef = useRef<(direction: number) => void>(() => {});
+  const drawRef = useRef(() => {});
+  const sceneTween = useRef<gsap.core.Tween | null>(null);
+  const suppressClickUntil = useRef(0);
   const active = modulo(step, count);
   const activeRef = useRef(active);
   activeRef.current = active;
@@ -89,6 +92,7 @@ export default function ChapterCarousel({
           });
         });
     };
+    drawRef.current = draw;
     onActive(active);
     draw();
     const tween = gsap.to(position.current, {
@@ -100,6 +104,7 @@ export default function ChapterCarousel({
         lock.current = false;
       },
     });
+    sceneTween.current = tween;
     window.addEventListener("resize", draw);
     return () => {
       tween.kill();
@@ -144,38 +149,89 @@ export default function ChapterCarousel({
     });
     // Track one complete touch gesture without rebuilding listeners when
     // the selected chapter changes. Leave boundary swipes to native scrolling.
-    let gesture: { x: number; y: number; dx: number; dy: number } | null = null;
+    let gesture: {
+      x: number;
+      y: number;
+      dx: number;
+      dy: number;
+      start: number;
+      dragging: boolean;
+    } | null = null;
+    const snapBack = (value: number) => {
+      sceneTween.current?.kill();
+      lock.current = true;
+      sceneTween.current = gsap.to(position.current, {
+        value,
+        duration: reduced ? 0 : 0.35,
+        ease: "power2.out",
+        onUpdate: () => drawRef.current(),
+        onComplete: () => {
+          lock.current = false;
+        },
+      });
+    };
     const touchStart = (event: TouchEvent) => {
       const target = event.target as HTMLElement;
       if (
         event.touches.length !== 1 ||
-        !isFullyVisible() ||
-        target.closest(".carousel-controls, .chapter-caption a")
+        lock.current ||
+        target.closest(".carousel-controls, .chapter-caption button")
       )
         return;
       const touch = event.touches[0];
-      gesture = { x: touch.clientX, y: touch.clientY, dx: 0, dy: 0 };
+      gesture = {
+        x: touch.clientX,
+        y: touch.clientY,
+        dx: 0,
+        dy: 0,
+        start: position.current.value,
+        dragging: false,
+      };
     };
     const touchMove = (event: TouchEvent) => {
       if (!gesture || event.touches.length !== 1) return;
       gesture.dx = event.touches[0].clientX - gesture.x;
       gesture.dy = event.touches[0].clientY - gesture.y;
       const vertical = Math.abs(gesture.dy) > Math.abs(gesture.dx);
-      if (vertical && atBoundary(gesture.dy < 0 ? 1 : -1)) {
+      if (!gesture.dragging && vertical && !isFullyVisible()) {
+        gesture = null;
+        return;
+      }
+      if (
+        !gesture.dragging &&
+        vertical &&
+        atBoundary(gesture.dy < 0 ? 1 : -1)
+      ) {
         gesture = null;
         return;
       }
       if (event.cancelable) event.preventDefault();
+      if (gesture.dragging || (!vertical && Math.abs(gesture.dx) > 8)) {
+        gesture.dragging = true;
+        suppressClickUntil.current = performance.now() + 500;
+        sceneTween.current?.kill();
+        const gap = innerWidth * (innerWidth < 768 ? 0.69 : 0.47);
+        position.current.value =
+          gesture.start - Math.max(-1, Math.min(1, gesture.dx / gap));
+        drawRef.current();
+      }
     };
     const touchEnd = () => {
       if (!gesture) return;
-      const { dx, dy } = gesture;
+      const { dx, dy, dragging, start } = gesture;
       gesture = null;
-      if (Math.max(Math.abs(dx), Math.abs(dy)) < 45) return;
-      const direction = (Math.abs(dx) > Math.abs(dy) ? dx : dy) < 0 ? 1 : -1;
+      if (
+        (dragging ? Math.abs(dx) : Math.max(Math.abs(dx), Math.abs(dy))) < 45
+      ) {
+        if (dragging) snapBack(start);
+        return;
+      }
+      const direction =
+        (dragging || Math.abs(dx) > Math.abs(dy) ? dx : dy) < 0 ? 1 : -1;
       changeRef.current(direction);
     };
     const touchCancel = () => {
+      if (gesture?.dragging) snapBack(gesture.start);
       gesture = null;
     };
     const node = root.current;
@@ -211,6 +267,8 @@ export default function ChapterCarousel({
     window.addEventListener("keydown", keyboard);
     return () => {
       observer.kill();
+      sceneTween.current?.kill();
+      lock.current = false;
       node?.removeEventListener("touchstart", touchStart);
       node?.removeEventListener("touchmove", touchMove);
       node?.removeEventListener("touchend", touchEnd);
@@ -255,6 +313,12 @@ export default function ChapterCarousel({
       ref={root}
       className="chapter-carousel"
       aria-label="Explore Farm Natura’s pages"
+      onClickCapture={(event) => {
+        if (performance.now() < suppressClickUntil.current) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }}
     >
       <SunlightCanvas active={active} paused={blocked || !visible} />
       <div className="scenes-stage">
@@ -337,22 +401,30 @@ export default function ChapterCarousel({
               onClick={() => onExplore(carouselDestinations[active].id)}
               aria-label={carouselDestinations[active].title}
             >
-              {[...carouselDestinations[active].title].map((char, i) => (
-                <span className="caption-character-mask" key={i}>
-                  <motion.span
-                    aria-hidden="true"
-                    initial={{ y: reduced ? 0 : "110%" }}
-                    animate={{ y: 0 }}
-                    transition={{
-                      duration: reduced ? 0 : 1.1,
-                      delay: reduced ? 0 : i * 0.007,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                  >
-                    {char === " " ? "\u00a0" : char}
-                  </motion.span>
-                </span>
-              ))}
+              {carouselDestinations[active].title
+                .split(/(?<=[. ])/)
+                .map((segment, segmentIndex) => (
+                  <span className="caption-title-group" key={segmentIndex}>
+                    {[...segment].map((char, i) => (
+                      <span className="caption-character-mask" key={i}>
+                        <motion.span
+                          aria-hidden="true"
+                          initial={{ y: reduced ? 0 : "110%" }}
+                          animate={{ y: 0 }}
+                          transition={{
+                            duration: reduced ? 0 : 1.1,
+                            delay: reduced
+                              ? 0
+                              : segmentIndex * 0.05 + i * 0.007,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                        >
+                          {char === " " ? "\u00a0" : char}
+                        </motion.span>
+                      </span>
+                    ))}
+                  </span>
+                ))}
             </button>
           </Heading>
         </motion.div>
@@ -373,7 +445,6 @@ export default function ChapterCarousel({
           <ArrowRight size={23} strokeWidth={1} />
         </button>
       </div>
-      <span className="scroll-instruction">SCROLL TO DISCOVER</span>
       <div className="chapter-pagination" aria-live="polite">
         <span className="pagination-orbit" />
         <span className="pagination-mask">

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, useReducedMotion } from "framer-motion";
 import * as motion from "framer-motion/m";
-import { ArrowDown, ArrowUpRight, Download } from "../../icons";
+import { ArrowDown, Download } from "../../icons";
 import { lifeFacts } from "../../data/life";
 import { faqs } from "../../data/content";
 import HandDrawnMotif from "./HandDrawnMotif";
@@ -66,21 +66,6 @@ export default function StoryClosingSections({
               </div>
             ))}
           </dl>
-        </div>
-        <div className="story-estate-footnote">
-          <p>
-            Figures and travel times are as described by Farm Natura; journeys
-            vary with route and traffic. The three values are Indulge, Involve
-            and Impact nature. Confirm current maintenance terms with our team.
-          </p>
-          <a
-            className="paper-button"
-            href="https://www.google.com/maps/search/?api=1&query=Farm+Natura+Kandukur"
-            target="_blank"
-            rel="noreferrer"
-          >
-            FIND YOUR WAY <ArrowUpRight size={16} />
-          </a>
         </div>
       </section>
       <section

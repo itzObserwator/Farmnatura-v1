@@ -22,22 +22,26 @@ import {
   galleryVideos,
   type GalleryCategory,
 } from "../../data/gallery";
-import { type ChapterId } from "../../data/chapters";
+import { chapters } from "../../data/chapters";
 import { useGalleryAnimations } from "../../hooks/useGalleryAnimations";
 import FarmFooter from "./FarmFooter";
 import RevealText from "./RevealText";
 import GallerySketch from "./GallerySketch";
 import PhotoTransition from "./PhotoTransition";
 import HeroBackdrop from "./HeroBackdrop";
+import NextChapter from "./NextChapter";
+import type { PageId } from "../../data/routes";
 
 export default function GalleryPage({
   onVisit,
   onFarmLife,
   onNavigate,
+  blocked = false,
 }: {
   onVisit: () => void;
   onFarmLife: () => void;
-  onNavigate: (id: ChapterId | "gallery") => void;
+  onNavigate: (id: PageId) => void;
+  blocked?: boolean;
 }) {
   const root = useRef<HTMLElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -195,7 +199,7 @@ export default function GalleryPage({
                     }
                   }}
                 >
-                  {item === "photos" ? "Photographs" : "Films"}
+                  {item === "photos" ? "Photographs" : "Our Stories"}
                   <span>
                     {String(
                       item === "photos"
@@ -381,6 +385,11 @@ export default function GalleryPage({
             EXPLORE FARM LIFE <ArrowRight size={17} strokeWidth={1} />
           </button>
         </section>
+        <NextChapter
+          pageId="story"
+          onNavigate={onNavigate}
+          blocked={blocked || viewerOpen}
+        />
         <FarmFooter onVisit={onVisit} onNavigate={onNavigate} />
         <dialog
           ref={dialog}

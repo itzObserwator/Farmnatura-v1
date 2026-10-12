@@ -16,11 +16,11 @@ for (const route of [
       name: "Next chapter",
       exact: true,
     });
-    for (let i = 0; i < 4 && (await title.textContent()) !== "Gallery"; i++) {
+    for (let i = 0; i < 5 && (await title.textContent()) !== "Gallery"; i++) {
       await next.click();
     }
     await expect(title).toHaveText("Gallery");
-    await expect(carousel.locator(".chapter-pagination")).toHaveText("04/04");
+    await expect(carousel.locator(".chapter-pagination")).toHaveText("05/05");
     const illustration = carousel.locator(
       ".chapter-scene.is-current .scene-illustration",
     );
@@ -43,6 +43,7 @@ for (const route of [
       for (let cycle = 0; cycle < 2; cycle++) {
         for (const label of [
           "Our Story",
+          "Rooted in Purpose",
           "Natural Farming",
           "Farm Life",
           "Gallery",

@@ -1,18 +1,42 @@
 import ResponsiveImage from "./ResponsiveImage";
 import { useReducedMotion } from "framer-motion";
 import * as motion from "framer-motion/m";
-import { ArrowUpRight } from "lucide-react";
-import { chapters, type ChapterId } from "../../data/chapters";
+import { ArrowUpRight, MapPin, Phone } from "../../icons";
+import { carouselDestinations } from "../../data/carousel";
 import { contact } from "../../data/content";
 import BrandLogo from "./BrandLogo";
-import { routePaths } from '../../data/routes';
+import { routePaths, type PageId } from "../../data/routes";
+
+const socialLinks = [
+  {
+    name: "Facebook",
+    icon: "fb",
+    url: "https://www.facebook.com/farmnatura.in",
+  },
+  { name: "Twitter", icon: "twitter", url: "https://twitter.com/farmnatura" },
+  {
+    name: "LinkedIn",
+    icon: "linkedin",
+    url: "https://www.linkedin.com/company/farm-natura/",
+  },
+  {
+    name: "YouTube",
+    icon: "youtube",
+    url: "https://www.youtube.com/@FarmNatura",
+  },
+  {
+    name: "Instagram",
+    icon: "insta",
+    url: "https://www.instagram.com/farmnatura.in/",
+  },
+] as const;
 
 /** Shared illustrated closing section for the chapters and gallery. */
 export default function FarmFooter({
   onNavigate,
   onVisit,
 }: {
-  onNavigate: (id: ChapterId | "gallery") => void;
+  onNavigate: (id: PageId) => void;
   onVisit: () => void;
 }) {
   const reduced = useReducedMotion();
@@ -77,12 +101,10 @@ export default function FarmFooter({
           </div>
           <nav className="footer-chapters" aria-label="Footer chapters">
             <span className="footer-label">WANDER A LITTLE</span>
-            {[
-              ...chapters.map(({ id, title }) => ({ id, title })),
-              { id: "gallery" as const, title: "Gallery" },
-            ].map(({ id, title }, index) => (
+            {carouselDestinations.map(({ id, title }, index) => (
               <a
                 key={id}
+                className={id === "impact" ? "footer-impact-link" : undefined}
                 href={routePaths[id]}
                 onClick={(event) => {
                   event.preventDefault();
@@ -98,26 +120,41 @@ export default function FarmFooter({
           <div className="footer-contact">
             <span className="footer-label">LET’S KEEP IN TOUCH</span>
             <a className="footer-phone" href={`tel:${contact.tel}`}>
+              <Phone size={20} aria-hidden="true" />
               {contact.phone}
-              <ArrowUpRight size={18} strokeWidth={1.2} />
             </a>
-            <p>
-              Kandukur, near Hyderabad.
-              <br />
-              Come walk the land with us.
-            </p>
+            <address className="footer-address">
+              <MapPin size={20} aria-hidden="true" />
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {contact.address}
+              </a>
+            </address>
             <button className="footer-visit-link" onClick={onVisit}>
               Arrange a farm visit <ArrowUpRight size={16} strokeWidth={1.2} />
             </button>
-            <a
-              className="footer-instagram"
-              href="https://www.instagram.com/farmnatura.in/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Follow along on Instagram{" "}
-              <ArrowUpRight size={15} strokeWidth={1.2} />
-            </a>
+            <nav className="footer-socials" aria-label="Social media">
+              {socialLinks.map(({ name, icon, url }) => (
+                <a
+                  key={name}
+                  href={url}
+                  aria-label={name}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={`/icons/social/${icon}.svg`}
+                    width={22}
+                    height={22}
+                    alt=""
+                    loading="lazy"
+                  />
+                </a>
+              ))}
+            </nav>
           </div>
         </div>
         <div className="footer-bottom">

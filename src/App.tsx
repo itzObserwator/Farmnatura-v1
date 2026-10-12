@@ -9,14 +9,17 @@ import { chapters, type ChapterId } from "./data/chapters";
 import {
   EntranceView as FarmEntrance,
   GalleryView as GalleryPage,
+  ImpactView as ImpactPage,
 } from "./components/world/DeferredViews";
 import ChapterPage from "./components/world/ChapterPage";
 import MenuPanel from "./components/world/MenuPanel";
 import ContactDialog from "./components/ContactDialog";
+import FloatingChat from "./components/world/FloatingChat";
+import { carouselDestinations } from "./data/carousel";
 import { curtainPath, motionTokens } from "./animation/motionTokens";
 import { useAmbientSound } from "./hooks/useAmbientSound";
-import { routePaths, pageMetadata } from "./data/routes";
-type RouteId = ChapterId | "gallery";
+import { routePaths, pageMetadata, type PageId } from "./data/routes";
+type RouteId = PageId;
 function readRoute(): RouteId | null {
   if (typeof location === "undefined") return null;
   const paths: Record<string, RouteId> = {
@@ -24,7 +27,9 @@ function readRoute(): RouteId | null {
     "/natural-farming": "farming",
     "/farmhouses-for-sale-in-hyderabad": "living",
     "/gallery": "gallery",
+    "/involve-indulge-impact": "impact",
   };
+  if (location.hash === "#impact") return "impact";
   if (location.hash === "#gallery") return "gallery";
   return (
     chapters.find((c) => `#${c.id}` === location.hash)?.id ??
@@ -41,6 +46,7 @@ export default function App({
     [intro, setIntro] = useState(() => !(initialRoute ?? readRoute())),
     [menu, setMenu] = useState(false),
     [visit, setVisit] = useState(false),
+    [enquiryPurpose, setEnquiryPurpose] = useState<"visit" | "legal">("visit"),
     [footerVisible, setFooterVisible] = useState(false),
     [reading, setReading] = useState(false);
   const { audioRef, enabled, toggle } = useAmbientSound(intro);
@@ -100,7 +106,8 @@ export default function App({
       const progress = { value: 0 };
       curtainShape.current?.setAttribute(
         "fill",
-        chapters.find((c) => c.id === id)?.color ?? chapters[0].color,
+        carouselDestinations.find((c) => c.id === id)?.color ??
+          chapters[0].color,
       );
       curtainShape.current?.setAttribute("d", curtainPath(0));
       transition.current = gsapRuntime
@@ -277,8 +284,19 @@ export default function App({
           >
             {intro ? (
               <FarmEntrance onComplete={finishEntry} />
+            ) : route === "impact" ? (
+              <ImpactPage
+                onLegalRequest={() => {
+                  setEnquiryPurpose("legal");
+                  setVisit(true);
+                }}
+                onVisit={() => setVisit(true)}
+                onNavigate={navigate}
+                blocked={menu || visit}
+              />
             ) : route === "gallery" ? (
               <GalleryPage
+                blocked={menu || visit}
                 onVisit={() => setVisit(true)}
                 onFarmLife={() => navigate("living")}
                 onNavigate={navigate}
@@ -296,6 +314,9 @@ export default function App({
           </Suspense>
         </main>
         <CursorRing />
+        {!intro && !menu && !visit && (
+          <FloatingChat onVisit={() => setVisit(true)} />
+        )}
         <div className="world-utilities">
           {soundControlVisible && (
             <button
@@ -310,11 +331,13 @@ export default function App({
               ))}
             </button>
           )}
-          {!intro && (chapter || route === "gallery") && !footerVisible && (
-            <span className="page-number">
-              {chapter ? `${chapter.number}/03` : "GALLERY"}
-            </span>
-          )}
+          {!intro &&
+            (chapter || route === "gallery" || route === "impact") &&
+            !footerVisible && (
+              <span className="page-number">
+                {`${String(carouselDestinations.findIndex((page) => page.id === route) + 1).padStart(2, "0")}/${String(carouselDestinations.length).padStart(2, "0")}`}
+              </span>
+            )}
         </div>
         <MenuPanel
           open={menu}
@@ -327,7 +350,14 @@ export default function App({
             setVisit(true);
           }}
         />
-        <ContactDialog open={visit} onClose={() => setVisit(false)} />
+        <ContactDialog
+          open={visit}
+          purpose={enquiryPurpose}
+          onClose={() => {
+            setVisit(false);
+            setEnquiryPurpose("visit");
+          }}
+        />
         <div ref={curtain} className="transition-curtain" aria-hidden="true">
           <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
             <path ref={curtainShape} />

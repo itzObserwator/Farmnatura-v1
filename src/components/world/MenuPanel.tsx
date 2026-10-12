@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 import type gsap from "gsap";
 import { X, ArrowUpRight, Phone } from "lucide-react";
-import { chapters, type ChapterId } from "../../data/chapters";
+import { carouselDestinations } from "../../data/carousel";
 import { contact } from "../../data/content";
 import { motionTokens } from "../../animation/motionTokens";
 import BrandLogo from "./BrandLogo";
+import type { PageId } from "../../data/routes";
 import HandDrawnMotif from "./HandDrawnMotif";
 export default function MenuPanel({
   open,
@@ -16,7 +17,7 @@ export default function MenuPanel({
 }: {
   open: boolean;
   onClose: () => void;
-  onNavigate: (id: ChapterId) => void;
+  onNavigate: (id: PageId) => void;
   onHome: () => void;
   onGallery: () => void;
   onVisit: () => void;
@@ -128,16 +129,17 @@ export default function MenuPanel({
           <BrandLogo /> <ArrowUpRight size={15} />
         </button>
         <nav aria-label="Chapter navigation">
-          {chapters.map((c) => (
-            <button key={c.id} onClick={() => onNavigate(c.id)}>
-              <span>{c.number}</span>
-              <span>{c.title}</span>
+          {carouselDestinations.map((page, index) => (
+            <button
+              key={page.id}
+              onClick={() =>
+                page.id === "gallery" ? onGallery() : onNavigate(page.id)
+              }
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <span>{page.title}</span>
             </button>
           ))}
-          <button onClick={onGallery}>
-            <span>04</span>
-            <span>Gallery</span>
-          </button>
         </nav>
         <HandDrawnMotif kind="flower" className="menu-flower" loading="lazy" />
         <div className="menu-footer">

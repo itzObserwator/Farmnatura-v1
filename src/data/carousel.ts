@@ -1,8 +1,18 @@
 import { chapters } from "./chapters";
 
-/** Navigation artwork is separate from the three editorial chapter pages. */
+/** One navigation order shared by the menu, footer and illustrated carousel. */
 export const carouselDestinations = [
-  ...chapters,
+  chapters[0],
+  {
+    id: "impact",
+    title: "Rooted in Purpose",
+    tag: "A VISION ROOTED IN NATURE",
+    color: "#f4efd9",
+    art: "/illustrations/living-ecosystem-folk.webp",
+    alt: "Folk art garden with vegetables, birds, pollinators and living roots",
+  },
+  chapters[1],
+  chapters[2],
   {
     id: "gallery",
     title: "Gallery",

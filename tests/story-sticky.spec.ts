@@ -1,5 +1,78 @@
 import { test, expect } from "@playwright/test";
 
+for (const viewport of [{ width: 390, height: 844 }]) {
+  test(`story cards stack, reverse and release at ${viewport.width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/about-us");
+    const stack = page.locator(".story-card-stack");
+    const cards = stack.locator("article");
+    await expect(cards).toHaveCount(6);
+    const scrollToCard = async (index: number) => {
+      await cards.nth(index).evaluate(
+        (el, top) => {
+          // Each marker stays in flow while its card sticks.
+          const marker = el.previousElementSibling!;
+          scrollTo(0, scrollY + marker.getBoundingClientRect().top - top + 2);
+        },
+        (viewport.width < 768 ? 80 : 90) +
+          index * (viewport.width < 768 ? 4 : 6),
+      );
+    };
+    for (const index of [0, 1, 3, 5, 2, 0]) {
+      await scrollToCard(index);
+      const expectedTop =
+        (viewport.width < 768 ? 80 : 90) +
+        index * (viewport.width < 768 ? 4 : 6);
+      await expect
+        .poll(() =>
+          cards
+            .nth(index)
+            .evaluate((el) => Math.round(el.getBoundingClientRect().top)),
+        )
+        .toBe(expectedTop);
+      const box = await cards.nth(index).boundingBox();
+      expect(box!.y + box!.height).toBeLessThan(viewport.height);
+      if (index > 0) {
+        await expect
+          .poll(() =>
+            cards
+              .nth(index - 1)
+              .evaluate((el) => el.getBoundingClientRect().top),
+          )
+          .toBeLessThan(expectedTop);
+      }
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBe(viewport.width);
+    }
+    await stack.evaluate((el) =>
+      scrollTo(0, scrollY + el.getBoundingClientRect().bottom),
+    );
+    await expect
+      .poll(() =>
+        cards.last().evaluate((el) => el.getBoundingClientRect().bottom),
+      )
+      .toBeLessThan(1);
+  });
+}
+
+test("reduced motion shows all six story cards in normal document flow", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/about-us");
+  const cards = page.locator(".story-card-stack article");
+  await expect(cards).toHaveCount(6);
+  for (const card of await cards.all()) {
+    expect(await card.evaluate((el) => getComputedStyle(el).position)).toBe(
+      "relative",
+    );
+  }
+});
+
 test("desktop story panel fits the viewport and follows the scrolling chapter", async ({
   page,
 }, info) => {
@@ -64,55 +137,3 @@ test("desktop story panel fits the viewport and follows the scrolling chapter", 
     });
   }
 });
-
-for (const width of [320, 440]) {
-  test(`story preview stays within its section at ${width}px`, async ({
-    browser,
-    baseURL,
-  }, info) => {
-    test.skip(
-      info.project.name !== "desktop",
-      "Dedicated touch viewport test.",
-    );
-    const context = await browser.newContext({
-      baseURL,
-      viewport: { width, height: 956 },
-      isMobile: true,
-      hasTouch: true,
-    });
-    const page = await context.newPage();
-    await page.goto("/about-us");
-    const list = page.locator(".story-index-list");
-    await list.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(500);
-    const positions = await list.evaluate((el) => {
-      const top = scrollY + el.getBoundingClientRect().top;
-      return [
-        top,
-        top + el.clientHeight * 0.5,
-        top + el.clientHeight - 150,
-        top + el.clientHeight,
-        top + el.clientHeight - 150,
-        top,
-      ];
-    });
-    for (const position of positions) {
-      await page.evaluate((y) => scrollTo(0, y), position);
-      await expect
-        .poll(() =>
-          page.evaluate(() => {
-            const panel = document
-              .querySelector(".story-index-panel")!
-              .getBoundingClientRect();
-            const section = document
-              .querySelector(".story-index")!
-              .getBoundingClientRect();
-            return panel.bottom <= section.bottom + 1;
-          }),
-        )
-        .toBe(true);
-    }
-    await page.screenshot({ path: test.info().outputPath("story-sticky.png") });
-    await context.close();
-  });
-}

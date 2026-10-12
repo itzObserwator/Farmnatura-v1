@@ -5,7 +5,9 @@ import { resolve } from "node:path";
 import { gzipSync } from "node:zlib";
 import deployment from "./vercel.json" with { type: "json" };
 import storyHeroImages from "./src/data/storyHeroImages.json" with { type: "json" };
+import { developmentPrerender } from "./scripts/development-prerender";
 export default defineConfig({
+  ssr: { noExternal: ["gsap"] },
   resolve: {
     alias: [{ find: /^lucide-react$/, replacement: resolve("src/icons.ts") }],
   },
@@ -122,6 +124,7 @@ export default defineConfig({
         });
       },
     },
+    developmentPrerender(),
     {
       name: "prerendered-clean-urls",
       configurePreviewServer(server) {
@@ -130,7 +133,7 @@ export default defineConfig({
             res.setHeader(key, value);
           const pathname = (req.url ?? "/").split("?")[0].replace(/\/$/, "");
           if (
-            !/^\/(about-us|natural-farming|farmhouses-for-sale-in-hyderabad|gallery)$/.test(
+            !/^\/(about-us|natural-farming|farmhouses-for-sale-in-hyderabad|gallery|involve-indulge-impact)$/.test(
               pathname,
             )
           )

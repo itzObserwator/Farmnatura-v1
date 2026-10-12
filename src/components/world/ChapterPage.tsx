@@ -10,10 +10,12 @@ import {
 } from "./DeferredViews";
 import RevealText from "./RevealText";
 import NextChapter from "./NextChapter";
+import { carouselDestinations } from "../../data/carousel";
 import HeroBotanicals from "./HeroBotanicals";
 import OurStoryLayout from "./OurStoryLayout";
 import HeroBackdrop from "./HeroBackdrop";
 import StoryHero from "./StoryHero";
+import type { PageId } from "../../data/routes";
 import StoryClosingSections from "./StoryClosingSections";
 export default function ChapterPage({
   chapter,
@@ -24,13 +26,16 @@ export default function ChapterPage({
 }: {
   chapter: Chapter;
   onVisit: () => void;
-  onNavigate: (id: ChapterId) => void;
+  onNavigate: (id: PageId) => void;
   onGallery: () => void;
   blocked: boolean;
 }) {
   useChapterAnimations();
   const next =
-    chapters[(chapters.findIndex((c) => c.id === chapter.id) + 1) % 3];
+    carouselDestinations[
+      (carouselDestinations.findIndex((c) => c.id === chapter.id) + 1) %
+        carouselDestinations.length
+    ];
   return (
     <article className={`chapter-page page-${chapter.id}`}>
       {chapter.id === "story" ? (
@@ -106,7 +111,7 @@ export default function ChapterPage({
         </button>
       </section>
       <NextChapter
-        chapter={next}
+        pageId={next.id}
         onNavigate={(id) => (id === "gallery" ? onGallery() : onNavigate(id))}
         blocked={blocked}
       />

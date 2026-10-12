@@ -178,8 +178,10 @@ test("touch swipes browse the carousel and continue into the footer", async ({
     scrollTo(0, scrollY + el.getBoundingClientRect().top),
   );
   const heading = carousel.getByRole("heading", { level: 2 });
-  await expect(heading).toHaveText("Natural Farming");
+  await expect(heading).toHaveText("Rooted in Purpose");
   await swipe(page, { x: 195, y: 550 }, { x: 195, y: 380 });
+  await expect(heading).toHaveText("Natural Farming");
+  await swipe(page, { x: 280, y: 450 }, { x: 100, y: 450 });
   await expect(heading).toHaveText("Farm Life");
   await swipe(page, { x: 280, y: 450 }, { x: 100, y: 450 });
   await expect(heading).toHaveText("Gallery");
@@ -225,7 +227,7 @@ test("gallery controls and portrait photos fit touch landscape", async ({
   await context.close();
 });
 
-test("mobile gallery keeps the selected thumbnail reachable when wrapping", async ({
+test("mobile gallery hides dots and keeps arrow navigation usable", async ({
   browser,
   baseURL,
 }, info) => {
@@ -248,13 +250,7 @@ test("mobile gallery keeps the selected thumbnail reachable when wrapping", asyn
     "aria-label",
     `Show photograph ${await gallery.locator(".gallery-dots button").count()}`,
   );
-  expect(
-    await selected.evaluate((el) => {
-      const box = el.getBoundingClientRect();
-      const strip = el.parentElement!.getBoundingClientRect();
-      return box.left >= strip.left && box.right <= strip.right;
-    }),
-  ).toBe(true);
+  await expect(gallery.locator(".gallery-dots")).toBeHidden();
   await gallery
     .getByRole("button", { name: "Open photograph", exact: true })
     .tap();

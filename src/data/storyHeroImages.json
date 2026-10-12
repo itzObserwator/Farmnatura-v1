@@ -1,6 +1,6 @@
 {
   "widths": [240, 360, 480, 640, 800, 1200],
-  "sizes": "(max-height: 500px) and (orientation: landscape) 20vw, (max-width: 767px) 42vw, 24vw",
+  "sizes": "(max-height: 500px) and (orientation: landscape) 20vw, (max-width: 767px) 72vw, 24vw",
   "scenes": ["story-grove", "living-harvest-moringa"],
   "birdWidths": [120, 240, 480],
   "birdSizes": "(max-height: 500px) and (orientation: landscape) 70px, (max-width: 767px) 75px, clamp(75px, 7vw, 130px)"

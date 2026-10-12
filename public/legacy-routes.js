@@ -4,6 +4,7 @@ const legacyRoutes = {
   farming: 'natural-farming',
   living: 'farmhouses-for-sale-in-hyderabad',
   gallery: 'gallery',
+  impact: 'involve-indulge-impact',
 };
 const legacyDestination = legacyRoutes[location.hash.slice(1)];
 if (legacyDestination) location.replace('/' + legacyDestination);

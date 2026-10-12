@@ -1,59 +1,14 @@
+import type { CSSProperties } from "react";
 import ResponsiveImage from "./ResponsiveImage";
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, useReducedMotion } from "framer-motion";
-import * as motion from "framer-motion/m";
 import { ArrowUpRight } from "lucide-react";
 import { chapters } from "../../data/chapters";
 import { storyChapters } from "../../data/story";
 import RevealText from "./RevealText";
-import PhotoTransition from "./PhotoTransition";
+import StoryChapterIndex from "./StoryChapterIndex";
 const story = chapters[0];
 
 /** Victoria Wharf's editorial structure, with Farm Natura's story and original artwork. */
 export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
-  const [active, setActive] = useState(0);
-  const listRef = useRef<HTMLOListElement>(null);
-  const panelRef = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
-  const selected = storyChapters[active];
-  useEffect(() => {
-    let frame = 0;
-    const panel = panelRef.current;
-    const sizeObserver = new ResizeObserver(() => {
-      if (panel)
-        listRef.current?.style.setProperty(
-          "--story-preview-height",
-          `${panel.offsetHeight}px`,
-        );
-    });
-    if (panel) sizeObserver.observe(panel);
-    const updateChapter = () => {
-      frame = 0;
-      const rows = listRef.current?.children;
-      if (!rows?.length) return;
-      const readingLine = Math.min(
-        240,
-        Math.max(150, window.innerHeight * 0.3),
-      );
-      let chapter = 0;
-      for (let i = 0; i < rows.length; i++) {
-        if (rows[i].getBoundingClientRect().top <= readingLine) chapter = i;
-      }
-      setActive(chapter);
-    };
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(updateChapter);
-    };
-    updateChapter();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      cancelAnimationFrame(frame);
-      sizeObserver.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
   return (
     <div className="our-story-layout">
       <section
@@ -146,70 +101,48 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
           />
         </div>
       </section>
+      <StoryChapterIndex />
       <section
-        className="story-index"
+        className="story-chapter-cards"
         data-motion-section="story-index"
-        aria-label="Discover our story"
+        aria-labelledby="story-chapters-heading"
       >
-        <div className="story-index-introduction">
-          <span className="chapter-tag">OUR STORY, CHAPTER BY CHAPTER</span>
-          <p>
-            Good living starts with the land. Discover the people, practices and
-            everyday pleasures that make Farm Natura.
+        <header className="story-cards-heading">
+          <span className="chapter-tag" data-reveal>
+            OUR STORY, CHAPTER BY CHAPTER
+          </span>
+          <h2 id="story-chapters-heading" data-text-reveal>
+            <RevealText text="Good living starts with the land" />
+          </h2>
+          <p data-reveal>
+            Discover the people, practices and everyday pleasures that make Farm
+            Natura.
           </p>
-        </div>
-        <ol className="story-index-list" ref={listRef}>
-          {storyChapters.map((item, i) => (
-            <li key={item.title} data-reveal>
-              <button
-                aria-pressed={active === i}
-                aria-controls="story-index-panel"
-                onClick={() => setActive(i)}
-                onMouseEnter={() => setActive(i)}
-                onFocus={() => setActive(i)}
+        </header>
+        <div className="farming-cards farming-practice-stack story-card-stack">
+          {storyChapters.map((item, index) => (
+            <div className="practice-step" key={item.title}>
+              <div className="practice-marker" aria-hidden="true" />
+              <article
+                className="farming-feature-card story-chapter-card"
+                style={{ "--card-index": index } as CSSProperties}
+                aria-labelledby={`story-card-heading-${index}`}
               >
-                <span className="story-index-arrow" aria-hidden="true">
-                  ↗
-                </span>
-                <span className="story-index-number">0{i + 1}</span>
-                <span>{item.title}</span>
-              </button>
-            </li>
-          ))}
-        </ol>
-        <aside
-          className="story-index-panel"
-          id="story-index-panel"
-          ref={panelRef}
-        >
-          <span className="chapter-tag">OUR STORY, CHAPTER BY CHAPTER</span>
-          <p className="story-index-about">
-            Good living starts with the land. Discover the people, practices and
-            everyday pleasures that make Farm Natura.
-          </p>
-          <div className="story-selection">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={selected.title}
-                initial={{ opacity: 0, y: reduced ? 0 : 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: reduced ? 0 : 0.25 }}
-              >
-                {selected.text}
-              </motion.p>
-            </AnimatePresence>
-            <div className="story-selection-photo">
-              <ResponsiveImage
-                src={selected.image}
-                sizes="(max-width: 767px) calc(100vw - 44px), 40vw"
-                alt={selected.caption}
-                loading="lazy"
-              />
-              <PhotoTransition src={selected.image} />
+                <div className="story-card-photo">
+                  <ResponsiveImage
+                    src={item.image}
+                    sizes="(max-width: 767px) calc(100vw - 88px), 560px"
+                    alt={item.caption}
+                    loading="lazy"
+                  />
+                </div>
+                <h3 id={`story-card-heading-${index}`}>{item.title}</h3>
+                <p>{item.text}</p>
+                <span className="farming-card-number">0{index + 1} / 06</span>
+              </article>
             </div>
-          </div>
-        </aside>
+          ))}
+        </div>
       </section>
     </div>
   );
