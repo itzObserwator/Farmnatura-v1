@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("contact buttons stack on the right and the greeting slides out after a delay", async ({
+test("contact buttons stack above chat and the greeting slides out on hover", async ({
   page,
 }) => {
   await page.goto("/about-us");
@@ -24,11 +24,23 @@ test("contact buttons stack on the right and the greeting slides out after a del
   ).toBeLessThan(1);
   const greeting = page.locator(".chat-greeting");
   await expect(greeting).toHaveCSS("opacity", "0");
-  await expect(greeting).toHaveCSS("opacity", "1", { timeout: 6000 });
   const avatarBox = (await page.locator(".chat-avatar").boundingBox())!;
+  expect(avatarBox.y - callBox.y - callBox.height).toBeCloseTo(14, 0);
+  expect(
+    Math.abs(
+      whatsappBox.x + whatsappBox.width / 2 - avatarBox.x - avatarBox.width / 2,
+    ),
+  ).toBeLessThan(1);
+  const launcher = page.getByRole("button", { name: "Open Farm Natura chat" });
+  await launcher.hover();
+  await expect(greeting).toHaveCSS("opacity", "1");
   const greetingBox = (await greeting.boundingBox())!;
   expect(greetingBox.x + greetingBox.width).toBeLessThan(avatarBox.x);
-  await page.getByRole("button", { name: "Open Farm Natura chat" }).click();
+  await page.mouse.move(0, 0);
+  await expect(greeting).toHaveCSS("opacity", "0");
+  await launcher.focus();
+  await expect(greeting).toHaveCSS("opacity", "1");
+  await launcher.click();
   await expect(greeting).toBeHidden();
 });
 

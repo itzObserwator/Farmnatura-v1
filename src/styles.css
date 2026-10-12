@@ -6798,7 +6798,13 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
   right: calc(100% + 10px);
   white-space: nowrap;
   pointer-events: none;
-  animation: chat-greeting-slide 650ms cubic-bezier(0.22, 1, 0.36, 1) 3s both;
+  opacity: 0;
+  transform: translateX(64px);
+  clip-path: inset(0 0 0 100%);
+  transition:
+    opacity 250ms ease,
+    transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
+    clip-path 450ms cubic-bezier(0.22, 1, 0.36, 1);
   padding: 16px 22px;
   background: var(--ink);
   color: white;
@@ -6811,17 +6817,10 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 .chat-launcher[aria-expanded="true"] .chat-greeting {
   display: none;
 }
-@keyframes chat-greeting-slide {
-  from {
-    opacity: 0;
-    transform: translateX(64px);
-    clip-path: inset(0 0 0 100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-    clip-path: inset(0);
-  }
+.chat-launcher:is(:hover, :focus-visible) .chat-greeting {
+  opacity: 1;
+  transform: translateX(0);
+  clip-path: inset(0);
 }
 .chat-avatar {
   position: relative;
@@ -7055,21 +7054,12 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 }
 
 .floating-contact-links {
-  position: fixed;
-  right: 24px;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
-  margin: 0;
-}
-@media (max-width: 767px) {
-  .floating-contact-links {
-    right: 16px;
-  }
+  margin: 0 0 14px;
 }
 .floating-contact-links a {
   display: grid;
@@ -7102,7 +7092,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 }
 @media (prefers-reduced-motion: reduce) {
   .chat-greeting {
-    animation: none;
+    transition: none;
   }
   .floating-contact-links a {
     transition: none;
