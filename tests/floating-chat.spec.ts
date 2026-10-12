@@ -1,5 +1,37 @@
 import { test, expect } from "@playwright/test";
 
+test("contact buttons stack on the right and the greeting slides out after a delay", async ({
+  page,
+}) => {
+  await page.goto("/about-us");
+  const whatsapp = page.getByRole("link", {
+    name: "WhatsApp Farm Natura",
+    exact: true,
+  });
+  const call = page.getByRole("link", {
+    name: "Call Farm Natura",
+    exact: true,
+  });
+  await expect(whatsapp).toBeVisible();
+  const whatsappBox = (await whatsapp.boundingBox())!;
+  const callBox = (await call.boundingBox())!;
+  expect(whatsappBox.width).toBe(56);
+  expect(callBox.y).toBeGreaterThan(whatsappBox.y + whatsappBox.height);
+  expect(
+    Math.abs(
+      whatsappBox.x + whatsappBox.width / 2 - callBox.x - callBox.width / 2,
+    ),
+  ).toBeLessThan(1);
+  const greeting = page.locator(".chat-greeting");
+  await expect(greeting).toHaveCSS("opacity", "0");
+  await expect(greeting).toHaveCSS("opacity", "1", { timeout: 6000 });
+  const avatarBox = (await page.locator(".chat-avatar").boundingBox())!;
+  const greetingBox = (await greeting.boundingBox())!;
+  expect(greetingBox.x + greetingBox.width).toBeLessThan(avatarBox.x);
+  await page.getByRole("button", { name: "Open Farm Natura chat" }).click();
+  await expect(greeting).toBeHidden();
+});
+
 test("conversation chat collects a name, answers questions, resets and opens visit booking", async ({
   page,
 }, info) => {
