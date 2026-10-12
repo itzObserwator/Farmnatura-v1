@@ -495,6 +495,161 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
   border: 0;
   pointer-events: none;
 }
+.story-scene-picture {
+  display: contents;
+}
+.story-scene.page-hero {
+  height: 100svh;
+  min-height: 0;
+  padding: 0;
+  display: block;
+}
+.story-scene .story-hero-copy {
+  position: absolute;
+  left: 50%;
+  top: 43%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  text-align: center;
+  width: min(970px, 75vw);
+  padding: 0;
+}
+.story-scene .hero-subtitle {
+  max-width: 390px;
+  margin-inline: auto;
+}
+.story-scene .intro-poster .intro-art {
+  width: 24%;
+  height: 55%;
+  transform: none;
+}
+.story-scene .intro-art-left {
+  left: 0;
+}
+.story-scene .intro-art-right {
+  right: 0;
+}
+.story-scene .intro-poster .drawn-mango {
+  left: 18%;
+}
+@media (max-width: 767px) {
+  .story-scene .intro-poster .drawn-mango {
+    left: 44%;
+  }
+  .story-scene .story-hero-copy {
+    width: 88%;
+    top: 35%;
+  }
+  .story-scene .intro-poster .intro-art {
+    width: 42%;
+    height: 27%;
+    bottom: 40px;
+  }
+  .story-scene .intro-art-left {
+    left: 0;
+  }
+  .story-scene .intro-art-right {
+    right: 0;
+  }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .story-scene .story-hero-copy {
+    width: min(970px, 75vw);
+    top: 50%;
+  }
+  .story-scene .intro-poster .intro-art {
+    width: 20%;
+    height: 50%;
+    bottom: 0;
+  }
+}
+.intro-brand {
+  width: min(44vw, 720px);
+  top: 42%;
+}
+.story-scene .intro-brand h1 {
+  font-size: clamp(34px, 3.8vw, 68px);
+  line-height: 1.08;
+  letter-spacing: -1px;
+  margin: 24px 0;
+}
+.story-scene-title-line {
+  display: block;
+}
+.story-scene .intro-brand .story-scene-subtitle {
+  font-size: clamp(14px, 1.1vw, 18px);
+  line-height: 1.55;
+  letter-spacing: 0;
+  max-width: 390px;
+  margin: 0 auto;
+}
+.story-scene .intro-art {
+  width: 32%;
+  height: 70%;
+  transform: none;
+}
+.story-scene .intro-art-left {
+  left: 0;
+}
+.story-scene .intro-art-right {
+  right: 0;
+}
+.story-scene .intro-poster .drawn-mango {
+  left: 18%;
+}
+@media (max-width: 767px) {
+  .story-scene .intro-poster .drawn-mango {
+    left: 44%;
+  }
+  .story-scene .intro-brand {
+    width: calc(100% - 40px);
+    top: 33%;
+  }
+  .story-scene .intro-brand h1 {
+    font-size: clamp(29px, 7.6vw, 50px);
+    margin: 20px 0;
+  }
+  .story-scene .intro-brand .story-scene-subtitle {
+    font-size: 13px;
+    max-width: 290px;
+  }
+  .story-scene .intro-art {
+    width: 52%;
+    height: 32%;
+    bottom: 92px;
+  }
+  .story-scene .intro-art-left {
+    left: -4%;
+  }
+  .story-scene .intro-art-right {
+    right: -4%;
+  }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .story-scene {
+    min-height: 0;
+  }
+  .story-scene .intro-brand {
+    width: 44%;
+    top: 44%;
+  }
+  .story-scene .intro-brand h1 {
+    font-size: clamp(22px, 6.8svh, 34px);
+    margin: 12px 0;
+  }
+  .story-scene .intro-brand .story-scene-subtitle {
+    font-size: 11px;
+    max-width: 280px;
+  }
+  .story-scene .intro-art {
+    width: 30%;
+    height: 70%;
+    bottom: 0;
+  }
+  .story-scene .enter-button {
+    bottom: max(14px, env(safe-area-inset-bottom));
+  }
+}
 .intro-brand {
   position: absolute;
   left: 50%;
@@ -545,7 +700,7 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
   right: -4%;
   transform: rotate(4deg);
 }
-.intro-art > img {
+.intro-art img {
   position: absolute;
   inset: 0;
   margin: auto;
@@ -5952,7 +6107,10 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
   .story-index-list {
     gap: 0;
     /* Keep the preview pinned until the final chapter reaches the reading line. */
-    padding-bottom: max(0px, calc(var(--story-preview-height, 640px) - min(30svh, 240px) + 40px));
+    padding-bottom: max(
+      0px,
+      calc(var(--story-preview-height, 640px) - min(30svh, 240px) + 40px)
+    );
   }
   .story-index-list li {
     min-height: clamp(150px, 22svh, 210px);
@@ -6451,7 +6609,11 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 .story-questions-sprig,
 .story-estate-fact,
 .story-question button {
-  transition: transform 300ms ease, translate 300ms ease, background-color 200ms ease, border-color 200ms ease;
+  transition:
+    transform 300ms ease,
+    translate 300ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease;
 }
 .story-closing-sections .paper-button:focus-visible,
 .story-question button:focus-visible {

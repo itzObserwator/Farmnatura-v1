@@ -111,7 +111,7 @@ export default function GalleryPage({
                 <RevealText text="LIFE, AS" />
               </span>
               <span className="title-line">
-                <RevealText text="IT GROWS." />
+                <RevealText text="IT GROWS" />
               </span>
             </h1>
             <p className="hero-subtitle">
@@ -139,7 +139,7 @@ export default function GalleryPage({
             <span className="chapter-tag">A LITTLE LOOK AROUND</span>
             <h2>
               Some moments deserve
-              <br />a little longer.
+              <br />a little longer
             </h2>
             <p>
               Orchards taking root. Hands in the soil. Time spent together.
@@ -306,7 +306,7 @@ export default function GalleryPage({
             ) : (
               <>
                 <div className="gallery-video-intro">
-                  <h3>Conversations on a greener life.</h3>
+                  <h3>Conversations on a greener life</h3>
                   <p>
                     Stories and perspectives from Farm Natura’s film collection.
                   </p>
@@ -366,9 +366,9 @@ export default function GalleryPage({
           />
           <span className="chapter-tag">THE BEST VIEW IS FROM HERE</span>
           <h2>
-            Step out of the picture.
+            Step out of the picture
             <br />
-            Into the farm.
+            Into the farm
           </h2>
           <p>
             There’s more to a place than a photograph can hold.

@@ -26,7 +26,7 @@ export default function FarmLifeLayout({
           ABOUT FARM LIFE
         </span>
         <h2 data-text-reveal>
-          <RevealText text="A little more space for the things that matter. For family, for nature, and for a life that grows with you." />
+          <RevealText text="A little more space for the things that matter. For family, for nature, and for a life that grows with you" />
         </h2>
         <HandDrawnMotif
           kind="sprig"
@@ -67,7 +67,7 @@ export default function FarmLifeLayout({
       >
         <div className="life-weekend-copy" data-reveal>
           <span className="chapter-tag">TIME TOGETHER</span>
-          <h3>A weekend with room to breathe.</h3>
+          <h3>A weekend with room to breathe</h3>
           <p>
             Return to the farmhouse, share a meal, and enjoy a slower day with
             the people you love.
@@ -81,15 +81,15 @@ export default function FarmLifeLayout({
           <LivingSurface className="life-photo-surface" color="#dce8cc" />
           <ResponsiveImage
             className="life-weekend-photo"
-            src="/images/gallery/farmnatura-upscaled-2.webp"
+            src="/images/gallery/farmnatura-collection-04.webp"
             sizes="(max-width: 767px) calc(100vw - 44px), 45vw"
-            alt="Farmhouses, gardens and the blue-roofed pavilion at Farm Natura"
+            alt="A farmhouse with gardens and growing fields at Farm Natura"
             loading="lazy"
           />
           <ResponsiveImage
             className="life-table-photo"
-            src="/images/garden-planter.webp"
-            alt="A wooden garden planter among greenery at Farm Natura"
+            src="/images/gallery/farmnatura-collection-05.webp"
+            alt="Tented stays beside the green fields at Farm Natura"
             loading="lazy"
           />
           <ResponsiveImage

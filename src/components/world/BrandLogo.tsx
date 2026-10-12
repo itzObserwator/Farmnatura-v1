@@ -16,7 +16,8 @@ export default function BrandLogo({ className = "" }: { className?: string }) {
       alt="Farm Natura"
       width={609}
       height={283}
-      fetchPriority="high"
+      loading={className.includes("footer-logo") ? "lazy" : undefined}
+      fetchPriority={className.includes("footer-logo") ? "low" : "high"}
     />
   );
 }

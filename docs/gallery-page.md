@@ -1,16 +1,16 @@
 # Gallery journal
 
-The dedicated `#gallery` page reinterprets [Farm Natura’s gallery](https://www.farmnatura.in/gallery/) in the site's green, yellow and paper palette. It contains the source gallery's 29 photographs and six YouTube videos, an editorial hero, hand-drawn botanical ornaments and an original editable camera illustration.
+The dedicated `#gallery` page reinterprets [Farm Natura’s gallery](https://www.farmnatura.in/gallery/) in the site's green, yellow and paper palette. It contains the 15 photographs supplied in `public/images/Gallery FarmNatura` and six YouTube videos, an editorial hero, hand-drawn botanical ornaments and an original editable camera illustration.
 
 ## Edit content
 
-- `src/data/gallery.ts`: photo order, captions, categories and film titles/IDs. The local photographs live in `public/images/gallery/`.
+- `src/data/galleryCollection.json`: supplied filenames, photo order, captions and categories. `src/data/gallery.ts` combines these with image dimensions and film titles/IDs. Optimized photographs live in `public/images/gallery/`.
 - `src/components/world/GalleryPage.tsx`: hero, collection filters, load-more control, viewer, films and visit invitation.
 - `src/components/world/GallerySketch.tsx`: original ink-style botanical camera drawing; edit the SVG paths and colors directly.
 - `src/hooks/useGalleryAnimations.ts`: scoped GSAP reveals, ornament drift, line drawing and Lenis scrolling.
 - The `Gallery journal` block at the end of `src/styles.css` controls desktop and mobile layouts.
 
-Photos are optimized WebP files, limited to 1600 pixels without upscaling. They retain the original gallery's imagery; descriptive captions are new. Film titles were checked against YouTube's metadata. Posters use the actual video thumbnails, and YouTube embeds mount only when a visitor opens a film. Closing a film removes the player.
+Photos are optimized WebP files, limited to 1920 pixels without upscaling, with 480- and 800-pixel responsive versions. Story, farming and farm-life sections reuse this collection according to their subject: crops for seeds and harvests, tractor for soil care, farmhouses for stays, and aerial views for estate overviews. Film titles were checked against YouTube's metadata. Posters use the actual video thumbnails, and YouTube embeds mount only when a visitor opens a film. Closing a film removes the player.
 
 ## Navigation and interaction
 
@@ -18,7 +18,7 @@ The main menu and Farm Life's `VIEW THE GALLERY` button open the dedicated page 
 
 The Photographs/Films tabs support arrow keys, Home and End. Reduced-motion preferences disable gallery drift and animated rearrangement. Film playback depends on YouTube availability; each viewer also offers a direct YouTube link. Visit enquiries reuse the existing WhatsApp flow.
 
-The gallery has its own route and does not add a fourth chapter to the home carousel. Its menu entry is separate from the three numbered chapters.
+The gallery has its own route, appears as the fourth carousel destination, and has the numbered `04` menu entry. The compact story gallery includes all 15 collection entries.
 
 ## Verification
 

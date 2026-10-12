@@ -264,22 +264,21 @@ test("gallery, FAQ, enquiry and original artwork work", async ({ page }) => {
   await page.getByRole("button", { name: "Close enquiry" }).click();
   await expect(page.locator(".contact-dialog")).not.toBeVisible();
 });
-test("intro, sound preference and reduced motion remain accessible", async ({
+test("automatic entry, sound preference and reduced motion remain accessible", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(
-    page.getByRole("button", { name: "ENTER THE FARM" }),
-  ).toBeEnabled();
+  await expect(page.locator(".entrance-plough-team img")).toBeVisible();
+  await expect(page.locator(".sound-toggle")).toBeVisible();
+  await expect(page.locator(".story-scene h1")).toBeVisible();
   const audio = page.locator("audio");
-  await expect(page.locator(".sound-toggle")).toHaveCount(0);
-  expect(await audio.evaluate((el: HTMLAudioElement) => el.paused)).toBe(true);
   await expect(
     page.getByRole("button", { name: "Skip intro", exact: true }),
   ).toHaveCount(0);
-  await page.getByRole("button", { name: "ENTER THE FARM" }).click();
-  await expect(page.locator(".entrance-plough-team img")).toBeVisible();
+  if (await audio.evaluate((el: HTMLAudioElement) => el.paused))
+    await page.locator(".story-scene h1").click();
+  await expect(page.locator(".farm-entrance")).toHaveCount(0);
   await expect(page).toHaveURL(/about-us$/, { timeout: 10000 });
   await expect(page.locator(".entrance-copy")).toHaveCount(0);
   await expect
@@ -310,7 +309,7 @@ test("intro, sound preference and reduced motion remain accessible", async ({
   await expect(page).toHaveURL(/about-us$/, { timeout: 10000 });
   expect(
     await page
-      .locator(".hero-title")
+      .locator(".story-hero-copy")
       .evaluate((el) => getComputedStyle(el).opacity),
   ).toBe("1");
 });
@@ -319,9 +318,17 @@ test("ploughing loader completes into Our Story and preserves entry on reload", 
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "ENTER THE FARM" }).click();
   await expect(page.locator(".entrance-plough-team img")).toBeVisible();
-  await expect(page.locator(".entrance-status")).toContainText("01 / 03");
+  await expect(page.locator(".entrance-status")).toContainText(
+    "Life from the land",
+  );
+  await expect(page.locator(".entrance-status")).toContainText(/\d+%/);
+  await expect(page.locator(".entrance-art-note")).toHaveCount(0);
+  const progress = page.getByRole("progressbar", {
+    name: "Loading Farm Natura",
+  });
+  await expect(progress).toHaveAttribute("aria-valuemin", "0");
+  await expect(progress).toHaveAttribute("aria-valuemax", "100");
   const crops = page.locator(".entrance-crop-art");
   await expect(crops).toHaveCount(32);
   const sources = await crops.evaluateAll((els) => [
@@ -351,6 +358,9 @@ test("ploughing loader completes into Our Story and preserves entry on reload", 
   expect(await sway.getAttribute("style")).not.toBe(before);
   await page.screenshot({ path: test.info().outputPath("folk-crops.png") });
 
+  await expect(progress).toHaveAttribute("aria-valuenow", "100", {
+    timeout: 10000,
+  });
   await expect(page.locator(".sound-toggle")).toBeVisible();
   await expect(page).toHaveURL(/about-us$/, { timeout: 10000 });
   await expect(page.locator(".page-hero")).toBeVisible();
@@ -362,7 +372,7 @@ test("ploughing loader completes into Our Story and preserves entry on reload", 
   ).toBe("yes");
   await page.reload();
   await expect(page.locator(".page-hero")).toBeVisible();
-  await expect(page.locator(".intro-screen")).toHaveCount(0);
+  await expect(page.locator(".farm-entrance")).toHaveCount(0);
   await page.goto("/");
   await expect(page).toHaveURL(/about-us$/, { timeout: 10000 });
   await expect(page.locator(".page-hero")).toBeVisible();
@@ -432,7 +442,7 @@ test("Our Story hand-drawn artwork and reference-style selector work", async ({
   await expect(weekends).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator(".story-selection-photo > img")).toHaveAttribute(
     "src",
-    "/images/farmhouse.webp",
+    "/images/gallery/farmnatura-collection-04.webp",
   );
   expect(
     await page.evaluate(
@@ -448,7 +458,7 @@ test("Natural Farming practices stack smoothly and remain readable", async ({
   const cards = page.locator(".farming-feature-card");
   await expect(cards).toHaveCount(4);
   await expect(
-    page.getByRole("heading", { name: "Your land. A team that cares." }),
+    page.getByRole("heading", { name: "Your land. A team that cares" }),
   ).toHaveCount(1);
   const start = await page
     .locator(".farming-cards")
@@ -602,21 +612,18 @@ test("dedicated gallery supports the uploaded photos, filtering and keyboard vie
   await page.getByRole("button", { name: "EXPLORE THE GALLERY" }).click();
   await expect(page.locator(".gallery-journal-card")).toHaveCount(9);
   await expect(page.getByRole("status")).toHaveText(
-    "Showing 9 of 34 photographs",
+    "Showing 9 of 15 photographs",
   );
-  for (let i = 0; i < 3; i++)
-    await page.getByRole("button", { name: "MORE MOMENTS" }).click();
-  await expect(page.locator(".gallery-journal-card")).toHaveCount(34);
+  await page.getByRole("button", { name: "MORE MOMENTS" }).click();
+  await expect(page.locator(".gallery-journal-card")).toHaveCount(15);
   await expect(page.getByRole("status")).toHaveText(
-    "Showing 34 of 34 photographs",
+    "Showing 15 of 15 photographs",
   );
   await expect(page.getByRole("button", { name: "MORE MOMENTS" })).toHaveCount(
     0,
   );
-  const newPhotos = page.locator(
-    'button[aria-label^="View photograph: Farm fields and the community"] img, button[aria-label^="View photograph: The farm courtyard"] img, button[aria-label^="View photograph: A tractor"] img, button[aria-label^="View photograph: Field paths"] img, button[aria-label^="View photograph: Banana plots"] img',
-  );
-  await expect(newPhotos).toHaveCount(5);
+  const newPhotos = page.locator(".gallery-journal-photo img");
+  await expect(newPhotos).toHaveCount(15);
   for (const image of await newPhotos.all()) {
     await image.scrollIntoViewIfNeeded();
     await expect
@@ -628,7 +635,7 @@ test("dedicated gallery supports the uploaded photos, filtering and keyboard vie
       .toBe(true);
     await expect(image).toHaveAttribute(
       "srcset",
-      /responsive\/farmnatura-upscaled-.*-480.webp 480w/,
+      /responsive\/farmnatura-collection-.*-480.webp 480w/,
     );
   }
   await page
@@ -639,11 +646,11 @@ test("dedicated gallery supports the uploaded photos, filtering and keyboard vie
     .click();
   await expect(page.locator(".gallery-viewer-frame > img")).toHaveAttribute(
     "src",
-    /farmnatura-upscaled-5.webp$/,
+    /farmnatura-collection-14.webp$/,
   );
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Farm life", exact: true }).click();
-  await expect(page.locator(".gallery-journal-card")).toHaveCount(9);
+  await expect(page.locator(".gallery-journal-card")).toHaveCount(7);
   await expect(
     page.getByRole("button", { name: "Farm life", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
@@ -654,18 +661,18 @@ test("dedicated gallery supports the uploaded photos, filtering and keyboard vie
   await expect(viewer).toBeVisible();
   await expect(viewer.locator(".gallery-viewer-frame > img")).toHaveAttribute(
     "src",
-    /images\/gallery\/farmhouse.webp$/,
+    /images\/gallery\/farmnatura-collection-01.webp$/,
   );
   await page.keyboard.press("ArrowRight");
   await expect(viewer.locator(".gallery-viewer-frame > img")).toHaveAttribute(
     "src",
-    /farmhouse2.webp$/,
+    /farmnatura-collection-03.webp$/,
   );
   await page.keyboard.press("ArrowLeft");
   await page.keyboard.press("ArrowLeft");
   await expect(viewer.locator(".gallery-viewer-frame > img")).toHaveAttribute(
     "src",
-    /farmnatura-upscaled-2.webp$/,
+    /farmnatura-collection-12.webp$/,
   );
   await page.keyboard.press("Escape");
   await expect(viewer).not.toBeVisible();

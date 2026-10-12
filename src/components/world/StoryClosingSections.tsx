@@ -25,7 +25,7 @@ export default function StoryClosingSections({
               <RevealText text="GROWING A FULLER LIFE" />
             </span>
             <h2 id="story-estate-title" data-text-reveal>
-              <RevealText text="A little closer to the land. A little closer to each other." />
+              <RevealText text="A little closer to the land. A little closer to each other" />
             </h2>
           </header>
           <div className="story-estate-copy" data-reveal>
@@ -93,7 +93,7 @@ export default function StoryClosingSections({
             <RevealText text="A LITTLE MORE TO KNOW" />
           </span>
           <h2 id="story-questions-title" data-text-reveal>
-            <RevealText text="Before you put down roots." />
+            <RevealText text="Before you put down roots" />
           </h2>
           <HandDrawnMotif
             kind="sprig"

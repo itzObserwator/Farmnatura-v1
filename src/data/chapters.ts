@@ -8,7 +8,7 @@ export const chapters = [
     color: "#e8efdd",
     art: "/illustrations/story-grove.webp",
     alt: "An original Indian folk-art mango grove with a mother and child sharing fruit",
-    hero: ["A LITTLE CLOSER", "TO THE LAND.", "TO EACH OTHER."],
+    hero: ["A LITTLE CLOSER", "TO THE LAND", "TO EACH OTHER"],
     subtitle:
       "The story of Farm Natura. A living farm, a slower rhythm, and a place to put down roots.",
     intro:
@@ -18,7 +18,7 @@ export const chapters = [
       "By Planet Green Infra, Farm Natura brings natural farming and family life together. Dedicated agronomy staff care for everyday farming, leaving you more time to enjoy the land and the people you share it with.",
     section: "OUR ROOTS",
     statement: "Indulge. Involve. Impact nature.",
-    photo: "/images/gallery/farmnatura-upscaled-1.webp",
+    photo: "/images/gallery/farmnatura-collection-13.webp",
   },
   {
     id: "farming",
@@ -28,7 +28,7 @@ export const chapters = [
     color: "#dce8cc",
     art: "/illustrations/farming-peppers.webp",
     alt: "Original botanical folk art of tomatoes, aubergines, bell peppers, okra, marigolds and living roots",
-    hero: ["GROW FOOD.", "GROW HEALTH.", "GROW A LIFE."],
+    hero: ["GROW FOOD", "GROW HEALTH", "GROW A LIFE"],
     subtitle:
       "Indigenous seeds, living soil, and the little lives that keep a farm thriving.",
     intro:
@@ -38,7 +38,7 @@ export const chapters = [
       "Farm Natura describes more than six years of soil revitalisation and ongoing attention to soil health and microbiology. Visit the estate to meet the team and understand how the managed farming programme works.",
     section: "NATURALLY, TOGETHER",
     statement: "Rooted in living soil. Grown with care.",
-    photo: "/images/gallery/farmnatura-upscaled-3.webp",
+    photo: "/images/gallery/farmnatura-collection-11.webp",
   },
   {
     id: "living",
@@ -48,7 +48,7 @@ export const chapters = [
     color: "#fff3b5",
     art: "/illustrations/living-harvest-moringa.webp",
     alt: "Original Indian folk-art family planting a seedling and harvesting tomatoes beneath a flowering moringa tree",
-    hero: ["LESS HURRY.", "MORE NATURE.", "MORE LIFE."],
+    hero: ["LESS HURRY", "MORE NATURE", "MORE LIFE"],
     subtitle:
       "Weekends under open skies. Family around the table. A little space to simply breathe.",
     intro:
@@ -58,7 +58,7 @@ export const chapters = [
       "Set along the Srisailam Highway corridor in Kandukur, the estate is close enough to return to on a weekend. Explore the farmhouse living concept, current availability and managed maintenance terms with the Farm Natura team.",
     section: "COME, WALK THE LAND",
     statement: "Close enough to visit. Far enough to breathe.",
-    photo: "/images/gallery/farmnatura-upscaled-2.webp",
+    photo: "/images/gallery/farmnatura-collection-12.webp",
   },
 ] as const;
 export type Chapter = (typeof chapters)[number];

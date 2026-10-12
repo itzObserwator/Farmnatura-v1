@@ -1,7 +1,13 @@
 import HandDrawnMotif from "./HandDrawnMotif";
 import heroImages from "../../data/heroImages.json";
 /** Original pen-and-watercolor ornaments around each chapter's hero headline. */
-export default function HeroBotanicals({ variant = 0 }: { variant?: number }) {
+export default function HeroBotanicals({
+  variant = 0,
+  scene = false,
+}: {
+  variant?: number;
+  scene?: boolean;
+}) {
   return (
     <div className={`handdrawn-decor handdrawn-${variant}`} aria-hidden="true">
       <HandDrawnMotif
@@ -20,21 +26,25 @@ export default function HeroBotanicals({ variant = 0 }: { variant?: number }) {
               : "(max-width: 767px) 160px, (min-width: 1700px) 360px, 280px"
         }
       />
-      <HandDrawnMotif
-        kind="sprig"
-        className="decor-piece drawn-foliage"
-        sizes={heroImages.sizes["native-foliage"]}
-      />
-      <HandDrawnMotif
-        kind="flower"
-        className="decor-piece drawn-marigold-bottom"
-        sizes={heroImages.sizes["marigold-stem"]}
-      />
-      <HandDrawnMotif
-        kind="bird"
-        className="decor-piece drawn-bird"
-        sizes={heroImages.sizes["orchard-bird"]}
-      />
+      {!scene && (
+        <>
+          <HandDrawnMotif
+            kind="sprig"
+            className="decor-piece drawn-foliage"
+            sizes={heroImages.sizes["native-foliage"]}
+          />
+          <HandDrawnMotif
+            kind="flower"
+            className="decor-piece drawn-marigold-bottom"
+            sizes={heroImages.sizes["marigold-stem"]}
+          />
+          <HandDrawnMotif
+            kind="bird"
+            className="decor-piece drawn-bird"
+            sizes={heroImages.sizes["orchard-bird"]}
+          />
+        </>
+      )}
     </div>
   );
 }

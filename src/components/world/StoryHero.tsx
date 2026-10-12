@@ -2,10 +2,9 @@ import ResponsiveImage from "./ResponsiveImage";
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import * as motion from "framer-motion/m";
-import BrandLogo from "./BrandLogo";
 import { chapters } from "../../data/chapters";
 import HeroBotanicals from "./HeroBotanicals";
-import FarmEntrance from "./FarmEntrance";
+import heroImages from "../../data/storyHeroImages.json";
 // A continuous displacement field bends only the crown. The neutral lower
 // half keeps the people, baskets and ground at their original pixels.
 const breezeMap = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><defs><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8000"/><stop offset="0.36" stop-color="#b08000"/><stop offset="0.47" stop-color="#808000"/><stop offset="1" stop-color="#808000"/></linearGradient></defs><rect width="100" height="100" fill="url(#b)"/></svg>`)}`;
@@ -88,64 +87,32 @@ function TreeBreeze({ index, active }: { index: number; active: boolean }) {
   );
 }
 
-export default function Intro({
-  onEnter,
-  onComplete,
-}: {
-  onEnter: () => void;
-  onComplete: () => void;
-}) {
+export default function StoryHero() {
   const reduced = useReducedMotion();
-  const [progress, setProgress] = useState(0);
-  const [entering, setEntering] = useState(false);
   const [paused, setPaused] = useState(false);
+  const hero = useRef<HTMLElement>(null);
   useEffect(() => {
-    const update = () => setPaused(document.hidden);
+    let onscreen = true;
+    const update = () => setPaused(document.hidden || !onscreen);
+    const observer = new IntersectionObserver(([entry]) => {
+      onscreen = entry.isIntersecting;
+      update();
+    });
+    if (hero.current) observer.observe(hero.current);
     update();
     document.addEventListener("visibilitychange", update);
-    return () => document.removeEventListener("visibilitychange", update);
-  }, []);
-  useEffect(() => {
-    let alive = true,
-      loaded = 0;
-    const images = Array.from(
-      document.querySelectorAll<HTMLImageElement>(".intro-poster img"),
-    );
-    const done = () => {
-      if (alive)
-        setProgress(Math.round((++loaded / Math.max(images.length, 1)) * 100));
-    };
-    if (!images.length) setProgress(100);
-    images.forEach((image) => {
-      if (image.complete) done();
-      else {
-        image.addEventListener("load", done, { once: true });
-        image.addEventListener("error", done, { once: true });
-      }
-    });
     return () => {
-      alive = false;
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", update);
     };
   }, []);
-  if (entering)
-    return (
-      <section
-        className="intro-screen is-sequence"
-        aria-label="Welcome to Farm Natura"
-      >
-        <FarmEntrance onComplete={onComplete} />
-      </section>
-    );
   return (
     <section
-      className="intro-screen is-poster"
-      aria-label="Welcome to Farm Natura"
+      ref={hero}
+      className="intro-screen is-poster story-scene page-hero"
+      data-motion-section="hero"
+      aria-labelledby="story-scene-heading"
     >
-      {progress < 100 && (
-        <span className="intro-loading-status" role="status">
-          Loading {progress}%
-        </span>
-      )}
       <motion.div
         className={`intro-poster ${paused ? "is-paused" : ""}`}
         initial={false}
@@ -155,20 +122,41 @@ export default function Intro({
           ease: [0.22, 1, 0.36, 1],
         }}
       >
-        <HeroBotanicals />
+        <HeroBotanicals scene />
         {[chapters[0], chapters[2]].map((chapter, index) => (
           <div
             key={chapter.id}
             className={`intro-art intro-art-${index === 0 ? "left" : "right"}`}
           >
             <TreeBreeze index={index} active={!reduced && !paused} />
-            <ResponsiveImage
-              style={{ filter: `url(#tree-breeze-${index})` }}
-              className="intro-tree-art"
-              src={chapter.art}
-              alt={chapter.alt}
-              sizes="(max-width: 767px) 52vw, 32vw"
-            />
+            <picture className="story-scene-picture">
+              <source
+                type="image/avif"
+                srcSet={heroImages.widths
+                  .map(
+                    (width) =>
+                      `/illustrations/hero-scenes/${heroImages.scenes[index]}-${width}.avif ${width}w`,
+                  )
+                  .join(", ")}
+                sizes={heroImages.sizes}
+              />
+              <ResponsiveImage
+                style={{ filter: `url(#tree-breeze-${index})` }}
+                className="intro-tree-art"
+                fetchPriority="high"
+                src={chapter.art}
+                srcSet={heroImages.widths
+                  .map(
+                    (width) =>
+                      `/illustrations/hero-scenes/${heroImages.scenes[index]}-${width}.webp ${width}w`,
+                  )
+                  .join(", ")}
+                alt={chapter.alt}
+                sizes={heroImages.sizes}
+                width={index === 0 ? 1254 : 1280}
+                height={index === 0 ? 1254 : 1280}
+              />
+            </picture>
           </div>
         ))}
         <div className="intro-sky" aria-hidden="true">
@@ -182,28 +170,49 @@ export default function Intro({
             <path d="M650 275Q810 230 1000 270T1400 250" />
           </svg>
           <div className="intro-flying-bird">
-            <img
-              className="intro-bird-art"
-              src="/illustrations/hero/flying-oriole.webp"
-              alt=""
-              width={480}
-              height={320}
-            />
+            <picture className="story-scene-picture">
+              <source
+                type="image/avif"
+                srcSet={heroImages.birdWidths
+                  .map(
+                    (width) =>
+                      `/illustrations/hero/flying-oriole-${width}.avif ${width}w`,
+                  )
+                  .join(", ")}
+                sizes={heroImages.birdSizes}
+              />
+              <img
+                className="intro-bird-art"
+                src="/illustrations/hero/flying-oriole.webp"
+                srcSet={heroImages.birdWidths
+                  .map(
+                    (width) =>
+                      `/illustrations/hero/flying-oriole-${width}.webp ${width}w`,
+                  )
+                  .join(", ")}
+                sizes={heroImages.birdSizes}
+                alt=""
+                width={480}
+                height={320}
+              />
+            </picture>
           </div>
         </div>
-        <div className="intro-brand">
-          <span className="mini-label">PLANET GREEN PRESENTS</span>
+        <div className="story-hero-copy hero-title">
+          <span className="chapter-tag">{chapters[0].tag}</span>
           <motion.h1
+            id="story-scene-heading"
             initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: reduced ? 0 : 0.7 }}
           >
-            Life from
-            <br />
-            <em>the land.</em>
+            {chapters[0].hero.map((line) => (
+              <span className="title-line" key={line}>
+                <span className="line-inner">{line}</span>
+              </span>
+            ))}
           </motion.h1>
-          <BrandLogo className="intro-logo" />
-          <p>ROOTED IN NATURE. GROWN TOGETHER.</p>
+          <p className="hero-subtitle">{chapters[0].subtitle}</p>
         </div>
         <svg
           className="intro-land"
@@ -229,16 +238,6 @@ export default function Intro({
             />
           ))}
         </svg>
-        <button
-          className="paper-button enter-button"
-          onClick={() => {
-            onEnter();
-            setEntering(true);
-          }}
-          disabled={progress < 100}
-        >
-          {progress < 100 ? `LOADING ${progress}%` : "ENTER THE FARM"}
-        </button>
       </motion.div>
     </section>
   );

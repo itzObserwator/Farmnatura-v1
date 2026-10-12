@@ -13,6 +13,40 @@ const sceneCount = 3;
 const sceneDuration = 2200;
 const entranceDuration = sceneDuration * sceneCount;
 
+function EntranceProgress({ duration }: { duration: number }) {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const started = performance.now();
+    const interval = window.setInterval(() => {
+      const next = Math.min(
+        100,
+        Math.floor(((performance.now() - started) / duration) * 100),
+      );
+      setProgress(next);
+      if (next === 100) clearInterval(interval);
+    }, 50);
+    return () => clearInterval(interval);
+  }, [duration]);
+  return (
+    <>
+      <div className="entrance-status">
+        <span>Life from the land</span>
+        <span aria-hidden="true">{progress}%</span>
+      </div>
+      <div
+        className="entrance-progress"
+        role="progressbar"
+        aria-label="Loading Farm Natura"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={progress}
+      >
+        <span style={{ width: `${progress}%` }} />
+      </div>
+    </>
+  );
+}
+
 /** A short illustrated welcome, separate from actual image-loading progress. */
 export default function FarmEntrance({
   onComplete,
@@ -20,23 +54,15 @@ export default function FarmEntrance({
   onComplete: () => void;
 }) {
   const reduced = useReducedMotion();
-  const [scene, setScene] = useState(reduced ? 2 : 0);
   const [closing, setClosing] = useState(false);
   useEffect(() => {
     const duration = reduced ? sceneDuration : entranceDuration;
-    const interval = reduced
-      ? undefined
-      : window.setInterval(
-          () => setScene((value) => Math.min(value + 1, sceneCount - 1)),
-          sceneDuration,
-        );
     const fade = window.setTimeout(
       () => setClosing(true),
       duration - (reduced ? 0 : 400),
     );
     const complete = window.setTimeout(onComplete, duration);
     return () => {
-      clearInterval(interval);
       clearTimeout(fade);
       clearTimeout(complete);
     };
@@ -51,7 +77,6 @@ export default function FarmEntrance({
     >
       <div className="entrance-header">
         <BrandLogo />
-        <span>PLANET GREEN PRESENTS</span>
       </div>
       <div className="entrance-world">
         <div className="entrance-field-scene" aria-hidden="true">
@@ -205,27 +230,11 @@ export default function FarmEntrance({
             src="/illustrations/hero/orchard-bird.webp"
             alt=""
           />
-          <span className="entrance-art-note">
-            Experience Loading...
-          </span>
         </div>
       </div>
-      <div className="entrance-status">
-        <span role="status" aria-live="polite">
-          {reduced ? "WELCOME TO FARM NATURA" : "ENTERING THE FARM"}
-        </span>
-        <span aria-hidden="true">0{scene + 1} / 03</span>
-      </div>
-      <div className="entrance-progress" aria-hidden="true">
-        <motion.span
-          initial={{ scaleX: reduced ? 1 : 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{
-            duration: reduced ? 0 : entranceDuration / 1000,
-            ease: "linear",
-          }}
-        />
-      </div>
+      <EntranceProgress
+        duration={(reduced ? sceneDuration : entranceDuration) - 500}
+      />
     </motion.div>
   );
 }

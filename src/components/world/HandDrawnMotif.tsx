@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import ResponsiveImage from "./ResponsiveImage";
 import heroImages from "../../data/heroImages.json";
 /** Shared original pen-and-watercolor ornaments. Decorative images have empty alt text. */
@@ -20,21 +21,43 @@ export default function HandDrawnMotif({
   loading?: "lazy" | "eager";
   sizes?: string;
 }) {
+  const picture = useRef<HTMLPictureElement>(null);
+  const [near, setNear] = useState(loading !== "lazy");
+  useEffect(() => {
+    if (loading !== "lazy") return;
+    const image = picture.current?.querySelector("img");
+    if (!image) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setNear(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(image);
+    return () => observer.disconnect();
+  }, [loading]);
   const imageSizes =
     sizes ??
     (className.includes("scene-orbit")
       ? "100px"
       : "(max-width: 767px) 180px, 400px");
   return (
-    <picture className="botanical-picture">
+    <picture ref={picture} className="botanical-picture">
       <source
         type="image/avif"
-        srcSet={heroImages.widths
-          .map(
-            (width) =>
-              `/illustrations/hero/${motifs[kind]}-${width}.avif ${width}w`,
-          )
-          .join(", ")}
+        srcSet={
+          near
+            ? heroImages.widths
+                .map(
+                  (width) =>
+                    `/illustrations/hero/${motifs[kind]}-${width}.avif ${width}w`,
+                )
+                .join(", ")
+            : undefined
+        }
         sizes={imageSizes}
       />
       <ResponsiveImage

@@ -13,7 +13,7 @@ export default function StoryGoldenYears() {
           <RevealText text="THE GOLDEN YEARS" />
         </span>
         <h2 id="golden-years-title" data-text-reveal>
-          <RevealText text="An ideal way to spend your golden years." />
+          <RevealText text="An ideal way to spend your golden years" />
         </h2>
       </header>
       <div className="story-golden-layout">

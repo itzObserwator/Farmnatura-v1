@@ -1,5 +1,5 @@
 import sharp from "sharp";
-import { readdir, mkdir, writeFile, access } from "node:fs/promises";
+import { readdir, mkdir, writeFile, access, readFile } from "node:fs/promises";
 const directory = "public/images/gallery";
 await mkdir(`${directory}/responsive`, { recursive: true });
 // Keep the uploaded PNG originals and produce smaller web assets separately.
@@ -36,6 +36,16 @@ for (const [filename, matches] of replacements) {
       .webp({ quality: 86, effort: 5 })
       .toFile(`${directory}/${name}.webp`);
 }
+// Current photography collection, supplied in Gallery FarmNatura.
+const collection = JSON.parse(
+  await readFile("src/data/galleryCollection.json", "utf8"),
+);
+for (const { id, source } of collection)
+  await sharp(`public/images/Gallery FarmNatura/${source}`)
+    .autoOrient()
+    .resize({ width: 1920, withoutEnlargement: true })
+    .webp({ quality: 84, effort: 5 })
+    .toFile(`${directory}/${id}.webp`);
 const names = (await readdir(directory))
   .filter((name) => name.endsWith(".webp") && !name.startsWith("video-"))
   .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));

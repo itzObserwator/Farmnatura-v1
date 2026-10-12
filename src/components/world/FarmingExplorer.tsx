@@ -28,7 +28,7 @@ const practices = [
   },
   {
     title: "Managed with care",
-    headline: "Your land. A team that cares.",
+    headline: "Your land. A team that cares",
     tag: "MANAGED WITH CARE",
     text: "Dedicated agronomy staff manage everyday farming, so you can spend more time enjoying the land. Meet the team to explore the programme and current maintenance terms.",
     art: "managed-with-care-folk",
@@ -62,7 +62,7 @@ export default function FarmingExplorer() {
         <div className="farming-feature-stage">
           <div className="farming-feature-heading">
             <h2 data-farming-reveal>
-              <RevealText text="For the land. For the life it grows." />
+              <RevealText text="For the land. For the life it grows" />
             </h2>
             <p className="farming-features-intro" data-farming-reveal>
               Discover the practices that care for your land, season after

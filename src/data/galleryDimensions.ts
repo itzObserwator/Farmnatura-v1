@@ -19,6 +19,66 @@ export const galleryDimensions: Record<
     width: 487,
     height: 480,
   },
+  "farmnatura-collection-01": {
+    width: 1673,
+    height: 940,
+  },
+  "farmnatura-collection-02": {
+    width: 1672,
+    height: 941,
+  },
+  "farmnatura-collection-03": {
+    width: 1254,
+    height: 1254,
+  },
+  "farmnatura-collection-04": {
+    width: 1672,
+    height: 941,
+  },
+  "farmnatura-collection-05": {
+    width: 1672,
+    height: 941,
+  },
+  "farmnatura-collection-06": {
+    width: 1536,
+    height: 1024,
+  },
+  "farmnatura-collection-07": {
+    width: 1448,
+    height: 1086,
+  },
+  "farmnatura-collection-08": {
+    width: 1672,
+    height: 941,
+  },
+  "farmnatura-collection-09": {
+    width: 1536,
+    height: 1024,
+  },
+  "farmnatura-collection-10": {
+    width: 1536,
+    height: 1024,
+  },
+  "farmnatura-collection-11": {
+    width: 1254,
+    height: 1254,
+  },
+  "farmnatura-collection-12": {
+    width: 1254,
+    height: 1254,
+  },
+  "farmnatura-collection-13": {
+    width: 1254,
+    height: 1254,
+  },
+  "farmnatura-collection-14": {
+    width: 1254,
+    height: 1254,
+  },
+  "farmnatura-collection-15": {
+    width: 1536,
+    height: 1024,
+  },
   "farmnatura-upscaled-1": {
     width: 1254,
     height: 1254,

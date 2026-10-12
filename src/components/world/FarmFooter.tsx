@@ -37,9 +37,9 @@ export default function FarmFooter({
           <div>
             <span className="chapter-tag">A LIFE ROOTED IN NATURE</span>
             <h2>
-              Rooted in nature.
+              Rooted in nature
               <br />
-              Connected for life.
+              Connected for life
             </h2>
           </div>
           <div className="footer-orchard" aria-hidden="true">

@@ -1,14 +1,11 @@
 import sharp from "sharp";
 import { test, expect } from "@playwright/test";
 
-test("welcome trees bend in the wind while people and foreground stay still", async ({
+test("story hero trees bend in the wind while people and foreground stay still", async ({
   page,
 }, info) => {
-  await page.goto("/");
-  await expect(
-    page.getByRole("button", { name: "ENTER THE FARM" }),
-  ).toBeEnabled();
-  await expect(page.locator(".sound-toggle")).toHaveCount(0);
+  await page.goto("/about-us");
+  await expect(page.locator(".story-scene h1")).toBeVisible();
   const poster = await page.locator(".intro-poster").boundingBox();
   expect(poster!.x).toBe(0);
   expect(poster!.y).toBe(0);
@@ -65,12 +62,18 @@ test("welcome trees bend in the wind while people and foreground stay still", as
     expect(crownA.equals(crownB)).toBe(false);
   }
   await page.screenshot({ path: info.outputPath("welcome-breeze.png") });
+  await page.evaluate(() => scrollTo(0, innerHeight * 1.2));
+  await expect(page.locator(".intro-poster")).toHaveClass(/is-paused/);
+  await expect(field).toHaveAttribute("scale", "0");
+  await page.evaluate(() => scrollTo(0, 0));
+  await expect(page.locator(".intro-poster")).not.toHaveClass(/is-paused/);
+  await expect.poll(() => field.getAttribute("scale")).not.toBe("0");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(field).toHaveAttribute("scale", "0");
   expect(await bird.evaluate((el) => getComputedStyle(el).animationName)).toBe(
     "none",
   );
-  await page.getByRole("button", { name: "ENTER THE FARM" }).click();
+  await page.getByRole("button", { name: "Turn sound on" }).click();
   await expect(page.locator(".sound-toggle")).toBeVisible();
   const sound = await page.locator(".sound-toggle").boundingBox();
   expect(sound!.x).toBeLessThan(50);

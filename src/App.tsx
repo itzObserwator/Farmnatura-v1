@@ -7,7 +7,7 @@ import CursorRing from "./components/world/CursorRing";
 import { Menu } from "lucide-react";
 import { chapters, type ChapterId } from "./data/chapters";
 import {
-  IntroView as Intro,
+  EntranceView as FarmEntrance,
   GalleryView as GalleryPage,
 } from "./components/world/DeferredViews";
 import ChapterPage from "./components/world/ChapterPage";
@@ -38,27 +38,19 @@ export default function App({
   const [route, setRoute] = useState<RouteId | null>(() =>
       initialRoute !== undefined ? initialRoute : readRoute(),
     ),
-    [intro, setIntro] = useState(
-      () =>
-        !(initialRoute ?? readRoute()) &&
-        (typeof sessionStorage === "undefined" ||
-          !sessionStorage.getItem("farm-entered")),
-    ),
+    [intro, setIntro] = useState(() => !(initialRoute ?? readRoute())),
     [menu, setMenu] = useState(false),
     [visit, setVisit] = useState(false),
     [footerVisible, setFooterVisible] = useState(false),
     [reading, setReading] = useState(false);
-  const { audioRef, enabled, start, toggle } = useAmbientSound();
-  const [soundControlVisible, setSoundControlVisible] = useState(!intro);
-  const enterWithSound = useCallback(() => {
-    setSoundControlVisible(true);
-    start();
-  }, [start]);
+  const { audioRef, enabled, toggle } = useAmbientSound(intro);
+  const [soundControlVisible, setSoundControlVisible] = useState(true);
   const finishEntry = useCallback(() => {
     sessionStorage.setItem("farm-entered", "yes");
-    history.pushState(null, "", routePaths.story);
+    history.replaceState(null, "", routePaths.story);
     setRoute("story");
     setIntro(false);
+    setSoundControlVisible(true);
     window.scrollTo(0, 0);
   }, []);
   const curtain = useRef<HTMLDivElement>(null);
@@ -284,7 +276,7 @@ export default function App({
             }
           >
             {intro ? (
-              <Intro onEnter={enterWithSound} onComplete={finishEntry} />
+              <FarmEntrance onComplete={finishEntry} />
             ) : route === "gallery" ? (
               <GalleryPage
                 onVisit={() => setVisit(true)}

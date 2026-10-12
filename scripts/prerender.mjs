@@ -6,6 +6,7 @@ const template = (await readFile('dist/index.html','utf8')).replace(/<link rel="
 const cssFile = template.match(/<link rel="stylesheet"[^>]*href="([^"]+)"[^>]*>/)?.[1];
 const css = cssFile ? await readFile('dist'+cssFile,'utf8') : '';
 const heroImages = JSON.parse(await readFile('src/data/heroImages.json', 'utf8'));
+const storyHeroImages = JSON.parse(await readFile('src/data/storyHeroImages.json', 'utf8'));
 const escape = s => s.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
 for (const [path, route] of [['','home'],['about-us','story'],['natural-farming','farming'],['farmhouses-for-sale-in-hyderabad','living'],['gallery','gallery']]) {
   const copy = pageMetadata[route];
@@ -13,9 +14,10 @@ for (const [path, route] of [['','home'],['about-us','story'],['natural-farming'
   let html = template.replace(/<title>.*?<\/title>/s,'').replace(/<meta name="description"[^>]*\/>/,'').replace('</head>',metadata+'</head>');
   html = html.replace(/<link rel="stylesheet"[^>]*>/,`<style>${css}</style>`).replace('<script type="module"','<script fetchpriority="low" type="module"').replaceAll('<link rel="modulepreload"','<link fetchpriority="low" rel="modulepreload"');
   if (['story','farming','living'].includes(route)) {
-    const heroAssets = ['mango-branch',route==='farming'?'okra-branch':'marigold-stem','native-foliage','orchard-bird',...(route==='story'?['okra-branch']:[])];
+    const heroAssets = route==='story' ? ['mango-branch','okra-branch'] : ['mango-branch',route==='farming'?'okra-branch':'marigold-stem','native-foliage','orchard-bird'];
     const preloads = heroAssets.map(name=>`<link rel="preload" as="image" fetchpriority="${name==='marigold-stem'?'high':'low'}" type="image/avif" imagesrcset="${heroImages.widths.map(width=>`/illustrations/hero/${name}-${width}.avif ${width}w`).join(', ')}" imagesizes="${route==='story' && name==='okra-branch' ? heroImages.storyOkraSizes : heroImages.sizes[name]}"/>`).join('');
-    html = html.replace('</head>',preloads+'</head>');
+    const scenePreloads = route==='story' ? storyHeroImages.scenes.map(name=>`<link rel="preload" as="image" fetchpriority="high" type="image/avif" imagesrcset="${storyHeroImages.widths.map(width=>`/illustrations/hero-scenes/${name}-${width}.avif ${width}w`).join(', ')}" imagesizes="${storyHeroImages.sizes}"/>`).join('') : '';
+    html = html.replace('</head>',preloads+scenePreloads+'</head>');
   }
   html = html.replace('<div id="root"></div>',`<div id="root">${render(route==='home'?null:route)}</div>`);
   html = html.replace('</head>','<noscript><style>img[data-src]{display:none}</style></noscript></head>');

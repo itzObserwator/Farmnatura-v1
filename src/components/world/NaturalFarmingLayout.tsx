@@ -22,13 +22,13 @@ export default function NaturalFarmingLayout({
           ABOUT NATURAL FARMING
         </span>
         <h2 data-farming-reveal>
-          <RevealText text="Care for the soil, and the soil cares for us." />
+          <RevealText text="Care for the soil, and the soil cares for us" />
         </h2>
         <div className="farming-about-split">
           <div className="farming-about-art">
             <ResponsiveImage
               className="farming-about-photo"
-              src="/images/gallery/farmnatura-upscaled-3.webp"
+              src="/images/gallery/farmnatura-collection-11.webp"
               sizes="(max-width: 767px) calc(100vw - 44px), 45vw"
               alt="A tractor beside growing rows and cultivated soil at Farm Natura"
               loading="lazy"
@@ -74,7 +74,7 @@ export default function NaturalFarmingLayout({
         <figure className="farming-panorama">
           <div className="farming-photo-mask" data-farming-image>
             <ResponsiveImage
-              src="/images/gallery/farmnatura-upscaled-5.webp"
+              src="/images/gallery/farmnatura-collection-14.webp"
               alt="Aerial view of banana plots, farmhouses and country paths at Farm Natura"
               width={1254}
               height={1254}
@@ -98,7 +98,7 @@ export default function NaturalFarmingLayout({
               LIFE BETWEEN THE ROWS
             </span>
             <h3 data-farming-reveal>
-              <RevealText text="Good things grow together." />
+              <RevealText text="Good things grow together" />
             </h3>
             <p data-farming-reveal>
               <RevealText text="Fruit-bearing trees, seasonal vegetables, birds and pollinators. Every part of the farm has a place in the story of the land." />
@@ -110,16 +110,16 @@ export default function NaturalFarmingLayout({
           <div className="farming-discover-art">
             <ResponsiveImage
               className="farming-detail-photo farming-detail-first"
-              src="/images/gallery/farmnatura-upscaled-5.webp"
+              src="/images/gallery/farmnatura-collection-15.webp"
               sizes="(max-width: 767px) 70vw, 30vw"
-              alt="Banana plots and farmhouses seen from above at Farm Natura"
+              alt="Bananas growing among lush leaves at Farm Natura"
               loading="lazy"
             />
             <ResponsiveImage
               className="farming-detail-photo farming-detail-second"
-              src="/images/gallery/farmnatura-upscaled-1.webp"
+              src="/images/gallery/farmnatura-collection-07.webp"
               sizes="(max-width: 767px) 60vw, 25vw"
-              alt="Cultivated fields, orchard rows and the farm community from above"
+              alt="Tomatoes ripening on the vine at Farm Natura"
               loading="lazy"
             />
             <LivingSurface className="farming-bird-surface" color="#dce8cc" />

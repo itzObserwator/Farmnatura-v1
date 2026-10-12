@@ -11,9 +11,7 @@ export default function Gallery({
   variant?: "default" | "story";
   onOpenGallery?: () => void;
 }) {
-  const images = (
-    variant === "story" ? galleryPhotos.slice(9) : galleryPhotos
-  ).map((photo) => ({
+  const images = galleryPhotos.map((photo) => ({
     src: photo.src,
     label: photo.title,
   }));
@@ -52,10 +50,10 @@ export default function Gallery({
         <div className="gallery-heading" data-reveal>
           <h2>
             {variant === "story" ? (
-              "Farm life, in pictures."
+              "Farm life, in pictures"
             ) : (
               <>
-                Little moments.
+                Little moments
                 <br />A fuller life.
               </>
             )}

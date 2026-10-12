@@ -4,6 +4,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { gzipSync } from "node:zlib";
 import deployment from "./vercel.json" with { type: "json" };
+import storyHeroImages from "./src/data/storyHeroImages.json" with { type: "json" };
 export default defineConfig({
   resolve: {
     alias: [{ find: /^lucide-react$/, replacement: resolve("src/icons.ts") }],
@@ -23,6 +24,35 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    {
+      name: "preload-development-story-art",
+      apply: "serve",
+      transformIndexHtml(_html, context) {
+        if (
+          (context.originalUrl ?? context.path)
+            .split("?")[0]
+            .replace(/\/$/, "") !== "/about-us"
+        )
+          return;
+        return storyHeroImages.scenes.map((name) => ({
+          tag: "link",
+          attrs: {
+            rel: "preload",
+            as: "image",
+            type: "image/avif",
+            fetchpriority: "high",
+            imagesrcset: storyHeroImages.widths
+              .map(
+                (width) =>
+                  `/illustrations/hero-scenes/${name}-${width}.avif ${width}w`,
+              )
+              .join(", "),
+            imagesizes: storyHeroImages.sizes,
+          },
+          injectTo: "head" as const,
+        }));
+      },
+    },
     {
       name: "compress-development-text",
       configureServer(server) {

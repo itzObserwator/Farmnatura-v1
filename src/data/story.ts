@@ -3,37 +3,37 @@ export const storyChapters = [
   {
     title: "Our roots",
     text: "Farm Natura is a managed natural-farming estate in Kandukur, near Hyderabad. A place for families to own their land and reconnect with the outdoors.",
-    image: "/images/gallery/farmnatura-upscaled-1.webp",
+    image: "/images/gallery/farmnatura-collection-13.webp",
     caption: "The land we return to",
   },
   {
     title: "The living soil",
     text: "Soil health sits at the heart of the farm. Farm Natura describes more than six years of soil revitalisation and ongoing attention to its living ecosystem.",
-    image: "/images/gallery/farmnatura-upscaled-3.webp",
+    image: "/images/gallery/farmnatura-collection-11.webp",
     caption: "Care for a living ecosystem",
   },
   {
     title: "Indigenous seeds",
     text: "Locally adapted native and heirloom seeds, seasonal crops and fruit-bearing trees grow through chemical-free farming practices.",
-    image: "/images/gallery/farmnatura-upscaled-5.webp",
+    image: "/images/gallery/farmnatura-collection-15.webp",
     caption: "Growing with the season",
   },
   {
     title: "Shared harvests",
     text: "Grow seasonal food and share the simple pleasures of time on the farm with the people you love.",
-    image: "/images/gallery/farmnatura-upscaled-4.webp",
+    image: "/images/gallery/farmnatura-collection-07.webp",
     caption: "Growing and sharing the season",
   },
   {
     title: "Farmhouse weekends",
     text: "Farmhouse stays, orchard walks and open skies make room for a different rhythm of family life.",
-    image: "/images/gallery/farmnatura-upscaled-2.webp",
+    image: "/images/gallery/farmnatura-collection-04.webp",
     caption: "A little room to breathe",
   },
   {
     title: "A community that grows",
     text: "Dedicated agronomy staff care for everyday farming, while families enjoy their land and a community of like-minded neighbours.",
-    image: "/images/gallery/farmnatura-upscaled-2.webp",
+    image: "/images/gallery/farmnatura-collection-12.webp",
     caption: "A life rooted in nature",
   },
 ] as const;

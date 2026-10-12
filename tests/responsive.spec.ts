@@ -63,11 +63,10 @@ for (const screen of screens) {
           width: screen.width,
           height: screen.height,
         });
-        const enter = page.getByRole("button", { name: "ENTER THE FARM" });
-        await expect(enter).toBeEnabled();
-        const bounds = await enter.boundingBox();
-        expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(screen.height);
-        expect(bounds!.height).toBeGreaterThanOrEqual(44);
+        await expect(
+          page.getByRole("button", { name: "ENTER THE FARM" }),
+        ).toHaveCount(0);
+        await expect(page.locator(".story-scene h1")).toBeVisible();
       } else {
         const menu = await page
           .getByRole("button", { name: "Open menu" })
@@ -245,7 +244,10 @@ test("mobile gallery keeps the selected thumbnail reachable when wrapping", asyn
     .getByRole("button", { name: "Previous photograph", exact: true })
     .tap();
   const selected = gallery.locator('.gallery-dots button[aria-pressed="true"]');
-  await expect(selected).toHaveAttribute("aria-label", "Show photograph 25");
+  await expect(selected).toHaveAttribute(
+    "aria-label",
+    `Show photograph ${await gallery.locator(".gallery-dots button").count()}`,
+  );
   expect(
     await selected.evaluate((el) => {
       const box = el.getBoundingClientRect();

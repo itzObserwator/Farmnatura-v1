@@ -1,5 +1,19 @@
 # Performance verification — 8 October 2026
 
+## Animated Our Story hero — 12 October 2026
+
+The supplied screenshot measured the development route `/about-us` at 88 Performance, with LCP 2.2 seconds. An isolated clean-browser reproduction measured 96 before these fixes; the screenshot's exact score did not reproduce. The production mobile baseline exposed a larger image-delivery cost after the animated scene became the hero.
+
+| Clean audit | Performance before → after | LCP before → after | Accessibility / Best Practices / SEO after |
+| --- | --- | --- | --- |
+| Development desktop (`5173/about-us`) | 96 → 98 | 1.4 → 1.1 s | 100 / 100 / 100 |
+| Production desktop (`4173/about-us`) | 100 → 100 | 0.8 → 0.6 s | 100 / 100 / 100 |
+| Production mobile (`4173/about-us`) | 86 → 96 | 4.3 → 2.8 s | 100 / 100 / 100 |
+
+The two tree scenes and flying bird now use responsive AVIF assets with WebP fallbacks. Their preload sizes match the rendered desktop, portrait and landscape sizes; development HTML discovers the critical images before React finishes loading. Hidden hero ornaments are no longer mounted, decorative AVIF sources stay deferred until near the viewport, and the footer logo loads lazily. Initial mobile image transfer fell from 361,466 to 77,712 bytes (79% smaller). Layout shift remains zero; the final mobile run measured 20 ms blocking time.
+
+Tree sway and CSS bird/wind animations pause when the hero leaves the viewport or the tab is hidden, and resume when visible. The original full-resolution artwork is retained. Regenerate the new hero assets with `node scripts/optimize-story-hero.mjs`; `src/data/storyHeroImages.json` shares responsive widths and sizes with the component, development hints and production preloads. Raw measurements are in the `heroFollowup` entry of [performance-audit.json](performance-audit.json). Scores are local measurements, not a deployed-site guarantee.
+
 ## Uploaded report follow-up — 9 October 2026
 
 The measurements below precede the subsequent user-requested restoration of decorative labels, captions and footnotes. Their styles have been restored; the image, font, deferred-loading, contrast and security changes remain.

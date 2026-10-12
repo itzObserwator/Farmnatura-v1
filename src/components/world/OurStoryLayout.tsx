@@ -65,7 +65,7 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
           THE JOY OF FARM NATURA
         </span>
         <h2 data-text-reveal>
-          <RevealText text="Find a little more life between the soil and the sky." />
+          <RevealText text="Find a little more life between the soil and the sky" />
         </h2>
       </section>
       <section className="story-first-split" data-motion-section="story-roots">
@@ -124,7 +124,7 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
       >
         <div className="story-farm-frame" data-image-reveal>
           <ResponsiveImage
-            src="/images/gallery/farmnatura-upscaled-5.webp"
+            src="/images/gallery/farmnatura-collection-14.webp"
             sizes="(max-width: 767px) calc(100vw - 44px), 50vw"
             alt="Aerial view of banana plots, farmhouses and paths at Farm Natura"
             loading="lazy"
@@ -135,7 +135,7 @@ export default function OurStoryLayout({ onVisit }: { onVisit: () => void }) {
             A LIFE THAT GROWS WITH YOU
           </span>
           <h2 data-text-reveal>
-            <RevealText text="A place to put down roots. A little space to simply breathe." />
+            <RevealText text="A place to put down roots. A little space to simply breathe" />
           </h2>
           <p data-reveal>{story.intro}</p>
           <ResponsiveImage

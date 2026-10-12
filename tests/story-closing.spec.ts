@@ -20,7 +20,7 @@ test("estate overview and questions sit before the Our Story visit invitation", 
   ]);
   await page.locator(".story-golden-years").scrollIntoViewIfNeeded();
   await expect(page.locator("#golden-years-title")).toHaveAccessibleName(
-    "An ideal way to spend your golden years.",
+    "An ideal way to spend your golden years",
   );
   await expect(page.locator(".story-golden-copy")).toContainText(
     "children and grandchildren can visit with ease",

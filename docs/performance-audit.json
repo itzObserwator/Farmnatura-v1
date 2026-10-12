@@ -216,5 +216,203 @@
       }
     ],
     "note": "Local fixes are not deployed. Residual unused-code estimates include interactive and below-fold code; Trusted Types enforcement remains a manual compatibility review."
+  },
+  "heroFollowup": {
+    "date": "2026-10-12",
+    "screenshot": {
+      "performance": 88,
+      "accessibility": 100,
+      "best-practices": 96,
+      "seo": 100,
+      "url": "http://localhost:5173/about-us"
+    },
+    "results": [
+      {
+        "profile": "baseline-dev",
+        "url": "http://127.0.0.1:5173/about-us",
+        "fetchTime": "2026-10-12T07:40:37.290Z",
+        "scores": {
+          "performance": 96,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": {
+            "value": 669.9539999999996,
+            "display": "0.7 s"
+          },
+          "largest-contentful-paint": {
+            "value": 1359.7239999999997,
+            "display": "1.4 s"
+          },
+          "total-blocking-time": {
+            "value": 0,
+            "display": "0 ms"
+          },
+          "cumulative-layout-shift": {
+            "value": 0,
+            "display": "0"
+          }
+        },
+        "initialImageTransferBytes": 347834,
+        "consoleErrors": []
+      },
+      {
+        "profile": "final-dev",
+        "url": "http://127.0.0.1:5173/about-us",
+        "fetchTime": "2026-10-12T07:52:33.410Z",
+        "scores": {
+          "performance": 98,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": {
+            "value": 671.9137500000004,
+            "display": "0.7 s"
+          },
+          "largest-contentful-paint": {
+            "value": 1108.7125,
+            "display": "1.1 s"
+          },
+          "total-blocking-time": {
+            "value": 0,
+            "display": "0 ms"
+          },
+          "cumulative-layout-shift": {
+            "value": 0,
+            "display": "0"
+          }
+        },
+        "initialImageTransferBytes": 69618,
+        "consoleErrors": []
+      },
+      {
+        "profile": "baseline-mobile",
+        "url": "http://127.0.0.1:4173/about-us",
+        "fetchTime": "2026-10-12T07:41:32.033Z",
+        "scores": {
+          "performance": 86,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": {
+            "value": 810.62125,
+            "display": "0.8 s"
+          },
+          "largest-contentful-paint": {
+            "value": 4282.2425,
+            "display": "4.3 s"
+          },
+          "total-blocking-time": {
+            "value": 20,
+            "display": "20 ms"
+          },
+          "cumulative-layout-shift": {
+            "value": 0,
+            "display": "0"
+          }
+        },
+        "initialImageTransferBytes": 361466,
+        "consoleErrors": []
+      },
+      {
+        "profile": "final-mobile",
+        "url": "http://127.0.0.1:4173/about-us",
+        "fetchTime": "2026-10-12T07:51:38.470Z",
+        "scores": {
+          "performance": 96,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": {
+            "value": 808.23065,
+            "display": "0.8 s"
+          },
+          "largest-contentful-paint": {
+            "value": 2787.9226,
+            "display": "2.8 s"
+          },
+          "total-blocking-time": {
+            "value": 23,
+            "display": "20 ms"
+          },
+          "cumulative-layout-shift": {
+            "value": 0,
+            "display": "0"
+          }
+        },
+        "initialImageTransferBytes": 77712,
+        "consoleErrors": []
+      },
+      {
+        "profile": "baseline-desktop",
+        "url": "http://127.0.0.1:4173/about-us",
+        "fetchTime": "2026-10-12T07:39:58.138Z",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": {
+            "value": 217.5114,
+            "display": "0.2 s"
+          },
+          "largest-contentful-paint": {
+            "value": 810.5341999999998,
+            "display": "0.8 s"
+          },
+          "total-blocking-time": {
+            "value": 0,
+            "display": "0 ms"
+          },
+          "cumulative-layout-shift": {
+            "value": 0,
+            "display": "0"
+          }
+        },
+        "initialImageTransferBytes": 353324,
+        "consoleErrors": []
+      },
+      {
+        "profile": "final-desktop",
+        "url": "http://127.0.0.1:4173/about-us",
+        "fetchTime": "2026-10-12T07:53:45.997Z",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": {
+            "value": 215.93675,
+            "display": "0.2 s"
+          },
+          "largest-contentful-paint": {
+            "value": 591.7470000000001,
+            "display": "0.6 s"
+          },
+          "total-blocking-time": {
+            "value": 0,
+            "display": "0 ms"
+          },
+          "cumulative-layout-shift": {
+            "value": 0,
+            "display": "0"
+          }
+        },
+        "initialImageTransferBytes": 73278,
+        "consoleErrors": []
+      }
+    ]
   }
 }

@@ -41,7 +41,7 @@ export default function ContactDialog({
       </div>
       <div className="contact-dialog-content">
         <span className="eyebrow">COME, WALK THE LAND</span>
-        <h2 id="visit-enquiry-title">Book a site visit.</h2>
+        <h2 id="visit-enquiry-title">Book a site visit</h2>
         <p id="visit-enquiry-description">
           Tell us a little about your visit. Your enquiry opens in WhatsApp for
           you to send to the Farm Natura team.
