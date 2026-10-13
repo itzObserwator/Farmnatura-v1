@@ -7072,19 +7072,16 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 .floating-contact-links a {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border: 1px solid var(--ink);
-  border-radius: 48% 52% 49% 51%;
+  border-radius: 50%;
   box-shadow: 0 3px 12px #244d2618;
   transition:
     transform 0.2s,
     background-color 0.2s;
 }
 .floating-contact-links .floating-whatsapp {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
   background: var(--ink);
   color: var(--paper);
 }
