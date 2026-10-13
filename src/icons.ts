@@ -10,6 +10,7 @@ export { default as Plus } from "lucide-react/dist/esm/icons/plus.mjs";
 export { default as Sprout } from "lucide-react/dist/esm/icons/sprout.mjs";
 export { default as X } from "lucide-react/dist/esm/icons/x.mjs";
 export { default as Phone } from "lucide-react/dist/esm/icons/phone.mjs";
+export { default as MessageCircle } from "lucide-react/dist/esm/icons/message-circle.mjs";
 export { default as MapPin } from "lucide-react/dist/esm/icons/map-pin.mjs";
 export { default as RotateCcw } from "lucide-react/dist/esm/icons/rotate-ccw.mjs";
 export { default as Download } from "lucide-react/dist/esm/icons/download.mjs";

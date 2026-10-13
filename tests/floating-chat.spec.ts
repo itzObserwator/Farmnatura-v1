@@ -36,6 +36,8 @@ test("contact buttons stack above chat and the greeting slides out on hover", as
   await expect(greeting).toHaveCSS("opacity", "1");
   const greetingBox = (await greeting.boundingBox())!;
   expect(greetingBox.x + greetingBox.width).toBeLessThan(avatarBox.x);
+  await greeting.hover();
+  await expect(greeting).toHaveCSS("opacity", "1");
   await page.mouse.move(0, 0);
   await expect(greeting).toHaveCSS("opacity", "0");
   await launcher.focus();

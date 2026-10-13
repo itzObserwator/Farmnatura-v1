@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { ArrowRight, ArrowUpRight, Phone, RotateCcw, X } from "../../icons";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  MessageCircle,
+  Phone,
+  RotateCcw,
+  X,
+} from "../../icons";
 import { contact, faqs } from "../../data/content";
 
 type ChatMessage = { from: "farm" | "visitor"; text: string };
@@ -244,7 +251,9 @@ export default function FloatingChat({ onVisit }: { onVisit: () => void }) {
             loading="lazy"
             fetchPriority="low"
           />
-          <span className="chat-status-dot" />
+          <span className="chat-icon-badge">
+            <MessageCircle size={18} strokeWidth={1.8} />
+          </span>
         </span>
       </button>
     </aside>
