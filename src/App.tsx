@@ -47,7 +47,6 @@ export default function App({
     [menu, setMenu] = useState(false),
     [visit, setVisit] = useState(false),
     [enquiryPurpose, setEnquiryPurpose] = useState<"visit" | "legal">("visit"),
-    [footerVisible, setFooterVisible] = useState(false),
     [reading, setReading] = useState(false);
   const { audioRef, enabled, toggle } = useAmbientSound(intro);
   const [soundControlVisible, setSoundControlVisible] = useState(true);
@@ -205,29 +204,12 @@ export default function App({
     };
   }, [route, intro]);
   useEffect(() => {
-    setFooterVisible(false);
     setReading(false);
     if (!route) return;
     const update = () => setReading(scrollY > innerHeight * 0.65);
     window.addEventListener("scroll", update, { passive: true });
-    const closingSections = new Set<Element>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) closingSections.add(entry.target);
-          else closingSections.delete(entry.target);
-        }
-        setFooterVisible(closingSections.size > 0);
-      },
-      { threshold: 0.55 },
-    );
-    const next = document.querySelector(".next-chapter-stage");
-    if (next) observer.observe(next);
-    const footer = document.querySelector(".farm-footer");
-    if (footer) observer.observe(footer);
     return () => {
       window.removeEventListener("scroll", update);
-      observer.disconnect();
     };
   }, [route]);
   const chapter = chapters.find(
@@ -331,13 +313,6 @@ export default function App({
               ))}
             </button>
           )}
-          {!intro &&
-            (chapter || route === "gallery" || route === "impact") &&
-            !footerVisible && (
-              <span className="page-number">
-                {`${String(carouselDestinations.findIndex((page) => page.id === route) + 1).padStart(2, "0")}/${String(carouselDestinations.length).padStart(2, "0")}`}
-              </span>
-            )}
         </div>
         <MenuPanel
           open={menu}

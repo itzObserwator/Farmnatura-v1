@@ -260,13 +260,6 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
 .index-button:hover {
   transform: translateX(-50%) translateY(-2px);
 }
-.page-number {
-  position: absolute;
-  right: 40px;
-  bottom: 38px;
-  font-size: 12px;
-  font-weight: 700;
-}
 .chapter-carousel {
   --scene-width: 460px;
   --scene-height: 460px;
@@ -2220,11 +2213,6 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
     width: 41px;
     height: 25px;
     min-height: 25px;
-  }
-  .page-number {
-    right: 22px;
-    bottom: 34px;
-    font-size: 10px;
   }
   .index-button {
     bottom: 22px;
@@ -5731,13 +5719,6 @@ body:has(.explore-cursor[data-visible="true"]) .cursor-ring {
   .sound-toggle {
     left: max(20px, env(safe-area-inset-left));
     bottom: max(22px, env(safe-area-inset-bottom));
-  }
-  .page-number {
-    right: max(20px, env(safe-area-inset-right));
-    bottom: max(22px, env(safe-area-inset-bottom));
-    padding: 5px 8px;
-    border-radius: 12px;
-    background: var(--paper);
   }
   .page-story .drawn-mango {
     left: 34%;
